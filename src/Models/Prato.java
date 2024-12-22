@@ -2,7 +2,7 @@ package Models;
 
 public class Prato {
     private String nome;
-    private String categoria;
+    private String categoria; //Entrada, prato principal ou sobremesa
     private double precoCusto;
     private double precoVenda;
     private int unidadeTempo;

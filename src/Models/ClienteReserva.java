@@ -1,16 +1,16 @@
 package Models;
 
-public class Cliente {
-    private int idCliente;
+public class ClienteReserva {
+    private int idReserva;
     private String nome;
     private int numPessoas;
     private int horaChegada;
     private int tempoMaxEspera;
 
-    public Cliente() {}
+    public ClienteReserva() {}
 
-    public Cliente(int idCliente, String nome, int numPessoas, int horaChegada, int tempoMaxEspera) {
-        this.idCliente = idCliente;
+    public ClienteReserva(int idCliente, String nome, int numPessoas, int horaChegada, int tempoMaxEspera) {
+        this.idReserva = idCliente;
         this.nome = nome;
         this.numPessoas = numPessoas;
         this.horaChegada = horaChegada;
@@ -18,11 +18,11 @@ public class Cliente {
     }
 
     public int getIdCliente() {
-        return idCliente;
+        return idReserva;
     }
 
     public void setIdCliente(int idCliente) {
-        this.idCliente = idCliente;
+        this.idReserva = idCliente;
     }
 
     public String getNome() {
