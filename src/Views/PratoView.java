@@ -10,6 +10,7 @@ public class PratoView {
     static Scanner sc = new Scanner(System.in);
 
     public static void mostrarPratos() {
+        System.out.println("━━━━━━━ Mostrar Pratos ━━━━━━━");
         Prato[] pratos = PratoController.getPratos();
         for (int i = 0; i < pratos.length; i++) {
             if (pratos[i] != null) {
@@ -26,6 +27,7 @@ public class PratoView {
     }
 
     public static void adicionarPrato() {
+        System.out.println("━━━━━━━ Adicionar Prato ━━━━━━━");
         Prato[] listaPratos = PratoController.getPratos();
         int idCount = 0;
 
@@ -116,6 +118,7 @@ public class PratoView {
 
 
     public static void modificarPrato() {
+        System.out.println("━━━━━━━ Editar Prato ━━━━━━━");
         Prato[] listaPratos = PratoController.getPratos();
         System.out.println("➤ Escolha um dos pratos que deseja modificar");
 
@@ -277,11 +280,15 @@ public class PratoView {
 
         Prato pratoAtualizado = new Prato(resposta,nome, categoria, precoCusto, precoVenda, unidadeTempo, estado);
 
-        PratoController.modificarPrato(pratoAtualizado);
-        System.out.println("Prato atualizado com sucesso!");
+        if(PratoController.modificarPrato(pratoAtualizado)){
+            System.out.println("➤ Prato atualizado com sucesso!");
+        } else {
+            System.out.println("⚠ Não foi possível atualizar o prato ⚠");
+        };
     }
 
     public static void eliminarPrato(){
+        System.out.println("━━━━━━━ Eliminar Prato ━━━━━━━");
         int idPrato;
 
         Prato[] listaPratos = PratoController.getPratos();

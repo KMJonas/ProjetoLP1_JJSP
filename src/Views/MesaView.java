@@ -11,6 +11,7 @@ public class MesaView {
 
     public static void mostrarMesas() {
         Mesa[] mesas = MesaController.getMesas();
+        System.out.println("━━━━━━━ Mostrar Mesas ━━━━━━━");
         for(int i = 0; i < mesas.length; i++) {
             if(mesas[i] != null) {
                 System.out.println("➤ Mesa Nº: " + mesas[i].getIdMesa());
@@ -22,7 +23,7 @@ public class MesaView {
     }
 
     public static void adicionarMesa(){
-        System.out.println("➤ Criar Mesa");
+        System.out.println("━━━━━━━ Adicionar Mesa ━━━━━━━");
         char resposta = 0;
         int capacidade;
 
@@ -52,6 +53,7 @@ public class MesaView {
     }
 
     public static void editarMesa(){
+        System.out.println("━━━━━━━ Editar Mesa ━━━━━━━");
         int numMesa;
 
         System.out.println("➤ Insira o número da mesa:");
@@ -177,6 +179,7 @@ public class MesaView {
     }
 
     public static void eliminarMesa(){
+        System.out.println("━━━━━━━ Eliminar Mesa ━━━━━━━");
         int numMesa;
 
         System.out.println("➤ Insira o número da mesa:");

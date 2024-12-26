@@ -1,5 +1,6 @@
 package Views;
 
+import Controllers.ClienteReservaController;
 import Controllers.MesaController;
 
 import java.util.Scanner;
@@ -10,7 +11,7 @@ public class Menu {
     public void menu() {
         System.out.println("━━━━━━━ Restaurante JJSP ━━━━━━━");
         System.out.println("1 ➤ Gerir mesas e menus");
-        System.out.println("2 ➤ Gerir clientes");
+        System.out.println("2 ➤ Gerir Reservas");
         System.out.println("3 ➤ Dia-a-dia");
         System.out.println("4 ➤ Sair");
         int resposta = sc.nextInt();
@@ -19,7 +20,7 @@ public class Menu {
             case 1:
                 menuGerirMesasMenus();
             case 2:
-                System.out.println("Mesas");
+                menuGerirReservas();
             case 3:
                 System.out.println("Pratos");
             case 4:
@@ -104,6 +105,35 @@ public class Menu {
             default:
                 System.out.println("⚠ Opção inválida ⚠");
         }
-
     }
+
+    public void menuGerirReservas() {
+        System.out.println("━━━━━━━ Reservas ━━━━━━━");
+        System.out.println("1 ➤ Mostrar Reservas");
+        System.out.println("2 ➤ Adicionar Reserva");
+        System.out.println("3 ➤ Editar Reserva");
+        System.out.println("4 ➤ Eliminar Reserva");
+        System.out.println("5 ➤ Voltar");
+        int resposta = sc.nextInt();
+
+        switch (resposta) {
+            case 1:
+                ClienteReservaView.mostrarClientesReserva();
+                menuGerirReservas();
+            case 2:
+                ClienteReservaView.adicionarReserva();
+                menuGerirReservas();
+            case 3:
+                ClienteReservaView.editarReserva();
+                menuGerirReservas();
+            case 4:
+                ClienteReservaView.eliminarReserva();
+                menuGerirReservas();
+            case 5:
+                menu();
+            default:
+                System.out.println("⚠ Opção inválida ⚠");
+        }
+    }
+
 }
