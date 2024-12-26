@@ -17,11 +17,11 @@ public class ClienteReserva {
         this.tempoMaxEspera = tempoMaxEspera;
     }
 
-    public int getIdCliente() {
+    public int getIdReserva() {
         return idReserva;
     }
 
-    public void setIdCliente(int idCliente) {
+    public void setIdReserva(int idCliente) {
         this.idReserva = idCliente;
     }
 
