@@ -56,7 +56,7 @@ public class LeituraFicheirosController {
         for (int i = 0; i < lista.length; i++) {
             if (lista[i] != null && !lista[i].trim().isEmpty()) {
                 String[] prato = lista[i].split("//");
-                pratos[i] = new Prato(prato[0], prato[1], Double.parseDouble(prato[2]), Double.parseDouble(prato[3]), Integer.parseInt(prato[4]), Integer.parseInt(prato[5]));
+                pratos[i] = new Prato(Integer.parseInt(prato[0]), prato[1], prato[2], Double.parseDouble(prato[3]), Double.parseDouble(prato[4]), Integer.parseInt(prato[5]), Integer.parseInt(prato[6]));
             }
         }
         return pratos;

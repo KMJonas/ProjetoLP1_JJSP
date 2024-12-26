@@ -1,6 +1,7 @@
 package Models;
 
 public class Prato {
+    private int idPrato;
     private String nome;
     private String categoria; //Entrada, prato principal ou sobremesa
     private double precoCusto;
@@ -10,13 +11,22 @@ public class Prato {
 
     public Prato() {}
 
-    public Prato(String nome, String categoria, double precoCusto, double precoVenda, int unidadeTempo, int estado) {
+    public Prato(int idPrato, String nome, String categoria, double precoCusto, double precoVenda, int unidadeTempo, int estado) {
+        this.idPrato = idPrato;
         this.nome = nome;
         this.categoria = categoria;
         this.precoCusto = precoCusto;
         this.precoVenda = precoVenda;
         this.unidadeTempo = unidadeTempo;
         this.estado = estado;
+    }
+
+    public int getIdPrato() {
+        return idPrato;
+    }
+
+    public void setIdPrato(int idPrato) {
+        this.idPrato = idPrato;
     }
 
     public String getNome() {

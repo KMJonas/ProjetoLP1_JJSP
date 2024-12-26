@@ -5,14 +5,14 @@ import java.util.ArrayList;
 public class Pedido {
     private int idPedido;
     private Mesa mesaAssociada;
-    private ArrayList<Prato> listaPratos;
+    private Prato[] listaPratos;
     private double custoTotal;
     private double lucro;
     private int status; //Ativo (1) , Desativo (0)
 
     public Pedido() {}
 
-    public Pedido(int idPedido, Mesa mesaAssociada, ArrayList<Prato> listaPratos, double custoTotal, double lucro, int status) {
+    public Pedido(int idPedido, Mesa mesaAssociada, Prato[] listaPratos, double custoTotal, double lucro, int status) {
         this.idPedido = idPedido;
         this.mesaAssociada = mesaAssociada;
         this.listaPratos = listaPratos;
@@ -37,11 +37,11 @@ public class Pedido {
         this.mesaAssociada = mesaAssociada;
     }
 
-    public ArrayList<Prato> getListaPratos() {
+    public Prato[] getListaPratos() {
         return listaPratos;
     }
 
-    public void setListaPratos(ArrayList<Prato> listaPratos) {
+    public void setListaPratos(Prato[] listaPratos) {
         this.listaPratos = listaPratos;
     }
 

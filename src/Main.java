@@ -1,7 +1,10 @@
 import Controllers.ClienteReservaController;
 import Controllers.LeituraFicheirosController;
+import Controllers.MesaController;
+import Controllers.PratoController;
 import Models.ClienteReserva;
 import Views.ClienteReservaView;
+import Views.Menu;
 import Views.MesaView;
 import Views.PratoView;
 
@@ -9,16 +12,10 @@ import Views.PratoView;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        ClienteReservaView crv = new ClienteReservaView();
-        MesaView mv = new MesaView();
-        PratoView pv = new PratoView();
+        MesaController mesaController = new MesaController();
+        PratoController pratoController = new PratoController();
 
-        System.out.println("━━━━━━━ Reservas ━━━━━━━");
-        crv.mostrarClientesReserva();
-        System.out.println("━━━━━━━ Mesas ━━━━━━━");
-        mv.mostrarMesas();
-        System.out.println("━━━━━━━ Pratos ━━━━━━━");
-        pv.mostrarPratos();
-
+        Menu menu = new Menu();
+        menu.menu();
     }
 }
