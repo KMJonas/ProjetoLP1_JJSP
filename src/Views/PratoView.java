@@ -45,11 +45,11 @@ public class PratoView {
                 System.out.println("➤ Insira o nome do prato: ");
                 nome = sc.nextLine();
 
-                if (!nome.matches("[a-zA-Z\\s]+")) {
+                if (!nome.matches("[a-zA-ZÀ-ÖØ-öø-ÿ\\s]+")) {
                     System.out.println("⚠ Nome inválido ⚠");
                 }
 
-            } while (!nome.matches("[a-zA-Z\\s]+"));
+            } while (!nome.matches("[a-zA-ZÀ-ÖØ-öø-ÿ\\s]+"));
 
             String categoria;
             do {
@@ -162,10 +162,10 @@ public class PratoView {
                 nome = pratoSelecionado.getNome();
                 break;
             }
-            if (!nome.matches("[a-zA-Z\\s]+")) {
+            if (!nome.matches("[a-zA-ZÀ-ÖØ-öø-ÿ\\s]+")) {
                 System.out.println("⚠ Nome inválido ⚠");
             }
-        } while (!nome.matches("[a-zA-Z\\s]+"));
+        } while (!nome.matches("[a-zA-ZÀ-ÖØ-öø-ÿ\\s]+"));
 
         do {
             System.out.println("➤ Insira a categoria do prato (Entrada, Prato principal, Sobremesa): ");

@@ -26,10 +26,10 @@ public class ClienteReservaController {
         ClienteReservaController.reservas = reservas;
     }
 
-    public static ClienteReserva[] adicionarReserva(String nome, int numPessoas, int horaChegada, int tempoMaxEspera) {
+    public static ClienteReserva[] adicionarReserva(String nome, int numPessoas, int numPessoasEntrada, int numPessoasSobremesa, int horaChegada, int tempoMaxEsperaEntrada, int tempoMaxEsperaAtendimento) {
         for (int i = 0; i < reservas.length; i++) {
             if (reservas[i] == null) {
-                reservas[i] = new ClienteReserva(i+1, nome, numPessoas, horaChegada, tempoMaxEspera);
+                reservas[i] = new ClienteReserva(i+1, nome, numPessoas, numPessoasEntrada, numPessoasSobremesa, horaChegada, tempoMaxEsperaEntrada, tempoMaxEsperaAtendimento);
                 break;
             }
         }
@@ -43,8 +43,11 @@ public class ClienteReservaController {
             if (listaReservas[i] != null && listaReservas[i].getIdReserva() == reserva.getIdReserva()) {
                 listaReservas[i].setNome(reserva.getNome());
                 listaReservas[i].setNumPessoas(reserva.getNumPessoas());
+                listaReservas[i].setNumPessoasEntrada(reserva.getNumPessoasEntrada());
+                listaReservas[i].setNumPessoasSobremesa(reserva.getNumPessoasSobremesa());
                 listaReservas[i].setHoraChegada(reserva.getHoraChegada());
-                listaReservas[i].setTempoMaxEspera(reserva.getTempoMaxEspera());
+                listaReservas[i].setTempoMaxEsperaEntrada(reserva.getTempoMaxEsperaEntrada());
+                listaReservas[i].setTempoMaxEsperaAtendimento(reserva.getTempoMaxEsperaAtendimento());
                 return true;
             }
         }
