@@ -3,11 +3,11 @@ package Models;
 public class Prato {
     private int idPrato;
     private String nome;
-    private String categoria; //Entrada, prato principal ou sobremesa
+    private String categoria; //Entrada, prato principal ou sobremesa.
     private double precoCusto;
     private double precoVenda;
-    private int unidadeTempo;
-    private int estado; //Disponivel (1), Indisponivel (0)
+    private int unidadeTempo; //Unidade tempo para a sua preparação
+    private int estado; //Disponivel (1), Indisponivel (0) para seleção.
 
     public Prato() {}
 

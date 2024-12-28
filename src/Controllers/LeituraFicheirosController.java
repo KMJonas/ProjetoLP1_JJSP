@@ -32,7 +32,7 @@ public class LeituraFicheirosController {
         for (int i = 0; i < lista.length; i++) {
             if (lista[i] != null && !lista[i].trim().isEmpty()) {
                 String[] cliente = lista[i].split("//");
-                clientes[i] = new ClienteReserva(Integer.parseInt(cliente[0]), cliente[1], Integer.parseInt(cliente[2]), Integer.parseInt(cliente[3]), Integer.parseInt(cliente[4]));
+                clientes[i] = new ClienteReserva(Integer.parseInt(cliente[0]), cliente[1], Integer.parseInt(cliente[2]), Integer.parseInt(cliente[3]), Integer.parseInt(cliente[4]), Integer.parseInt(cliente[5]), Integer.parseInt(cliente[6]), Integer.parseInt(cliente[7]));
             }
         }
         return clientes;
