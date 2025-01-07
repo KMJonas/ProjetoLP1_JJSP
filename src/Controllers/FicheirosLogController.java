@@ -1,39 +1,59 @@
 package Controllers;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class FicheirosLogController {
-    private static final Path dataDir = Paths.get("./src/Data");
-    private static final Path logsDir = Paths.get(dataDir.toAbsolutePath().toString() + "/src/Data/Logs");
+    //private static final Path logsDir = Paths.get(dataDir.toAbsolutePath().toString() + "/src/Data/Logs");
+    private static final String caminho = System.getProperty("user.dir");
+    private static final Path logs = Paths.get(caminho + "/src/Data/Logs");
 
     public static void criaFicheirosLog() throws IOException {
-        //Cria a pasta "Logs caso não exista"
-        File pasta = new File(dataDir.toAbsolutePath().toString() + "/Logs");
-        if (!pasta.exists()) {
-            System.out.println("criando a subpasta");
-            pasta.mkdir();
+
+        if (!Files.exists(logs)) {
+            Files.createDirectory(logs);
         }
 
-        // Conta o numero de ficheiros
-        int numLogs = contarNumeroLogs(pasta);
-        String nomeFicheiro = "Ficheiro" + numLogs + ".txt";
-        File log = new File(pasta.toString() + "/" + nomeFicheiro);
-        String conteudo = "Ficheiro Log criado com sucesso";
+        try {
+            String caminhoLog = caminho + "/src/Data/Logs";
+            int numLog = contarFicheirosLog(caminhoLog);
+            String nomeFicheiro = "FicheiroLog_";
 
-        try (FileWriter fw = new FileWriter(log, true)) {
-            fw.write(conteudo);
-            fw.close();
+            File ficheiro = new File(caminho + "/src/Data/Logs/" + nomeFicheiro + numLog + ".txt");
+
+            if (!ficheiro.exists()) {
+                System.out.println("Criar ficheiro");
+                System.out.println(numLog);
+                ficheiro.createNewFile();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    // Metodo para contar o nunero de ficheiros
-    private static int contarNumeroLogs (File logsDir){
-        File[] logs = logsDir.listFiles((dir, name) ->name.startsWith("FicheiroLog") && name.endsWith(".txt"));
-        return logs == null ? 0 : logs.length;
+    public static int contarFicheirosLog(String caminhoLog) throws IOException {
+        File diretorio = new File(caminhoLog);
+
+        if(diretorio.exists() && diretorio.isDirectory()){
+            // Listar arquivos do diretorio
+            File[] ficheiros = diretorio.listFiles();
+
+            int contador = 0;
+
+            if (ficheiros != null) {
+                for (File f : ficheiros) {
+                    if (f.isFile()) {
+                        contador++;
+                    }
+                }
+            }
+            return contador;
+        } else {
+            return 0;
+        }
     }
 }
