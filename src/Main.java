@@ -19,8 +19,9 @@ public class Main {
         Menu menu = new Menu();
         menu.menu();
         */
-
+        String mensagem = "Mensagem TESTE!";
         FicheirosLogController ficheirosLogController = new FicheirosLogController();
         FicheirosLogController.criaFicheirosLog();
+        FicheirosLogController.escreverLog(mensagem);
     }
 }

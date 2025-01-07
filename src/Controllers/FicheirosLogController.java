@@ -1,10 +1,12 @@
 package Controllers;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 public class FicheirosLogController {
     //private static final Path logsDir = Paths.get(dataDir.toAbsolutePath().toString() + "/src/Data/Logs");
@@ -35,6 +37,22 @@ public class FicheirosLogController {
         }
     }
 
+    public static void escreverLog(String mensagem) throws IOException {
+        File ultimoArquivo = obterUltimoFicheiroLog();
+
+        if (ultimoArquivo != null) {
+            // Tenta escrever no arquvio
+            try (FileWriter fw = new FileWriter(ultimoArquivo, true)) {
+                fw.write(mensagem);
+                System.out.println("Escrevendo no arquivo");
+            } catch (IOException e) {
+                System.err.println("Erro ao escrever o arquivo");
+            }
+        } else {
+            System.out.println("Nenhum arquivo encontrado");
+        }
+    }
+
     public static int contarFicheirosLog(String caminhoLog) throws IOException {
         File diretorio = new File(caminhoLog);
 
@@ -55,5 +73,30 @@ public class FicheirosLogController {
         } else {
             return 0;
         }
+    }
+
+    public static File obterUltimoFicheiroLog() {
+        File diretorio = new File(caminho + "/src/Data/Logs");
+
+        if(diretorio.exists() && diretorio.isDirectory()){
+            //Filtrar ficheiros
+            File[] ficheirosLog = diretorio.listFiles((dir, name) -> name.endsWith(".txt"));
+
+            if (ficheirosLog != null && ficheirosLog.length > 0) {
+                Arrays.sort(ficheirosLog, (a,b) -> {
+                    int comparar = Long.compare(b.lastModified(), a.lastModified());
+                    if (comparar == 0) {
+                        return a.getName().compareTo(b.getName());
+                    }
+                    return comparar;
+                });
+
+                // Retorna o primeiro arquivo (mais recente ou alfabetico no desempate)
+                return ficheirosLog[0];
+            }
+        }
+
+        System.out.println("Nenhum ficheiro encontrado");
+        return null; // Retorna Null se nenhum arquivo for encontrado
     }
 }
