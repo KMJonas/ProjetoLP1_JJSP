@@ -21,7 +21,7 @@ public class Main {
         */
         String mensagem = "Mensagem TESTE!";
         FicheirosLogController ficheirosLogController = new FicheirosLogController();
-        FicheirosLogController.criaFicheirosLog();
+        //FicheirosLogController.criaFicheirosLog();
         FicheirosLogController.escreverLog(mensagem);
     }
 }

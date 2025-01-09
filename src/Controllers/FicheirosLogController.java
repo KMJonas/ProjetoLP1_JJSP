@@ -43,7 +43,7 @@ public class FicheirosLogController {
         if (ultimoArquivo != null) {
             // Tenta escrever no arquvio
             try (FileWriter fw = new FileWriter(ultimoArquivo, true)) {
-                fw.write(mensagem);
+                fw.write(System.lineSeparator() + mensagem + "/");
                 System.out.println("Escrevendo no arquivo");
             } catch (IOException e) {
                 System.err.println("Erro ao escrever o arquivo");
