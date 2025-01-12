@@ -4,18 +4,21 @@ import Models.ClienteReserva;
 import Models.Prato;
 
 public class ClienteReservaController {
-    LeituraFicheirosController lf = new LeituraFicheirosController();
+    static LeituraFicheirosController lf = new LeituraFicheirosController();
+    static private String pathLeituraClienteReserva = null;
 
     //Array global que irá conter todas as reservas
     static ClienteReserva [] reservas;
 
-    //Construtor que irá ler todas as reservas
-    public ClienteReservaController(){
-        lerReservas();
+    public ClienteReservaController() {
+
     }
 
-    public void lerReservas(){
-        reservas = lf.devolverClientesReserva("src/Data/Reservas");
+    public static void lerReservas(String path){
+        reservas = lf.devolverClientesReserva(path);
+        if(reservas[0].getNome() != null){
+            pathLeituraClienteReserva = path;
+        }
     }
 
     public static ClienteReserva[] getReservas() {
@@ -24,6 +27,10 @@ public class ClienteReservaController {
 
     public static void setReservas(ClienteReserva[] reservas) {
         ClienteReservaController.reservas = reservas;
+    }
+
+    public static String getPathLeituraClienteReserva() {
+        return pathLeituraClienteReserva;
     }
 
     public static ClienteReserva[] adicionarReserva(String nome, int numPessoas, int numPessoasEntrada, int numPessoasSobremesa, int horaChegada, int tempoMaxEsperaEntrada, int tempoMaxEsperaAtendimento) {

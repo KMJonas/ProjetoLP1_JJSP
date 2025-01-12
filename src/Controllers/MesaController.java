@@ -3,18 +3,22 @@ package Controllers;
 import Models.Mesa;
 
 public class MesaController {
-    LeituraFicheirosController lf = new LeituraFicheirosController();
+    static LeituraFicheirosController lf = new LeituraFicheirosController();
+    static private String pathLeituraMesa = null;
 
     //Array global que irá conter todas as mesas
     static Mesa[] mesas;
 
     //Construtor que irá ler todas as mesas
     public MesaController(){
-        lerMesas();
+
     }
 
-    public void lerMesas(){
-        mesas = lf.devolverMesas("src/Data/Mesas");
+    public static void lerMesas(String path){
+        mesas = lf.devolverMesas(path);
+        if(mesas[0].getCapacidade() != 0){
+            pathLeituraMesa = path;
+        }
     }
 
     public static Mesa[] getMesas() {
@@ -23,6 +27,10 @@ public class MesaController {
 
     public static void setMesas(Mesa[] mesas) {
         MesaController.mesas = mesas;
+    }
+
+    public static String getPathLeituraMesa() {
+        return pathLeituraMesa;
     }
 
     public static Mesa[] adicionarMesa(int capacidade) {
@@ -103,8 +111,4 @@ public class MesaController {
 
         listaMesas[listaMesas.length - 1] = null;
     }
-
-
-
-
 }

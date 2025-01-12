@@ -1,7 +1,10 @@
 package Views;
 
 import Controllers.ClienteReservaController;
+import Controllers.LeituraFicheirosController;
 import Controllers.MesaController;
+import Controllers.PratoController;
+import Models.Prato;
 
 import java.util.Scanner;
 
@@ -13,7 +16,8 @@ public class Menu {
         System.out.println("1 ➤ Gerir mesas e menus");
         System.out.println("2 ➤ Gerir Reservas");
         System.out.println("3 ➤ Dia-a-dia");
-        System.out.println("4 ➤ Sair");
+        System.out.println("4 ➤ Configurações");
+        System.out.println("5 ➤ Sair");
         int resposta = sc.nextInt();
 
         switch (resposta) {
@@ -24,6 +28,8 @@ public class Menu {
             case 3:
                 System.out.println("Pratos");
             case 4:
+                menuConfiguracoes();
+            case 5:
                 System.out.println("Sair");
             default:
                 System.out.println("⚠ Opção inválida ⚠");
@@ -134,6 +140,97 @@ public class Menu {
             default:
                 System.out.println("⚠ Opção inválida ⚠");
         }
+    }
+
+    public void menuConfiguracoes(){
+        System.out.println("━━━━━━━ Configurações ━━━━━━━");
+        System.out.println("1 ➤ Definir caminho leitura de ficheiros.");
+        System.out.println("2 ➤ Definir separador de campos.");
+        System.out.println("3 ➤  ");
+        System.out.println("4 ➤ ");
+        System.out.println("5 ➤ ");
+        System.out.println("6 ➤ ");
+        System.out.println("7 ➤ Voltar");
+        System.out.println("8 ➤ Sair");
+        int resposta = sc.nextInt();
+
+        switch (resposta) {
+            case 1:
+                menuDefinirCaminhoLeitura();
+                menuConfiguracoes();
+            case 2:
+                menuDefinirSeparadorConteudo();
+                menuConfiguracoes();
+            case 7:
+                menu();
+            default:
+                System.out.println("⚠ Opção inválida ⚠");
+        }
+    }
+
+    public void menuDefinirCaminhoLeitura(){
+        System.out.println("━━━━━━━ Definir Caminho Leitura ━━━━━━━");
+        if(PratoController.getPathLeituraPrato() != null){
+            System.out.println("Caminho Pratos ➤ " + PratoController.getPathLeituraPrato());
+        }else {
+            System.out.println("Caminho Pratos ➤ Nenhum caminho definido.");
+        }
+        if(MesaController.getPathLeituraMesa() != null){
+            System.out.println("Caminho Mesas ➤ " + MesaController.getPathLeituraMesa());
+        }else {
+            System.out.println("Caminho Mesas ➤ Nenhum caminho definido.");
+        }
+        if (ClienteReservaController.getPathLeituraClienteReserva() != null){
+            System.out.println("Caminho Reservas ➤ " + ClienteReservaController.getPathLeituraClienteReserva());
+        }else {
+            System.out.println("Caminho Reservas ➤ Nenhum caminho definido.");
+        }
+        System.out.println(" ");
+        System.out.println("1 ➤ Ficheiro Pratos");
+        System.out.println("2 ➤ Ficheiro Mesas");
+        System.out.println("3 ➤ Ficheiro Reservas");
+        System.out.println("4 ➤ Voltar");
+        System.out.println("5 ➤ Sair");
+        int resposta = sc.nextInt();
+
+        switch (resposta){
+            case 1:
+                PratoView.caminhoLeituraPrato();
+                menuDefinirCaminhoLeitura();
+            case 2:
+                MesaView.caminhoLeituraMesa();
+                menuDefinirCaminhoLeitura();
+            case 3:
+                ClienteReservaView.caminhoLeituraClientesReserva();
+                menuDefinirCaminhoLeitura();
+            case 4:
+                menuConfiguracoes();
+            default:
+                System.out.println("⚠ Opção inválida ⚠");
+
+        }
+    }
+
+    public void menuDefinirSeparadorConteudo(){
+        System.out.println("━━━━━━━ Definir Separador Conteudo ━━━━━━━");
+        if(LeituraFicheirosController.getSeparadorConteudo() != null) {
+            System.out.println("Separador atual ➤ " + LeituraFicheirosController.getSeparadorConteudo());
+        }else {
+            System.out.println("➤ Separador atual ➤ Nenhum separador definido.");
+        }
+        System.out.println(" ");
+        String separador;
+        sc.nextLine();
+        do {
+            System.out.println("➤ Insira o separador de conteudo desejado: ");
+            separador = sc.nextLine();
+
+            if (!separador.matches("[\\p{P}\\p{S}]+")) {
+                System.out.println("⚠ Separador inválido ⚠");
+            }
+
+        } while (!separador.matches("[\\p{P}\\p{S}]+"));
+        LeituraFicheirosController.setSeparadorConteudo(separador);
     }
 
 }

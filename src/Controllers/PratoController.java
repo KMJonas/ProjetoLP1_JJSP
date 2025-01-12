@@ -3,18 +3,26 @@ package Controllers;
 import Models.Mesa;
 import Models.Prato;
 
+import java.text.ParseException;
+
 public class PratoController {
-    LeituraFicheirosController lf = new LeituraFicheirosController();
+    static LeituraFicheirosController lf = new LeituraFicheirosController();
+    private static String pathLeituraPrato = null;
 
     //Array global que irá conter todos os pratos
     static Prato[] pratos;
 
+
+
     public PratoController(){
-        lerPratos();
+
     }
 
-    public void lerPratos(){
-        pratos = lf.devolverPratos("src/Data/Pratos");
+    public static void lerPratos(String path) throws ParseException {
+        pratos = lf.devolverPratos(path);
+        if(pratos[0].getNome() != null){
+            pathLeituraPrato = path;
+        }
     }
 
     public static Prato[] getPratos() {
@@ -25,10 +33,14 @@ public class PratoController {
         PratoController.pratos = pratos; // Usa o nome da classe para referenciar o atributo estático
     }
 
-    public static Prato[] adicionarPrato(int idPrato, String nome, String categoria, double precoCusto, double precoVenda, int unidadeTempo) {
+    public static String getPathLeituraPrato() {
+        return pathLeituraPrato;
+    }
+
+    public static Prato[] adicionarPrato(int idPrato, String nome, String categoria, double precoCusto, double precoVenda, int unidadeTempoPreparacao, int unidadeTempoConsumo) {
         for (int i = 0; i < pratos.length; i++) {
             if (pratos[i] == null) {
-                pratos[i] = new Prato(idPrato, nome, categoria, precoCusto, precoVenda, unidadeTempo, 1);
+                pratos[i] = new Prato(idPrato, nome, categoria, precoCusto, precoVenda, unidadeTempoPreparacao,unidadeTempoConsumo, 1);
                 break;
             }
         }
@@ -57,7 +69,7 @@ public class PratoController {
                 listaPratos[i].setCategoria(prato.getCategoria());
                 listaPratos[i].setPrecoCusto(prato.getPrecoCusto());
                 listaPratos[i].setPrecoVenda(prato.getPrecoVenda());
-                listaPratos[i].setUnidadeTempo(prato.getUnidadeTempo());
+                listaPratos[i].setunidadeTempoPreparacao(prato.getunidadeTempoPreparacao());
                 listaPratos[i].setEstado(prato.getEstado());
                 return true;
             }

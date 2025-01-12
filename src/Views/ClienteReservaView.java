@@ -1,6 +1,7 @@
 package Views;
 
 import Controllers.ClienteReservaController;
+import Controllers.LeituraFicheirosController;
 import Controllers.PratoController;
 import Models.ClienteReserva;
 import Models.Prato;
@@ -12,21 +13,26 @@ public class ClienteReservaView {
     static Scanner sc = new Scanner(System.in);
 
     public static void mostrarClientesReserva() {
-        ClienteReserva[] reserva = ClienteReservaController.getReservas();
-        System.out.println("━━━━━━━ Mostrar Reservas ━━━━━━━");
-        for(int i = 0; i < reserva.length; i++) {
-            if(reserva[i] != null) {
-                System.out.println("➤ ID Reserva: " + reserva[i].getIdReserva());
-                System.out.println("➤ Nome cliente: " + reserva[i].getNome());
-                System.out.println("➤ Numero de pessoas: " + reserva[i].getNumPessoas());
-                System.out.println("➤ Numero de pessoas que comem entrada: " + reserva[i].getNumPessoasEntrada());
-                System.out.println("➤ Numero de pessoas que comem sobremesa: " + reserva[i].getNumPessoasSobremesa());
-                System.out.println("➤ Hora de chegada: " + reserva[i].getHoraChegada());
-                System.out.println("➤ Tempo maximo de espera para entrar: " + reserva[i].getTempoMaxEsperaEntrada());
-                System.out.println("➤ Tempo maximo de espera para ser atendido: " + reserva[i].getTempoMaxEsperaAtendimento());
-                System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        if(ClienteReservaController.getPathLeituraClienteReserva() != null){
+            ClienteReserva[] reserva = ClienteReservaController.getReservas();
+            System.out.println("━━━━━━━ Mostrar Reservas ━━━━━━━");
+            for(int i = 0; i < reserva.length; i++) {
+                if(reserva[i] != null) {
+                    System.out.println("➤ ID Reserva: " + reserva[i].getIdReserva());
+                    System.out.println("➤ Nome cliente: " + reserva[i].getNome());
+                    System.out.println("➤ Numero de pessoas: " + reserva[i].getNumPessoas());
+                    System.out.println("➤ Numero de pessoas que comem entrada: " + reserva[i].getNumPessoasEntrada());
+                    System.out.println("➤ Numero de pessoas que comem sobremesa: " + reserva[i].getNumPessoasSobremesa());
+                    System.out.println("➤ Hora de chegada: " + reserva[i].getHoraChegada());
+                    System.out.println("➤ Tempo maximo de espera para entrar: " + reserva[i].getTempoMaxEsperaEntrada());
+                    System.out.println("➤ Tempo maximo de espera para ser atendido: " + reserva[i].getTempoMaxEsperaAtendimento());
+                    System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                }
             }
+        }else{
+            System.out.println("⚠ O caminho do ficheiro não está definido, por favor configure o caminho nas configurações ⚠");
         }
+
     }
 
     public static void adicionarReserva(){
@@ -413,4 +419,18 @@ public class ClienteReservaView {
         }
     }
 
+    public static void caminhoLeituraClientesReserva(){
+        System.out.println("━━━━━━━ Adicionar Caminho Leitura Reserva ━━━━━━━");
+        try{
+            if(LeituraFicheirosController.getSeparadorConteudo() != null){
+                System.out.println("Insira o caminho desejado do ficheiro: ");
+                String path = sc.nextLine();
+                ClienteReservaController.lerReservas(path);
+            }else {
+                System.out.println("⚠ O separador de conteúdo não está definido, por favor configure o separador nas configurações ⚠");
+            }
+        }catch (Exception e){
+            System.out.println("⚠ Não é possivel importar o ficheiro, por favor verifique o separador associado ⚠");
+        }
+    }
 }

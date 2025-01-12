@@ -6,18 +6,20 @@ public class Prato {
     private String categoria; //Entrada, prato principal ou sobremesa.
     private double precoCusto;
     private double precoVenda;
-    private int unidadeTempo; //Unidade tempo para a sua preparação
+    private int unidadeTempoPreparacao; //Unidade tempo para a sua preparação
+    private int unidadeTempoConsumo; //Unidade tempo para o seu consumo
     private int estado; //Disponivel (1), Indisponivel (0) para seleção.
 
     public Prato() {}
 
-    public Prato(int idPrato, String nome, String categoria, double precoCusto, double precoVenda, int unidadeTempo, int estado) {
+    public Prato(int idPrato, String nome, String categoria, double precoCusto, double precoVenda, int unidadeTempoPreparacao,int unidadeTempoConsumo, int estado) {
         this.idPrato = idPrato;
         this.nome = nome;
         this.categoria = categoria;
         this.precoCusto = precoCusto;
         this.precoVenda = precoVenda;
-        this.unidadeTempo = unidadeTempo;
+        this.unidadeTempoPreparacao = unidadeTempoPreparacao;
+        this.unidadeTempoConsumo = unidadeTempoConsumo;
         this.estado = estado;
     }
 
@@ -61,12 +63,20 @@ public class Prato {
         this.precoVenda = precoVenda;
     }
 
-    public int getUnidadeTempo() {
-        return unidadeTempo;
+    public int getunidadeTempoPreparacao() {
+        return unidadeTempoPreparacao;
     }
 
-    public void setUnidadeTempo(int unidadeTempo) {
-        this.unidadeTempo = unidadeTempo;
+    public void setunidadeTempoPreparacao(int unidadeTempo) {
+        this.unidadeTempoPreparacao = unidadeTempo;
+    }
+
+    public int getunidadeTempoConsumo() {
+        return unidadeTempoConsumo;
+    }
+
+    public void setunidadeTempoConsumo(int unidadeTempo) {
+        this.unidadeTempoConsumo = unidadeTempo;
     }
 
     public int getEstado() {

@@ -12,10 +12,6 @@ import Views.PratoView;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        MesaController mesaController = new MesaController();
-        PratoController pratoController = new PratoController();
-        ClienteReservaController crc = new ClienteReservaController();
-
         Menu menu = new Menu();
         menu.menu();
     }

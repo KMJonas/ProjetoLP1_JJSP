@@ -1,6 +1,8 @@
 package Views;
 
+import Controllers.LeituraFicheirosController;
 import Controllers.MesaController;
+import Controllers.PratoController;
 import Models.ClienteReserva;
 import Models.Mesa;
 
@@ -10,16 +12,21 @@ public class MesaView {
     static Scanner sc = new Scanner(System.in);
 
     public static void mostrarMesas() {
-        Mesa[] mesas = MesaController.getMesas();
-        System.out.println("━━━━━━━ Mostrar Mesas ━━━━━━━");
-        for(int i = 0; i < mesas.length; i++) {
-            if(mesas[i] != null) {
-                System.out.println("➤ Mesa Nº: " + mesas[i].getIdMesa());
-                System.out.println("➤ Capacidade: " + mesas[i].getCapacidade());
-                System.out.println("➤ Status: " + mesas[i].getStatus());
-                System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        if(MesaController.getPathLeituraMesa() != null) {
+            Mesa[] mesas = MesaController.getMesas();
+            System.out.println("━━━━━━━ Mostrar Mesas ━━━━━━━");
+            for(int i = 0; i < mesas.length; i++) {
+                if(mesas[i] != null) {
+                    System.out.println("➤ Mesa Nº: " + mesas[i].getIdMesa());
+                    System.out.println("➤ Capacidade: " + mesas[i].getCapacidade());
+                    System.out.println("➤ Status: " + mesas[i].getStatus());
+                    System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                }
             }
+        }else{
+            System.out.println("⚠ O caminho do ficheiro não está definido, por favor configure o caminho nas configurações ⚠");
         }
+
     }
 
     public static void adicionarMesa(){
@@ -196,6 +203,20 @@ public class MesaView {
             System.out.println("Mesa removida com sucesso!");
         } else {
             System.out.println("⚠ Não existe nenhuma mesa com esse número ⚠");
+        }
+    }
+
+    public static void caminhoLeituraMesa(){
+        try{
+            if(LeituraFicheirosController.getSeparadorConteudo() != null) {
+                System.out.println("Insira o caminho desejado do ficheiro: ");
+                String path = sc.nextLine();
+                MesaController.lerMesas(path);
+            }else{
+                System.out.println("⚠ O separador de conteúdo não está definido, por favor configure o separador nas configurações ⚠");
+            }
+        }catch (Exception e){
+            System.out.println("⚠ Não é possivel importar o ficheiro, por favor verifique o separador associado ⚠");
         }
     }
 }
