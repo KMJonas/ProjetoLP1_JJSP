@@ -1,12 +1,11 @@
 package Views;
 
-import Controllers.ClienteReservaController;
-import Controllers.LeituraFicheirosController;
-import Controllers.MesaController;
-import Controllers.PratoController;
+import Controllers.*;
 import Models.Prato;
 
 import java.util.Scanner;
+
+import static Views.GlobalStorageView.modificarPassword;
 
 public class Menu {
     Scanner sc = new Scanner(System.in);
@@ -17,7 +16,7 @@ public class Menu {
         System.out.println("2 ➤ Gerir Reservas");
         System.out.println("3 ➤ Dia-a-dia");
         System.out.println("4 ➤ Configurações");
-        System.out.println("5 ➤ Sair");
+        System.out.println("9 ➤ Sair");
         int resposta = sc.nextInt();
 
         switch (resposta) {
@@ -28,9 +27,23 @@ public class Menu {
             case 3:
                 System.out.println("Pratos");
             case 4:
-                menuConfiguracoes();
-            case 5:
-                System.out.println("Sair");
+                String password;
+                do {
+                    System.out.println("Insira a password de acesso: ");
+                    password = sc.next();
+                    if (GlobalStorageController.verificarPassword(password)) {
+                        menuConfiguracoes();
+                        break;
+                    } else {
+                        if (password.equals(".")) {
+                            menu();
+                        }
+                        System.out.println("⚠ Password incorreta, insira a tecla '.' se deseja sair ⚠");
+                    }
+                } while (!password.equals("."));
+
+            case 9:
+                System.exit(0);
             default:
                 System.out.println("⚠ Opção inválida ⚠");
         }
@@ -40,7 +53,7 @@ public class Menu {
         System.out.println("━━━━━━━ Mesas e Menus ━━━━━━━");
         System.out.println("1 ➤ Gerir mesas");
         System.out.println("2 ➤ Gerir menus");
-        System.out.println("3 ➤ Voltar");
+        System.out.println("8 ➤ Voltar");
         int resposta = sc.nextInt();
 
         switch (resposta) {
@@ -48,8 +61,10 @@ public class Menu {
                 menuGerirMesas();
             case 2:
                 menuGerirMenus();
-            case 3:
+            case 8:
                 menu();
+            case 9:
+                System.exit(0);
             default:
                 System.out.println("⚠ Opção inválida ⚠");
         }
@@ -61,7 +76,8 @@ public class Menu {
         System.out.println("2 ➤ Adicionar mesa");
         System.out.println("3 ➤ Editar mesa");
         System.out.println("4 ➤ Eliminar mesa");
-        System.out.println("5 ➤ Voltar");
+        System.out.println("8 ➤ Voltar");
+        System.out.println("9 ➤ Voltar Menu Principal");
         int resposta = sc.nextInt();
 
         switch (resposta) {
@@ -77,8 +93,10 @@ public class Menu {
             case 4:
                 MesaView.eliminarMesa();
                 menuGerirMesas();
-            case 5:
+            case 8:
                 menuGerirMesasMenus();
+            case 9:
+                menu();
             default:
                 System.out.println("⚠ Opção inválida ⚠");
         }
@@ -90,7 +108,8 @@ public class Menu {
         System.out.println("2 ➤ Adicionar prato ao menu");
         System.out.println("3 ➤ Editar prato no menu");
         System.out.println("4 ➤ Eliminar prato no menu");
-        System.out.println("5 ➤ Voltar");
+        System.out.println("8 ➤ Voltar");
+        System.out.println("9 ➤ Voltar Menu Principal");
         int resposta = sc.nextInt();
 
         switch (resposta) {
@@ -106,8 +125,10 @@ public class Menu {
             case 4:
                 PratoView.eliminarPrato();
                 menuGerirMenus();
-            case 5:
+            case 8:
                 menuGerirMesasMenus();
+            case 9:
+                menu();
             default:
                 System.out.println("⚠ Opção inválida ⚠");
         }
@@ -119,7 +140,7 @@ public class Menu {
         System.out.println("2 ➤ Adicionar Reserva");
         System.out.println("3 ➤ Editar Reserva");
         System.out.println("4 ➤ Eliminar Reserva");
-        System.out.println("5 ➤ Voltar");
+        System.out.println("8 ➤ Voltar");
         int resposta = sc.nextInt();
 
         switch (resposta) {
@@ -135,7 +156,7 @@ public class Menu {
             case 4:
                 ClienteReservaView.eliminarReserva();
                 menuGerirReservas();
-            case 5:
+            case 8:
                 menu();
             default:
                 System.out.println("⚠ Opção inválida ⚠");
@@ -146,12 +167,11 @@ public class Menu {
         System.out.println("━━━━━━━ Configurações ━━━━━━━");
         System.out.println("1 ➤ Definir caminho leitura de ficheiros.");
         System.out.println("2 ➤ Definir separador de campos.");
-        System.out.println("3 ➤  ");
+        System.out.println("3 ➤ Definir unidades tempo.");
         System.out.println("4 ➤ ");
         System.out.println("5 ➤ ");
-        System.out.println("6 ➤ ");
-        System.out.println("7 ➤ Voltar");
-        System.out.println("8 ➤ Sair");
+        System.out.println("6 ➤ Alterar password de configuração.");
+        System.out.println("8 ➤ Voltar");
         int resposta = sc.nextInt();
 
         switch (resposta) {
@@ -161,7 +181,13 @@ public class Menu {
             case 2:
                 menuDefinirSeparadorConteudo();
                 menuConfiguracoes();
-            case 7:
+            case 3:
+                menuDefinirUnidadesTempo();
+                menuConfiguracoes();
+            case 6:
+                modificarPassword();
+                menu();
+            case 8:
                 menu();
             default:
                 System.out.println("⚠ Opção inválida ⚠");
@@ -231,6 +257,34 @@ public class Menu {
 
         } while (!separador.matches("[\\p{P}\\p{S}]+"));
         LeituraFicheirosController.setSeparadorConteudo(separador);
+    }
+
+    public void menuDefinirUnidadesTempo(){
+        System.out.println("━━━━━━━ Definir Unidades Tempo ━━━━━━━");
+        System.out.println("1 ➤ Definir tempo de espera para entrar.");
+        System.out.println("2 ➤ Definir tempo de espera para atendimento.");
+        System.out.println("3 ➤ Definir tempo de espera para pagamento.");
+        System.out.println("8 ➤ Voltar");
+        System.out.println("9 ➤ Voltar menu principal");
+        int resposta = sc.nextInt();
+
+        switch (resposta){
+            case 1:
+                ClienteReservaView.tempoEspera(resposta);
+                menuDefinirUnidadesTempo();
+            case 2:
+                ClienteReservaView.tempoEspera(resposta);
+                menuDefinirUnidadesTempo();
+            case 3:
+                ClienteReservaView.tempoEspera(resposta);
+                menuDefinirUnidadesTempo();
+            case 8:
+                menuConfiguracoes();
+            case 9:
+                menu();
+            default:
+                System.out.println("⚠ Opção inválida ⚠");
+        }
     }
 
 }

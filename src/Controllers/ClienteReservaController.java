@@ -33,10 +33,10 @@ public class ClienteReservaController {
         return pathLeituraClienteReserva;
     }
 
-    public static ClienteReserva[] adicionarReserva(String nome, int numPessoas, int numPessoasEntrada, int numPessoasSobremesa, int horaChegada, int tempoMaxEsperaEntrada, int tempoMaxEsperaAtendimento) {
+    public static ClienteReserva[] adicionarReserva(String nome, int numPessoas, int numPessoasEntrada, int numPessoasSobremesa, int horaChegada) {
         for (int i = 0; i < reservas.length; i++) {
             if (reservas[i] == null) {
-                reservas[i] = new ClienteReserva(i+1, nome, numPessoas, numPessoasEntrada, numPessoasSobremesa, horaChegada, tempoMaxEsperaEntrada, tempoMaxEsperaAtendimento);
+                reservas[i] = new ClienteReserva(i+1, nome, numPessoas, numPessoasEntrada, numPessoasSobremesa, horaChegada);
                 break;
             }
         }
@@ -53,8 +53,6 @@ public class ClienteReservaController {
                 listaReservas[i].setNumPessoasEntrada(reserva.getNumPessoasEntrada());
                 listaReservas[i].setNumPessoasSobremesa(reserva.getNumPessoasSobremesa());
                 listaReservas[i].setHoraChegada(reserva.getHoraChegada());
-                listaReservas[i].setTempoMaxEsperaEntrada(reserva.getTempoMaxEsperaEntrada());
-                listaReservas[i].setTempoMaxEsperaAtendimento(reserva.getTempoMaxEsperaAtendimento());
                 return true;
             }
         }
@@ -97,4 +95,5 @@ public class ClienteReservaController {
 
         return false;
     }
+
 }

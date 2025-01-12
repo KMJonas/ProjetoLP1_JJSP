@@ -51,7 +51,7 @@ public class LeituraFicheirosController {
                 int horaChegada = Integer.parseInt(cliente[2]);
                 int numPessoasEntrada = Integer.parseInt(cliente[3]);
                 int numPessoasSobremesa = Integer.parseInt(cliente[4]);
-                clientes[i] = new ClienteReserva(i+1, nomeReserva, numPessoas, numPessoasEntrada, numPessoasSobremesa, horaChegada, 0, 0);
+                clientes[i] = new ClienteReserva(i+1, nomeReserva, numPessoas, numPessoasEntrada, numPessoasSobremesa, horaChegada);
             }
         }
         return clientes;
