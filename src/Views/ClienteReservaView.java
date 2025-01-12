@@ -1,32 +1,38 @@
 package Views;
 
 import Controllers.ClienteReservaController;
-import Controllers.PratoController;
+import Controllers.LeituraFicheirosController;
 import Models.ClienteReserva;
-import Models.Prato;
+import Models.GlobalStorage;
 
-import java.util.ResourceBundle;
 import java.util.Scanner;
 
 public class ClienteReservaView {
     static Scanner sc = new Scanner(System.in);
 
     public static void mostrarClientesReserva() {
-        ClienteReserva[] reserva = ClienteReservaController.getReservas();
-        System.out.println("━━━━━━━ Mostrar Reservas ━━━━━━━");
-        for(int i = 0; i < reserva.length; i++) {
-            if(reserva[i] != null) {
-                System.out.println("➤ ID Reserva: " + reserva[i].getIdReserva());
-                System.out.println("➤ Nome cliente: " + reserva[i].getNome());
-                System.out.println("➤ Numero de pessoas: " + reserva[i].getNumPessoas());
-                System.out.println("➤ Numero de pessoas que comem entrada: " + reserva[i].getNumPessoasEntrada());
-                System.out.println("➤ Numero de pessoas que comem sobremesa: " + reserva[i].getNumPessoasSobremesa());
-                System.out.println("➤ Hora de chegada: " + reserva[i].getHoraChegada());
-                System.out.println("➤ Tempo maximo de espera para entrar: " + reserva[i].getTempoMaxEsperaEntrada());
-                System.out.println("➤ Tempo maximo de espera para ser atendido: " + reserva[i].getTempoMaxEsperaAtendimento());
-                System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        if(ClienteReservaController.getPathLeituraClienteReserva() != null){
+            ClienteReserva[] reserva = ClienteReservaController.getReservas();
+            System.out.println("━━━━━━━ Mostrar Reservas ━━━━━━━");
+            for(int i = 0; i < reserva.length; i++) {
+                if(reserva[i] != null) {
+                    System.out.println("➤ ID Reserva: " + reserva[i].getIdReserva());
+                    System.out.println("➤ Nome cliente: " + reserva[i].getNome());
+                    System.out.println("➤ Numero de pessoas: " + reserva[i].getNumPessoas());
+                    System.out.println("➤ Numero de pessoas que comem entrada: " + reserva[i].getNumPessoasEntrada());
+                    System.out.println("➤ Numero de pessoas que comem sobremesa: " + reserva[i].getNumPessoasSobremesa());
+                    System.out.println("➤ Hora de chegada: " + reserva[i].getHoraChegada());
+                    System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                }
             }
+            System.out.println(" ");
+            System.out.println("➤ Tempo maximo de espera para entrar: " + GlobalStorage.getTempoMaxEsperaEntrada());
+            System.out.println("➤ Tempo maximo de espera para ser atendido: " + GlobalStorage.getTempoMaxEsperaAtendimento());
+            System.out.println("➤ Tempo maximo de espera para pagamento: " + GlobalStorage.getTempoMaxEsperaPagamento());
+        }else{
+            System.out.println("⚠ O caminho do ficheiro não está definido, por favor configure o caminho nas configurações ⚠");
         }
+
     }
 
     public static void adicionarReserva(){
@@ -120,6 +126,7 @@ public class ClienteReservaView {
 
             } while (horaChegada < 0);
 
+            /*
             int tempoMaxEsperaEntrada;
             do {
                 System.out.println("➤ Tempo maximo de espera para entrar: ");
@@ -135,24 +142,9 @@ public class ClienteReservaView {
                 }
 
             } while (tempoMaxEsperaEntrada < 0);
+             */
 
-            int tempoMaxEsperaAtendimento;
-            do {
-                System.out.println("➤ Tempo maximo de espera para ser atendido: ");
-                while (!sc.hasNextInt()) {
-                    System.out.println("⚠ Insira um número válido ⚠");
-                    sc.next();
-                }
-
-                tempoMaxEsperaAtendimento = sc.nextInt();
-
-                if (tempoMaxEsperaAtendimento < 0) {
-                    System.out.println("⚠ Número tem de ser superior a 0 ⚠");
-                }
-
-            } while (tempoMaxEsperaAtendimento < 0);
-
-            ClienteReservaController.adicionarReserva(nome, numPessoas, numPessoasComemEntrada, numPessoasComemSobremesa, horaChegada, tempoMaxEsperaEntrada, tempoMaxEsperaAtendimento);
+            ClienteReservaController.adicionarReserva(nome, numPessoas, numPessoasComemEntrada, numPessoasComemSobremesa, horaChegada);
 
             System.out.println("➤ Deseja adicionar mais reservas? (S/N)");
             resposta = sc.next().charAt(0);
@@ -195,8 +187,9 @@ public class ClienteReservaView {
         int numPessoasComemEntrada = reservaSelecionada.getNumPessoasEntrada();
         int numPessoasComemSobremesa = reservaSelecionada.getNumPessoasSobremesa();
         int horaChegada = reservaSelecionada.getHoraChegada();
-        int tempoMaxEsperaEntrada = reservaSelecionada.getTempoMaxEsperaEntrada();
-        int tempoMaxEsperaAtendimento = reservaSelecionada.getTempoMaxEsperaAtendimento();
+        int tempoMaxEsperaEntrada = GlobalStorage.getTempoMaxEsperaEntrada();
+        int tempoMaxEsperaAtendimento = GlobalStorage.getTempoMaxEsperaAtendimento();
+        int tempoMaxEsperaPagamento = GlobalStorage.getTempoMaxEsperaPagamento();
 
         System.out.println("➤ Caso não deseje alterar algum destes tópicos, por favor insira 'n'");
 
@@ -315,6 +308,7 @@ public class ClienteReservaView {
 
         } while (horaChegada < 0);
 
+        /*
         do {
             System.out.println("➤ Insira o tempo máximo de espera para entrar: ");
             String tempoMaxEsperaEntradaN = sc.nextLine();
@@ -363,8 +357,33 @@ public class ClienteReservaView {
 
         } while (tempoMaxEsperaAtendimento < 0);
 
+        do {
+            System.out.println("➤ Insira o tempo máximo de espera para pagamento: ");
+            String tempoMaxEsperaPagamentoN = sc.nextLine();
+            if (tempoMaxEsperaPagamentoN.equals("n")) {
+                tempoMaxEsperaPagamento = reservaSelecionada.getNumPessoas(); // Não altera
+                break;
+            }
 
-        ClienteReserva reservaAtualizada = new ClienteReserva(reservaSelecionada.getIdReserva(), nome, numPessoas, numPessoasComemEntrada, numPessoasComemSobremesa, horaChegada, tempoMaxEsperaEntrada, tempoMaxEsperaAtendimento);
+            do {
+                if (!tempoMaxEsperaPagamentoN.matches("\\d+(\\.\\d+)?")) {
+                    System.out.println("⚠ Número inválido. ⚠");
+                    System.out.println("➤ Insira o tempo máximo de espera para pagamento: ");
+                    tempoMaxEsperaPagamentoN = sc.nextLine();
+                }
+            } while (!tempoMaxEsperaPagamentoN.matches("\\d+(\\.\\d+)?"));
+
+            tempoMaxEsperaPagamento = Integer.parseInt(tempoMaxEsperaPagamentoN);
+
+            if (tempoMaxEsperaPagamento < 0) {
+                System.out.println("⚠ Número tem de ser maior que 0 ⚠");
+            }
+
+        } while (tempoMaxEsperaPagamento < 0);
+        */
+
+
+        ClienteReserva reservaAtualizada = new ClienteReserva(reservaSelecionada.getIdReserva(), nome, numPessoas, numPessoasComemEntrada, numPessoasComemSobremesa, horaChegada);
 
         if (ClienteReservaController.modificarReserva(reservaAtualizada)) {
             System.out.println("➤ Reserva editada com sucesso");
@@ -411,6 +430,51 @@ public class ClienteReservaView {
         } else {
             System.out.println("⚠ Não existe nenhum prato com esse número ⚠");
         }
+    }
+
+    public static void caminhoLeituraClientesReserva(){
+        System.out.println("━━━━━━━ Adicionar Caminho Leitura Reserva ━━━━━━━");
+        try{
+            if(LeituraFicheirosController.getSeparadorConteudo() != null){
+                System.out.println("Insira o caminho desejado do ficheiro: ");
+                String path = sc.nextLine();
+                ClienteReservaController.lerReservas(path);
+            }else {
+                System.out.println("⚠ O separador de conteúdo não está definido, por favor configure o separador nas configurações ⚠");
+            }
+        }catch (Exception e){
+            System.out.println("⚠ Não é possivel importar o ficheiro, por favor verifique o separador associado ⚠");
+        }
+    }
+
+    public static void tempoEspera(int resposta){
+        ClienteReserva[] reserva = ClienteReservaController.getReservas();
+        if(resposta == 1){
+            System.out.println("➤ Tempo de espera para entrar: ");
+            int tempo = sc.nextInt();
+            if(tempo > 0){
+                GlobalStorage.setTempoMaxEsperaEntrada(tempo);
+            }else{
+                System.out.println("⚠ Tempo tem de ser superior a 0 ⚠");
+            }
+        } else if (resposta == 2) {
+            System.out.println("➤ Tempo de espera para ser atendido: ");
+            int tempo = sc.nextInt();
+            if (tempo > 0) {
+                GlobalStorage.setTempoMaxEsperaAtendimento(tempo);
+            } else {
+                System.out.println("⚠ Tempo tem de ser superior a 0 ⚠");
+            }
+        } else if (resposta == 3) {
+            System.out.println("➤ Tempo de espera para pagamento: ");
+            int tempo = sc.nextInt();
+            if (tempo > 0) {
+                GlobalStorage.setTempoMaxEsperaPagamento(tempo);
+            } else {
+                System.out.println("⚠ Tempo tem de ser superior a 0 ⚠");
+            }
+        }
+
     }
 
 }

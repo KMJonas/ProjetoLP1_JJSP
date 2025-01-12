@@ -1,13 +1,6 @@
-1//Bacalhau à Brás//prato principal//18.95//29.99//3//1
-2//Mousse de Chocolate//sobremesa//3.00//6.50//1//1
-3//Salada César//entrada//5.50//10.99//2//1
-4//Mousse de Caramelo//sobremesa//3.00//6.50//1//1
-5//Caril de Frango//prato principal//12.00//19.99//4//1
-6//Sopa de Legumes//entrada//2.50//5.00//1//1
-7//Panna Cotta//sobremesa//4.00//8.00//2//1
-8//Feijoada à Transmontana//prato principal//15.00//24.50//5//0
-9//Creme de Marisco//entrada//6.00//12.00//2//1
-10//Tarte de Limão Merengada//sobremesa//3.50//7.50//2//1
-11//Francesinha//prato principal//16.00//27.50//6//0
-12//Queijo Fresco com Mel//entrada//4.50//9.00//2//1
-13//Baba de Camelo//sobremesa//3.25//6.75//1//0
+Pão de alho;Entrada;1,40;3;1;1;True
+Bacalhau com natas;Principal;3,40;9,99;3;2;True
+Francesinha de frango;Principal;4,5;11;2;2;False
+Francesinha de porco com ovo;Principal;5,90;12,50;2;2;True
+Gelado de nata;Sobremesa;1,10;3;1;1;True
+Bolo de bolacha;Sobremesa;2,1;3,5;2;1;True

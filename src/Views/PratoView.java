@@ -1,5 +1,7 @@
 package Views;
 
+import Controllers.ClienteReservaController;
+import Controllers.LeituraFicheirosController;
 import Controllers.MesaController;
 import Controllers.PratoController;
 import Models.Prato;
@@ -10,20 +12,26 @@ public class PratoView {
     static Scanner sc = new Scanner(System.in);
 
     public static void mostrarPratos() {
-        System.out.println("━━━━━━━ Mostrar Pratos ━━━━━━━");
-        Prato[] pratos = PratoController.getPratos();
-        for (int i = 0; i < pratos.length; i++) {
-            if (pratos[i] != null) {
-                System.out.println("➤ ID Prato: " + pratos[i].getIdPrato());
-                System.out.println("➤ Nome: " + pratos[i].getNome());
-                System.out.println("➤ Categoria: " + pratos[i].getCategoria());
-                System.out.println("➤ Preço custo: " + pratos[i].getPrecoCusto());
-                System.out.println("➤ Preço venda: " + pratos[i].getPrecoVenda());
-                System.out.println("➤ Unidade tempo: " + pratos[i].getUnidadeTempo());
-                System.out.println("➤ Estado: " + pratos[i].getEstado());
-                System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        if(PratoController.getPathLeituraPrato() != null){
+            System.out.println("━━━━━━━ Mostrar Pratos ━━━━━━━");
+            Prato[] pratos = PratoController.getPratos();
+            for (int i = 0; i < pratos.length; i++) {
+                if (pratos[i] != null) {
+                    System.out.println("➤ ID Prato: " + pratos[i].getIdPrato());
+                    System.out.println("➤ Nome: " + pratos[i].getNome());
+                    System.out.println("➤ Categoria: " + pratos[i].getCategoria());
+                    System.out.println("➤ Preço custo: " + pratos[i].getPrecoCusto());
+                    System.out.println("➤ Preço venda: " + pratos[i].getPrecoVenda());
+                    System.out.println("➤ Unidade tempo preparação: " + pratos[i].getunidadeTempoPreparacao());
+                    System.out.println("➤ Unidade tempo consumo: " + pratos[i].getunidadeTempoConsumo());
+                    System.out.println("➤ Estado: " + pratos[i].getEstado());
+                    System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                }
             }
+        }else{
+            System.out.println("⚠ O caminho do ficheiro não está definido, por favor configure o caminho nas configurações ⚠");
         }
+
     }
 
     public static void adicionarPrato() {
@@ -92,30 +100,45 @@ public class PratoView {
                 }
             } while (!PratoController.confirmarPreco(precoVenda));
 
-            int unidadeTempo;
+            int unidadeTempoPreparacao;
             do {
-                System.out.println("➤ Insira a unidade de tempo do prato: ");
+                System.out.println("➤ Insira a unidade de tempo de preparação do prato: ");
                 while (!sc.hasNextInt()) {
                     System.out.println("⚠ Unidade de tempo inválida ⚠");
                     sc.next();
                 }
 
-                unidadeTempo = sc.nextInt();
+                unidadeTempoPreparacao = sc.nextInt();
 
-                if (unidadeTempo <= 0) {
+                if (unidadeTempoPreparacao <= 0) {
                     System.out.println("⚠ Unidade de tempo inválida ⚠");
                 }
 
-            } while (unidadeTempo <= 0);
+            } while (unidadeTempoPreparacao <= 0);
 
-            PratoController.setPratos(PratoController.adicionarPrato(++idCount, nome, categoria, precoCusto, precoVenda, unidadeTempo));
+            int unidadeTempoConsumo;
+            do {
+                System.out.println("➤ Insira a unidade de tempo de consumo do prato: ");
+                while (!sc.hasNextInt()) {
+                    System.out.println("⚠ Unidade de tempo inválida ⚠");
+                    sc.next();
+                }
+
+                unidadeTempoConsumo = sc.nextInt();
+
+                if (unidadeTempoConsumo <= 0) {
+                    System.out.println("⚠ Unidade de tempo inválida ⚠");
+                }
+
+            } while (unidadeTempoConsumo <= 0);
+
+            PratoController.setPratos(PratoController.adicionarPrato(++idCount, nome, categoria, precoCusto, precoVenda, unidadeTempoPreparacao, unidadeTempoConsumo));
 
             System.out.println("➤ Deseja adicionar mais pratos? (S/N)");
             resposta = sc.next().charAt(0);
             sc.nextLine();
         } while (resposta == 'S' || resposta == 's');
     }
-
 
     public static void modificarPrato() {
         System.out.println("━━━━━━━ Editar Prato ━━━━━━━");
@@ -150,7 +173,8 @@ public class PratoView {
         String categoria = pratoSelecionado.getCategoria();
         double precoCusto = pratoSelecionado.getPrecoCusto();
         double precoVenda = pratoSelecionado.getPrecoVenda();
-        int unidadeTempo = pratoSelecionado.getUnidadeTempo();
+        int unidadeTempoPreparacao = pratoSelecionado.getunidadeTempoPreparacao();
+        int unidadeTempoConsumo = pratoSelecionado.getunidadeTempoConsumo();
         int estado = pratoSelecionado.getEstado();
 
         System.out.println("➤ Caso não deseje alterar algum destes tópicos, por favor insira 'n'");
@@ -236,28 +260,54 @@ public class PratoView {
         } while (!PratoController.confirmarPreco(precoVenda));
 
         do {
-            System.out.println("➤ Insira a unidade de tempo do prato: ");
-            String unidadeTempoN = sc.nextLine();
-            if (unidadeTempoN.equals("n")) {
-                unidadeTempo = pratoSelecionado.getUnidadeTempo(); // Não altera
+            System.out.println("➤ Insira a unidade de tempo de preparação do prato: ");
+            String unidadeTempoPreparacaoN = sc.nextLine();
+            if (unidadeTempoPreparacaoN.equals("n")) {
+                unidadeTempoPreparacao = pratoSelecionado.getunidadeTempoPreparacao(); // Não altera
                 break;
             }
 
             do {
-                if (!unidadeTempoN.matches("\\d+(\\.\\d+)?")) {
+                if (!unidadeTempoPreparacaoN.matches("\\d+(\\.\\d+)?")) {
                     System.out.println("⚠ Preço inválido ⚠");
                     System.out.println("➤ Insira a unidade de tempo do prato: ");
-                    unidadeTempoN = sc.nextLine();
+                    unidadeTempoPreparacaoN = sc.nextLine();
                 }
-            }while (!unidadeTempoN.matches("\\d+(\\.\\d+)?"));
+            }while (!unidadeTempoPreparacaoN.matches("\\d+(\\.\\d+)?"));
 
-            unidadeTempo = Integer.parseInt(unidadeTempoN);
+            unidadeTempoPreparacao = Integer.parseInt(unidadeTempoPreparacaoN);
 
-            if(unidadeTempo <= 0){
+            if(unidadeTempoPreparacao <= 0){
                 System.out.println("⚠ Unidade de tempo inválida ⚠");
             }
 
-        } while (unidadeTempo <= 0);
+        } while (unidadeTempoPreparacao <= 0);
+
+        do {
+            System.out.println("➤ Insira a unidade de tempo de consumo do prato: ");
+            String unidadeTempoConsumoN = sc.nextLine();
+            if (unidadeTempoConsumoN.equals("n")) {
+                unidadeTempoConsumo = pratoSelecionado.getunidadeTempoConsumo(); // Não altera
+                break;
+            }
+
+            do {
+                if (!unidadeTempoConsumoN.matches("\\d+(\\.\\d+)?")) {
+                    System.out.println("⚠ Preço inválido ⚠");
+                    System.out.println("➤ Insira a unidade de tempo do prato: ");
+                    unidadeTempoConsumoN = sc.nextLine();
+                }
+            }while (!unidadeTempoConsumoN.matches("\\d+(\\.\\d+)?"));
+
+            unidadeTempoConsumo = Integer.parseInt(unidadeTempoConsumoN);
+
+            if(unidadeTempoConsumo <= 0){
+                System.out.println("⚠ Unidade de tempo inválida ⚠");
+            }
+
+        } while (unidadeTempoConsumo <= 0);
+
+
 
         do {
             System.out.println("➤ Insira o estado que pretende (Indisponível(0) ou Disponível(1)): ");
@@ -278,7 +328,7 @@ public class PratoView {
 
         } while (estado < 0 || estado > 1);
 
-        Prato pratoAtualizado = new Prato(resposta,nome, categoria, precoCusto, precoVenda, unidadeTempo, estado);
+        Prato pratoAtualizado = new Prato(resposta,nome, categoria, precoCusto, precoVenda, unidadeTempoPreparacao, unidadeTempoConsumo, estado);
 
         if(PratoController.modificarPrato(pratoAtualizado)){
             System.out.println("➤ Prato atualizado com sucesso!");
@@ -327,6 +377,21 @@ public class PratoView {
             System.out.println("Prato removido com sucesso!");
         } else {
             System.out.println("⚠ Não existe nenhum prato com esse número ⚠");
+        }
+    }
+
+    public static void caminhoLeituraPrato(){
+        System.out.println("━━━━━━━ Adicionar Caminho Leitura Prato ━━━━━━━");
+        try{
+            if(LeituraFicheirosController.getSeparadorConteudo() != null){
+                System.out.println("Insira o caminho desejado do ficheiro: ");
+                String path = sc.nextLine();
+                PratoController.lerPratos(path);
+            }else {
+                System.out.println("⚠ O separador de conteúdo não está definido, por favor configure o separador nas configurações ⚠");
+            }
+        }catch (Exception e){
+            System.out.println("⚠ Não é possivel importar o ficheiro, por favor verifique o separador associado ⚠");
         }
     }
 }
