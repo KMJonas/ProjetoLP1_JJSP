@@ -4,16 +4,17 @@ public class ClienteReserva {
     private int idReserva;
     private String nome;
     private int numPessoas;
-    private int numPessoasEntrada; //Numero de pessoas que vão comer entrada.
-    private int numPessoasSobremesa; //Numero de pessoas que vão comer sobremesa.
+    private int numPessoasEntrada;
+    private int numPessoasSobremesa;
     private int horaChegada;
-    private int tempoMaxEsperaEntrada; //Tempo maximo de espera para a entrar em uma mesa.
-    private int tempoMaxEsperaAtendimento; //Tempo maximo de espera para ser atendido.
-
+    private int tempoMaxEsperaEntrada;
+    private int tempoMaxEsperaAtendimento;
+    private Mesa mesaAssociada; // Nova associação com a mesa
+    private int momentoAtribuicao;
 
     public ClienteReserva() {}
 
-    public ClienteReserva(int idCliente, String nome, int numPessoas,int numPessoasEntrada, int numPessoasSobremesa, int horaChegada, int tempoMaxEsperaEntrada, int tempoMaxEsperaAtendimento) {
+    public ClienteReserva(int idCliente, String nome, int numPessoas, int numPessoasEntrada, int numPessoasSobremesa, int horaChegada, int tempoMaxEsperaEntrada, int tempoMaxEsperaAtendimento) {
         this.idReserva = idCliente;
         this.nome = nome;
         this.numPessoas = numPessoas;
@@ -87,4 +88,20 @@ public class ClienteReserva {
     public void setTempoMaxEsperaAtendimento(int tempoMaxEsperaAtendimento) {
         this.tempoMaxEsperaAtendimento = tempoMaxEsperaAtendimento;
     }
+
+    public Mesa getMesaAssociada() {
+        return mesaAssociada;
+    }
+
+    public void setMesaAssociada(Mesa mesaAssociada) {
+        this.mesaAssociada = mesaAssociada;
+    }
+
+    public void setMomentoAtribuicao(int momentoAtribuicao) {
+        this.momentoAtribuicao = momentoAtribuicao;
+    }
+    public int getMomentoAtribuicao() {
+        return momentoAtribuicao;
+    }
+
 }

@@ -1,71 +1,118 @@
-package Models;
+    package Models;
 
-import java.util.ArrayList;
+    public class Pedido {
+        private int idPedido;
+        private Mesa mesaAssociada;
+        private Prato[] pratos;
+        private int momentoCriacao;
+        private int tempoPreparacao;
+        private int tempoConsumo;
+        private boolean preparado;
+        private boolean consumido;
+        private boolean prontoParaEntrega;
+        private int status; // 0: Finalizado, 1: Ativo, 2: Entregue
+        private int statusPedido;
 
-public class Pedido {
-    private int idPedido;
-    private Mesa mesaAssociada;
-    private Prato[] listaPratos;
-    private double custoTotal;
-    private double lucro;
-    private int status; //Ativo (1) , Desativo (0)
+        // Construtor
+        public Pedido(int idPedido, Mesa mesaAssociada, Prato[] pratos, int momentoCriacao, int tempoPreparacao, int status) {
+            this.idPedido = idPedido;
+            this.mesaAssociada = mesaAssociada;
+            this.pratos = pratos;
+            this.momentoCriacao = momentoCriacao;
+            this.tempoPreparacao = tempoPreparacao;
+            this.statusPedido = status;
+            this.status = status;
+            this.preparado = false;
+            this.consumido = false;
+        }
 
-    public Pedido() {}
 
-    public Pedido(int idPedido, Mesa mesaAssociada, Prato[] listaPratos, double custoTotal, double lucro, int status) {
-        this.idPedido = idPedido;
-        this.mesaAssociada = mesaAssociada;
-        this.listaPratos = listaPratos;
-        this.custoTotal = custoTotal;
-        this.lucro = lucro;
-        this.status = status;
+        public int getIdPedido() {
+            return idPedido;
+        }
+
+
+        public void setStatusPedido(int statusPedido){
+            this.statusPedido = statusPedido;
+        }
+
+        public int getStatusPedido(){
+            return statusPedido;
+        }
+        public void setProntoParaEntrega(boolean prontoParaEntrega) {
+            this.prontoParaEntrega = prontoParaEntrega;
+        }
+
+        public boolean isProntoParaEntrega() {
+            return prontoParaEntrega;
+        }
+
+        public boolean isConsumido() {
+            return consumido;
+        }
+
+
+        public void setFinalizado(boolean finalizado) {
+            this.status = finalizado ? 0 : this.status;
+        }
+
+
+        public void setMomentoEntrega(int momentoEntrega) {
+            this.momentoCriacao = momentoEntrega - tempoPreparacao;
+        }
+
+
+
+
+        public int getTempoPreparacao() {
+            return tempoPreparacao;
+        }
+
+        public int getMomentoCriacao() {
+            return momentoCriacao;
+        }
+
+        public void setPreparado(boolean preparado) {
+            this.preparado = preparado;
+        }
+
+        public boolean isPreparado() {
+            return preparado;
+        }
+
+        public boolean isFinalizado() {
+            return status == 0;
+        }
+
+        public int getTempoConsumo() {
+            return tempoConsumo;
+        }
+
+        public int getMomentoEntrega() {
+            return momentoCriacao + tempoPreparacao;
+        }
+
+        public void setConsumido(boolean consumido) {
+            this.consumido = consumido;
+        }
+
+        public Mesa getMesaAssociada() {
+            return mesaAssociada;
+        }
+
+        public Prato[] getPratos() {
+            return pratos;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+
+
+        public void adicionarPrato(Prato pratoSelecionado) {
+        }
     }
-
-    public int getIdPedido() {
-        return idPedido;
-    }
-
-    public void setIdPedido(int idPedido) {
-        this.idPedido = idPedido;
-    }
-
-    public Mesa getMesaAssociada() {
-        return mesaAssociada;
-    }
-
-    public void setMesaAssociada(Mesa mesaAssociada) {
-        this.mesaAssociada = mesaAssociada;
-    }
-
-    public Prato[] getListaPratos() {
-        return listaPratos;
-    }
-
-    public void setListaPratos(Prato[] listaPratos) {
-        this.listaPratos = listaPratos;
-    }
-
-    public double getCustoTotal() {
-        return custoTotal;
-    }
-
-    public void setCustoTotal(double custoTotal) {
-        this.custoTotal = custoTotal;
-    }
-
-    public double getLucro() {
-        return lucro;
-    }
-
-    public void setLucro(double lucro) {
-        this.lucro = lucro;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-}

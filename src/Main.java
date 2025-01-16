@@ -1,8 +1,8 @@
-import Controllers.ClienteReservaController;
-import Controllers.LeituraFicheirosController;
-import Controllers.MesaController;
-import Controllers.PratoController;
+import Controllers.*;
 import Models.ClienteReserva;
+import Models.Prato;
+import Models.Mesa;
+
 import Views.ClienteReservaView;
 import Views.Menu;
 import Views.MesaView;
@@ -16,7 +16,15 @@ public class Main {
         PratoController pratoController = new PratoController();
         ClienteReservaController crc = new ClienteReservaController();
 
-        Menu menu = new Menu();
-        menu.menu();
+        // Passando os arrays diretamente para o construtor
+        SimulacaoDiaADia simulacao = new SimulacaoDiaADia(
+                MesaController.getMesas(),
+                ClienteReservaController.getReservas(),
+                PratoController.getPratos()
+        );
+        simulacao.iniciarSimulacao();
     }
 }
+
+
+

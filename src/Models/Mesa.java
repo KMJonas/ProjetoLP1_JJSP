@@ -3,10 +3,11 @@ package Models;
 public class Mesa {
     private int idMesa;
     private int capacidade;
-    private int status; //Livre (1), Ocupado (0)
+    private int status; // 1: Livre, 0: Ocupado, 3: Aguardando entrega, 4: Consumo em andamento
+    private ClienteReserva reservaAssociada;
+    private Pedido pedidoAssociado;
 
-    public Mesa() {}
-
+    // Construtor
     public Mesa(int idMesa, int capacidade, int status) {
         this.idMesa = idMesa;
         this.capacidade = capacidade;
@@ -17,17 +18,11 @@ public class Mesa {
         return idMesa;
     }
 
-    public void setIdMesa(int idMesa) {
-        this.idMesa = idMesa;
-    }
-
     public int getCapacidade() {
         return capacidade;
     }
 
-    public void setCapacidade(int capacidade) {
-        this.capacidade = capacidade;
-    }
+
 
     public int getStatus() {
         return status;
@@ -35,5 +30,31 @@ public class Mesa {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public ClienteReserva getReservaAssociada() {
+        return reservaAssociada;
+    }
+
+    public void setReservaAssociada(ClienteReserva reservaAssociada) {
+        this.reservaAssociada = reservaAssociada;
+    }
+
+    public int setCapacidade(int capacidade) {
+        return capacidade;
+    }
+
+    public int setIdMesa(int i) {
+        return i;
+    }
+
+
+
+    public Pedido getPedidoAssociado() {
+        return pedidoAssociado;
+    }
+
+    public void setPedidoAssociado(Pedido pedido) {
+        this.pedidoAssociado = pedido;
     }
 }

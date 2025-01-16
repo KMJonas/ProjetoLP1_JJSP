@@ -151,6 +151,7 @@ public class PratoView {
         double precoCusto = pratoSelecionado.getPrecoCusto();
         double precoVenda = pratoSelecionado.getPrecoVenda();
         int unidadeTempo = pratoSelecionado.getUnidadeTempo();
+        int tempoPreparacao = pratoSelecionado.getTempoPreparacao();
         int estado = pratoSelecionado.getEstado();
 
         System.out.println("➤ Caso não deseje alterar algum destes tópicos, por favor insira 'n'");
