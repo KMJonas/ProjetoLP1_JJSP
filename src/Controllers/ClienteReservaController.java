@@ -1,24 +1,21 @@
 package Controllers;
 
 import Models.ClienteReserva;
+import Models.GlobalStorage;
 import Models.Prato;
 
 public class ClienteReservaController {
     static LeituraFicheirosController lf = new LeituraFicheirosController();
-    static private String pathLeituraClienteReserva = null;
 
     //Array global que irá conter todas as reservas
     static ClienteReserva [] reservas;
 
     public ClienteReservaController() {
-
+        lerReservas();
     }
 
-    public static void lerReservas(String path){
-        reservas = lf.devolverClientesReserva(path);
-        if(reservas[0].getNome() != null){
-            pathLeituraClienteReserva = path;
-        }
+    public static void lerReservas(){
+        reservas = lf.devolverClientesReserva(GlobalStorage.getPathClientesReserva());
     }
 
     public static ClienteReserva[] getReservas() {
@@ -27,10 +24,6 @@ public class ClienteReservaController {
 
     public static void setReservas(ClienteReserva[] reservas) {
         ClienteReservaController.reservas = reservas;
-    }
-
-    public static String getPathLeituraClienteReserva() {
-        return pathLeituraClienteReserva;
     }
 
     public static ClienteReserva[] adicionarReserva(String nome, int numPessoas, int numPessoasEntrada, int numPessoasSobremesa, int horaChegada) {

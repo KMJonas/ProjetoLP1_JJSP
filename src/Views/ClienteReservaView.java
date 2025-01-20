@@ -5,13 +5,14 @@ import Controllers.LeituraFicheirosController;
 import Models.ClienteReserva;
 import Models.GlobalStorage;
 
+import java.text.ParseException;
 import java.util.Scanner;
 
 public class ClienteReservaView {
     static Scanner sc = new Scanner(System.in);
 
     public static void mostrarClientesReserva() {
-        if(ClienteReservaController.getPathLeituraClienteReserva() != null){
+        if(GlobalStorage.getPathClientesReserva() != null){
             ClienteReserva[] reserva = ClienteReservaController.getReservas();
             System.out.println("━━━━━━━ Mostrar Reservas ━━━━━━━");
             for(int i = 0; i < reserva.length; i++) {
@@ -29,8 +30,6 @@ public class ClienteReservaView {
             System.out.println("➤ Tempo maximo de espera para entrar: " + GlobalStorage.getTempoMaxEsperaEntrada());
             System.out.println("➤ Tempo maximo de espera para ser atendido: " + GlobalStorage.getTempoMaxEsperaAtendimento());
             System.out.println("➤ Tempo maximo de espera para pagamento: " + GlobalStorage.getTempoMaxEsperaPagamento());
-        }else{
-            System.out.println("⚠ O caminho do ficheiro não está definido, por favor configure o caminho nas configurações ⚠");
         }
 
     }
@@ -433,17 +432,26 @@ public class ClienteReservaView {
     }
 
     public static void caminhoLeituraClientesReserva(){
-        System.out.println("━━━━━━━ Adicionar Caminho Leitura Reserva ━━━━━━━");
+        LeituraFicheirosController lf = new LeituraFicheirosController();
+        System.out.println("━━━━━━━ Alterar Caminho Leitura Reserva ━━━━━━━");
+
         try{
-            if(LeituraFicheirosController.getSeparadorConteudo() != null){
+            if(GlobalStorage.getSeparadorConteudo() != null){
                 System.out.println("Insira o caminho desejado do ficheiro: ");
                 String path = sc.nextLine();
-                ClienteReservaController.lerReservas(path);
+                if(lf.devolverClientesReserva(path)[0].getIdReserva() != 0){
+                    GlobalStorage.setPathClientesReserva(path);
+                    ClienteReservaController.lerReservas();
+                    ClienteReservaController.lerReservas();
+                    System.out.println("✔ Caminho do ficheiro atualizado com sucesso!");
+                }else {
+                    System.out.println("⚠ O ficheiro fornecido não contém pratos válidos. Verifique o caminho e tente novamente. ⚠");
+                }
             }else {
                 System.out.println("⚠ O separador de conteúdo não está definido, por favor configure o separador nas configurações ⚠");
             }
-        }catch (Exception e){
-            System.out.println("⚠ Não é possivel importar o ficheiro, por favor verifique o separador associado ⚠");
+        } catch (Exception e) {
+            System.out.println("⚠ Ocorreu um erro ao ler o ficheiro. Por favor, verifique o formato do conteúdo. ⚠");
         }
     }
 

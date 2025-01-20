@@ -1,5 +1,6 @@
 package Controllers;
 
+import Models.GlobalStorage;
 import Models.Mesa;
 import Models.Prato;
 
@@ -7,22 +8,16 @@ import java.text.ParseException;
 
 public class PratoController {
     static LeituraFicheirosController lf = new LeituraFicheirosController();
-    private static String pathLeituraPrato = null;
 
     //Array global que irá conter todos os pratos
     static Prato[] pratos;
 
-
-
-    public PratoController(){
-
+    public PratoController() throws ParseException {
+        lerPratos();
     }
 
-    public static void lerPratos(String path) throws ParseException {
-        pratos = lf.devolverPratos(path);
-        if(pratos[0].getNome() != null){
-            pathLeituraPrato = path;
-        }
+    public static void lerPratos() throws ParseException {
+        pratos = lf.devolverPratos(GlobalStorage.getPathPratos());
     }
 
     public static Prato[] getPratos() {
@@ -33,9 +28,6 @@ public class PratoController {
         PratoController.pratos = pratos; // Usa o nome da classe para referenciar o atributo estático
     }
 
-    public static String getPathLeituraPrato() {
-        return pathLeituraPrato;
-    }
 
     public static Prato[] adicionarPrato(int idPrato, String nome, String categoria, double precoCusto, double precoVenda, int unidadeTempoPreparacao, int unidadeTempoConsumo) {
         for (int i = 0; i < pratos.length; i++) {

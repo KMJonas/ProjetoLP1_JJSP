@@ -4,12 +4,24 @@ public class GlobalStorage {
     static private int tempoMaxEsperaEntrada;
     static private int tempoMaxEsperaAtendimento;
     static private int tempoMaxEsperaPagamento;
-    static private String passwordConfiguracao = "configPass";
+    static private String pathMesas;
+    static private String pathPratos;
+    static private String pathClientesReserva;
+    static private String passwordConfiguracao;
+    static private String separadorConteudo;
 
     public GlobalStorage(int tempoMaxEsperaEnt, int tempoMaxEsperaAtend, int tempoMaxEsperaPag) {
         tempoMaxEsperaEntrada = tempoMaxEsperaEnt;
         tempoMaxEsperaAtendimento = tempoMaxEsperaAtend;
         tempoMaxEsperaPagamento = tempoMaxEsperaPag;
+    }
+
+    public GlobalStorage(String Mesas, String Pratos, String ClientesReserva,String passwordConfig, String sepConteudo) {
+        pathMesas = Mesas;
+        pathPratos = Pratos;
+        pathClientesReserva = ClientesReserva;
+        passwordConfiguracao = passwordConfig;
+        separadorConteudo = sepConteudo;
     }
 
     public static int getTempoMaxEsperaEntrada() {
@@ -42,5 +54,37 @@ public class GlobalStorage {
 
     public static void setPasswordConfiguracao(String passwordConfiguracao) {
         GlobalStorage.passwordConfiguracao = passwordConfiguracao;
+    }
+
+    public static String getPathMesas() {
+        return pathMesas;
+    }
+
+    public static void setPathMesas(String pathMesas) {
+        GlobalStorage.pathMesas = pathMesas;
+    }
+
+    public static String getPathPratos() {
+        return pathPratos;
+    }
+
+    public static void setPathPratos(String pathPratos) {
+        GlobalStorage.pathPratos = pathPratos;
+    }
+
+    public static String getPathClientesReserva() {
+        return pathClientesReserva;
+    }
+
+    public static void setPathClientesReserva(String pathClientesReserva) {
+        GlobalStorage.pathClientesReserva = pathClientesReserva;
+    }
+
+    public static String getSeparadorConteudo() {
+        return separadorConteudo;
+    }
+
+    public static void setSeparadorConteudo(String separadorConteudo) {
+        GlobalStorage.separadorConteudo = separadorConteudo;
     }
 }

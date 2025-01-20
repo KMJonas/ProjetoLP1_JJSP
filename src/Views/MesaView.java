@@ -4,6 +4,7 @@ import Controllers.LeituraFicheirosController;
 import Controllers.MesaController;
 import Controllers.PratoController;
 import Models.ClienteReserva;
+import Models.GlobalStorage;
 import Models.Mesa;
 
 import java.util.Scanner;
@@ -12,7 +13,7 @@ public class MesaView {
     static Scanner sc = new Scanner(System.in);
 
     public static void mostrarMesas() {
-        if(MesaController.getPathLeituraMesa() != null) {
+        if(GlobalStorage.getPathMesas() != null) {
             Mesa[] mesas = MesaController.getMesas();
             System.out.println("━━━━━━━ Mostrar Mesas ━━━━━━━");
             for(int i = 0; i < mesas.length; i++) {
@@ -23,8 +24,6 @@ public class MesaView {
                     System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
                 }
             }
-        }else{
-            System.out.println("⚠ O caminho do ficheiro não está definido, por favor configure o caminho nas configurações ⚠");
         }
 
     }
@@ -207,16 +206,24 @@ public class MesaView {
     }
 
     public static void caminhoLeituraMesa(){
+        LeituraFicheirosController lf = new LeituraFicheirosController();
+        System.out.println("━━━━━━━ Alterar Caminho Leitura Mesas ━━━━━━━");
+
         try{
-            if(LeituraFicheirosController.getSeparadorConteudo() != null) {
+            if(GlobalStorage.getSeparadorConteudo() != null) {
                 System.out.println("Insira o caminho desejado do ficheiro: ");
                 String path = sc.nextLine();
-                MesaController.lerMesas(path);
+                if(lf.devolverMesas(path)[0].getIdMesa() != 0) {
+                    GlobalStorage.setPathMesas(path);
+                    MesaController.lerMesas();
+                    System.out.println("✔ Caminho do ficheiro atualizado com sucesso!");
+                }
+
             }else{
                 System.out.println("⚠ O separador de conteúdo não está definido, por favor configure o separador nas configurações ⚠");
             }
         }catch (Exception e){
-            System.out.println("⚠ Não é possivel importar o ficheiro, por favor verifique o separador associado ⚠");
+            System.out.println("⚠ Ocorreu um erro ao ler o ficheiro. Por favor, verifique o formato do conteúdo. ⚠");
         }
     }
 }

@@ -1,24 +1,21 @@
 package Controllers;
 
+import Models.GlobalStorage;
 import Models.Mesa;
 
 public class MesaController {
     static LeituraFicheirosController lf = new LeituraFicheirosController();
-    static private String pathLeituraMesa = null;
 
     //Array global que irá conter todas as mesas
     static Mesa[] mesas;
 
     //Construtor que irá ler todas as mesas
     public MesaController(){
-
+        lerMesas();
     }
 
-    public static void lerMesas(String path){
-        mesas = lf.devolverMesas(path);
-        if(mesas[0].getCapacidade() != 0){
-            pathLeituraMesa = path;
-        }
+    public static void lerMesas(){
+        mesas = lf.devolverMesas(GlobalStorage.getPathMesas());
     }
 
     public static Mesa[] getMesas() {
@@ -27,10 +24,6 @@ public class MesaController {
 
     public static void setMesas(Mesa[] mesas) {
         MesaController.mesas = mesas;
-    }
-
-    public static String getPathLeituraMesa() {
-        return pathLeituraMesa;
     }
 
     public static Mesa[] adicionarMesa(int capacidade) {
