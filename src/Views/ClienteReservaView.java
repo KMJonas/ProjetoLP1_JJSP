@@ -20,8 +20,6 @@ public class ClienteReservaView {
                     System.out.println("➤ ID Reserva: " + reserva[i].getIdReserva());
                     System.out.println("➤ Nome cliente: " + reserva[i].getNome());
                     System.out.println("➤ Numero de pessoas: " + reserva[i].getNumPessoas());
-                    System.out.println("➤ Numero de pessoas que comem entrada: " + reserva[i].getNumPessoasEntrada());
-                    System.out.println("➤ Numero de pessoas que comem sobremesa: " + reserva[i].getNumPessoasSobremesa());
                     System.out.println("➤ Hora de chegada: " + reserva[i].getHoraChegada());
                     System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
                 }
@@ -74,41 +72,6 @@ public class ClienteReservaView {
 
             } while (numPessoas <= 0);
 
-            int numPessoasComemEntrada;
-            do {
-                System.out.println("➤ Numero de pessoas que comem entrada: ");
-                while (!sc.hasNextInt()) {
-                    System.out.println("⚠ Insira um número válido ⚠");
-                    sc.next();
-                }
-
-                numPessoasComemEntrada = sc.nextInt();
-
-                if (numPessoasComemEntrada <= 0) {
-                    System.out.println("⚠ Número tem de ser superior ou igual a 0 ⚠");
-                } else if (numPessoasComemEntrada > numPessoas) {
-                    System.out.println("⚠ Número de pessoas que comem entrada não pode ser superior ao número de pessoas ⚠");
-                }
-
-            } while (numPessoasComemEntrada <= 0);
-
-            int numPessoasComemSobremesa;
-            do {
-                System.out.println("➤ Numero de pessoas que comem sobremesa: ");
-                while (!sc.hasNextInt()) {
-                    System.out.println("⚠ Insira um número válido ⚠");
-                    sc.next();
-                }
-
-                numPessoasComemSobremesa = sc.nextInt();
-
-                if (numPessoasComemSobremesa <= 0) {
-                    System.out.println("⚠ Número tem de ser superior ou igual a 0 ⚠");
-                } else if (numPessoasComemSobremesa > numPessoas) {
-                    System.out.println("⚠ Número de pessoas que comem sobremesa não pode ser superior ao número de pessoas ⚠");
-                }
-            } while (numPessoasComemSobremesa <= 0);
-
             int horaChegada;
             do {
                 System.out.println("➤ Hora de chegada: ");
@@ -125,25 +88,7 @@ public class ClienteReservaView {
 
             } while (horaChegada < 0);
 
-            /*
-            int tempoMaxEsperaEntrada;
-            do {
-                System.out.println("➤ Tempo maximo de espera para entrar: ");
-                while (!sc.hasNextInt()) {
-                    System.out.println("⚠ Insira um número válido ⚠");
-                    sc.next();
-                }
-
-                tempoMaxEsperaEntrada = sc.nextInt();
-
-                if (tempoMaxEsperaEntrada < 0) {
-                    System.out.println("⚠ Número tem de ser superior a 0 ⚠");
-                }
-
-            } while (tempoMaxEsperaEntrada < 0);
-             */
-
-            ClienteReservaController.adicionarReserva(nome, numPessoas, numPessoasComemEntrada, numPessoasComemSobremesa, horaChegada);
+            ClienteReservaController.adicionarReserva(nome, numPessoas, horaChegada);
 
             System.out.println("➤ Deseja adicionar mais reservas? (S/N)");
             resposta = sc.next().charAt(0);
@@ -183,13 +128,7 @@ public class ClienteReservaView {
 
         String nome = reservaSelecionada.getNome();
         int numPessoas = reservaSelecionada.getNumPessoas();
-        int numPessoasComemEntrada = reservaSelecionada.getNumPessoasEntrada();
-        int numPessoasComemSobremesa = reservaSelecionada.getNumPessoasSobremesa();
         int horaChegada = reservaSelecionada.getHoraChegada();
-        int tempoMaxEsperaEntrada = GlobalStorage.getTempoMaxEsperaEntrada();
-        int tempoMaxEsperaAtendimento = GlobalStorage.getTempoMaxEsperaAtendimento();
-        int tempoMaxEsperaPagamento = GlobalStorage.getTempoMaxEsperaPagamento();
-
         System.out.println("➤ Caso não deseje alterar algum destes tópicos, por favor insira 'n'");
 
         do {
@@ -229,61 +168,6 @@ public class ClienteReservaView {
         } while (numPessoas <= 0);
 
         do {
-            System.out.println("➤ Insira o número de pessoas que comem entrada: ");
-            String numPessoasComemEntradaN = sc.nextLine();
-            if (numPessoasComemEntradaN.equals("n")) {
-                numPessoasComemEntrada = reservaSelecionada.getNumPessoasEntrada(); // Não altera
-                break;
-            }
-
-            do {
-                if (!numPessoasComemEntradaN.matches("\\d+(\\.\\d+)?")) {
-                    System.out.println("⚠ Número de pessoas inválido. ⚠");
-                    System.out.println("➤ Insira o número de pessoas que comem entrada: ");
-                    numPessoasComemEntradaN = sc.nextLine();
-                }
-            } while (!numPessoasComemEntradaN.matches("\\d+(\\.\\d+)?"));
-
-            numPessoasComemEntrada = Integer.parseInt(numPessoasComemEntradaN);
-
-            if (numPessoasComemEntrada < 0) {
-                System.out.println("⚠ Número de pessoas tem de ser maior que 0 ⚠");
-            } else if (numPessoasComemEntrada > numPessoas) {
-                System.out.println("⚠ Número de pessoas que comem entrada não pode ser superior ao número de pessoas ⚠");
-            }
-
-        } while (numPessoasComemEntrada < 0 || numPessoasComemEntrada > numPessoas); ;
-
-        do {
-            System.out.println("➤ Insira o número de pessoas que comem sobremesa: ");
-            String numPessoasComemSobremesaN = sc.nextLine();
-            if (numPessoasComemSobremesaN.equals("n")) {
-                numPessoasComemSobremesa = reservaSelecionada.getNumPessoasEntrada(); // Não altera
-                break;
-            }
-
-            do {
-                if (!numPessoasComemSobremesaN.matches("\\d+(\\.\\d+)?")) {
-                    System.out.println("⚠ Número de pessoas inválido. ⚠");
-                    System.out.println("➤ Insira o número de pessoas que comem sobremesa: ");
-                    numPessoasComemSobremesaN = sc.nextLine();
-                }
-            } while (!numPessoasComemSobremesaN.matches("\\d+(\\.\\d+)?"));
-
-            numPessoasComemSobremesa = Integer.parseInt(numPessoasComemSobremesaN);
-
-            if (numPessoasComemSobremesa < 0) {
-                System.out.println("⚠ Número de pessoas tem de ser maior que 0 ⚠");
-            } else if (numPessoasComemSobremesa > numPessoas) {
-                System.out.println("⚠ Número de pessoas que comem sobremesa não pode ser superior ao número de pessoas ⚠");
-                {
-
-                }
-
-            }
-        } while (numPessoasComemSobremesa < 0 || numPessoasComemSobremesa > numPessoas);
-
-        do {
             System.out.println("➤ Insira a hora de chegada: ");
             String horaChegadaN = sc.nextLine();
             if (horaChegadaN.equals("n")) {
@@ -307,82 +191,7 @@ public class ClienteReservaView {
 
         } while (horaChegada < 0);
 
-        /*
-        do {
-            System.out.println("➤ Insira o tempo máximo de espera para entrar: ");
-            String tempoMaxEsperaEntradaN = sc.nextLine();
-            if (tempoMaxEsperaEntradaN.equals("n")) {
-                tempoMaxEsperaEntrada = reservaSelecionada.getNumPessoas(); // Não altera
-                break;
-            }
-
-            do {
-                if (!tempoMaxEsperaEntradaN.matches("\\d+(\\.\\d+)?")) {
-                    System.out.println("⚠ Número inválido. ⚠");
-                    System.out.println("➤ Insira o tempo máximo de espera para entrar: ");
-                    tempoMaxEsperaEntradaN = sc.nextLine();
-                }
-            } while (!tempoMaxEsperaEntradaN.matches("\\d+(\\.\\d+)?"));
-
-            tempoMaxEsperaEntrada = Integer.parseInt(tempoMaxEsperaEntradaN);
-
-            if (tempoMaxEsperaEntrada < 0) {
-                System.out.println("⚠ Número tem de ser maior que 0 ⚠");
-            }
-
-        } while (tempoMaxEsperaEntrada < 0);
-
-        do {
-            System.out.println("➤ Insira o tempo máximo de espera para ser atendido: ");
-            String tempoMaxEsperaAtendimentoN = sc.nextLine();
-            if (tempoMaxEsperaAtendimentoN.equals("n")) {
-                tempoMaxEsperaAtendimento = reservaSelecionada.getNumPessoas(); // Não altera
-                break;
-            }
-
-            do {
-                if (!tempoMaxEsperaAtendimentoN.matches("\\d+(\\.\\d+)?")) {
-                    System.out.println("⚠ Número inválido. ⚠");
-                    System.out.println("➤ Insira o tempo máximo de espera para ser atendido: ");
-                    tempoMaxEsperaAtendimentoN = sc.nextLine();
-                }
-            } while (!tempoMaxEsperaAtendimentoN.matches("\\d+(\\.\\d+)?"));
-
-            tempoMaxEsperaAtendimento = Integer.parseInt(tempoMaxEsperaAtendimentoN);
-
-            if (tempoMaxEsperaAtendimento < 0) {
-                System.out.println("⚠ Número tem de ser maior que 0 ⚠");
-            }
-
-        } while (tempoMaxEsperaAtendimento < 0);
-
-        do {
-            System.out.println("➤ Insira o tempo máximo de espera para pagamento: ");
-            String tempoMaxEsperaPagamentoN = sc.nextLine();
-            if (tempoMaxEsperaPagamentoN.equals("n")) {
-                tempoMaxEsperaPagamento = reservaSelecionada.getNumPessoas(); // Não altera
-                break;
-            }
-
-            do {
-                if (!tempoMaxEsperaPagamentoN.matches("\\d+(\\.\\d+)?")) {
-                    System.out.println("⚠ Número inválido. ⚠");
-                    System.out.println("➤ Insira o tempo máximo de espera para pagamento: ");
-                    tempoMaxEsperaPagamentoN = sc.nextLine();
-                }
-            } while (!tempoMaxEsperaPagamentoN.matches("\\d+(\\.\\d+)?"));
-
-            tempoMaxEsperaPagamento = Integer.parseInt(tempoMaxEsperaPagamentoN);
-
-            if (tempoMaxEsperaPagamento < 0) {
-                System.out.println("⚠ Número tem de ser maior que 0 ⚠");
-            }
-
-        } while (tempoMaxEsperaPagamento < 0);
-        */
-
-
-        ClienteReserva reservaAtualizada = new ClienteReserva(reservaSelecionada.getIdReserva(), nome, numPessoas, numPessoasComemEntrada, numPessoasComemSobremesa, horaChegada);
+        ClienteReserva reservaAtualizada = new ClienteReserva(reservaSelecionada.getIdReserva(), nome, numPessoas, horaChegada);
 
         if (ClienteReservaController.modificarReserva(reservaAtualizada)) {
             System.out.println("➤ Reserva editada com sucesso");

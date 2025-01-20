@@ -41,9 +41,7 @@ public class LeituraFicheirosController {
                 String nomeReserva = cliente[0];
                 int numPessoas = Integer.parseInt(cliente[1]);
                 int horaChegada = Integer.parseInt(cliente[2]);
-                int numPessoasEntrada = Integer.parseInt(cliente[3]);
-                int numPessoasSobremesa = Integer.parseInt(cliente[4]);
-                clientes[i] = new ClienteReserva(i+1, nomeReserva, numPessoas, numPessoasEntrada, numPessoasSobremesa, horaChegada);
+                clientes[i] = new ClienteReserva(i+1, nomeReserva, numPessoas, horaChegada);
             }
         }
         return clientes;
