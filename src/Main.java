@@ -19,9 +19,12 @@ public class Main {
         Menu menu = new Menu();
         menu.menu();
         */
+        String caminho = "src/Data/Logs/23-01-2025-02.txt";
         String mensagem = "Mensagem TESTE!";
+        int unidadeTempo = 1;
         FicheirosLogController ficheirosLogController = new FicheirosLogController();
         //FicheirosLogController.criaFicheirosLog();
-        FicheirosLogController.escreverLog(mensagem);
+        //FicheirosLogController.escreverLog(unidadeTempo, mensagem);
+        System.out.println(FicheirosLogController.lerFicheiroLog(caminho));
     }
 }

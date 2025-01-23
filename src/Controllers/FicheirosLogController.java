@@ -1,35 +1,39 @@
 package Controllers;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
+
 public class FicheirosLogController {
-    //private static final Path logsDir = Paths.get(dataDir.toAbsolutePath().toString() + "/src/Data/Logs");
-    private static final String caminho = System.getProperty("user.dir");
-    private static final Path logs = Paths.get(caminho + "/src/Data/Logs");
 
     public static void criaFicheirosLog() throws IOException {
+        Path logs = Paths.get("src/Data/Logs");
 
         if (!Files.exists(logs)) {
             Files.createDirectory(logs);
         }
 
         try {
-            String caminhoLog = caminho + "/src/Data/Logs";
-            int numLog = contarFicheirosLog(caminhoLog);
-            String nomeFicheiro = "FicheiroLog_";
+            String caminhoLog = "src/Data/Logs";
+            int numLog = contarFicheirosLog(caminhoLog) + 1;
 
-            File ficheiro = new File(caminho + "/src/Data/Logs/" + nomeFicheiro + numLog + ".txt");
+            //Obter a data e formataala
+            LocalDate data = LocalDate.now();
+            DateTimeFormatter dataFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String dataFormatada = data.format(dataFormat);
 
-            if (!ficheiro.exists()) {
-                System.out.println("Criar ficheiro");
-                System.out.println(numLog);
-                ficheiro.createNewFile();
+            String nomeFicheiro = dataFormatada + "-" + String.format("%02d", numLog) + ".txt";
+            Path ficheiroLog = Paths.get(caminhoLog + "/" + nomeFicheiro );
+
+            // Criar arquivo Log
+            if (!Files.exists(ficheiroLog)) {
+                Files.createFile(ficheiroLog);
+                System.out.println("Ficheiro criado com sucesso!");
             }
 
         } catch (IOException e) {
@@ -37,13 +41,13 @@ public class FicheirosLogController {
         }
     }
 
-    public static void escreverLog(String mensagem) throws IOException {
+    public static void escreverLog (int unidadeTempo ,  String mensagem) {
         File ultimoArquivo = obterUltimoFicheiroLog();
 
         if (ultimoArquivo != null) {
             // Tenta escrever no arquvio
             try (FileWriter fw = new FileWriter(ultimoArquivo, true)) {
-                fw.write(System.lineSeparator() + mensagem + "/");
+                fw.write(System.lineSeparator() +"unidade " + unidadeTempo + ": " + mensagem + " ;");
                 System.out.println("Escrevendo no arquivo");
             } catch (IOException e) {
                 System.err.println("Erro ao escrever o arquivo");
@@ -76,11 +80,11 @@ public class FicheirosLogController {
     }
 
     public static File obterUltimoFicheiroLog() {
-        File diretorio = new File(caminho + "/src/Data/Logs");
+        File diretorio = new File("src/Data/Logs");
 
         if(diretorio.exists() && diretorio.isDirectory()){
             //Filtrar ficheiros
-            File[] ficheirosLog = diretorio.listFiles((dir, name) -> name.endsWith(".txt"));
+            File[] ficheirosLog = diretorio.listFiles((_, name) -> name.endsWith(".txt"));
 
             if (ficheirosLog != null && ficheirosLog.length > 0) {
                 Arrays.sort(ficheirosLog, (a,b) -> {
@@ -98,5 +102,30 @@ public class FicheirosLogController {
 
         System.out.println("Nenhum ficheiro encontrado");
         return null; // Retorna Null se nenhum arquivo for encontrado
+    }
+
+    public static String lerFicheiroLog (String caminhoLog) throws IOException {
+        StringBuilder conteudo = new StringBuilder();
+        BufferedReader reader = null;
+
+        try {
+            reader = new BufferedReader(new FileReader(caminhoLog));
+            String linha;
+
+            while ((linha = reader.readLine()) != null) {
+                conteudo.append(linha).append("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return conteudo.toString();
     }
 }
