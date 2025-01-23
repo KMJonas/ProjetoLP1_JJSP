@@ -1,6 +1,7 @@
 package Controllers;
 
 import Models.ClienteReserva;
+import Models.GlobalStorage;
 import Models.Mesa;
 import Models.Prato;
 
@@ -12,15 +13,6 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 
 public class LeituraFicheirosController {
-    static private  String separadorConteudo = null;
-
-    public static void setSeparadorConteudo(String separador) {
-       separadorConteudo = separador;
-    }
-
-    public static String getSeparadorConteudo() {
-        return separadorConteudo;
-    }
 
     public String[] devolverConteudoFicheiro(String path) {
         String[] lista = new String[100];
@@ -45,13 +37,11 @@ public class LeituraFicheirosController {
         ClienteReserva[] clientes = new ClienteReserva[100];
         for (int i = 0; i < lista.length; i++) {
             if (lista[i] != null && !lista[i].trim().isEmpty()) {
-                String[] cliente = lista[i].split(separadorConteudo);
+                String[] cliente = lista[i].split(GlobalStorage.getSeparadorConteudo());
                 String nomeReserva = cliente[0];
                 int numPessoas = Integer.parseInt(cliente[1]);
                 int horaChegada = Integer.parseInt(cliente[2]);
-                int numPessoasEntrada = Integer.parseInt(cliente[3]);
-                int numPessoasSobremesa = Integer.parseInt(cliente[4]);
-                clientes[i] = new ClienteReserva(i+1, nomeReserva, numPessoas, numPessoasEntrada, numPessoasSobremesa, horaChegada);
+                clientes[i] = new ClienteReserva(i+1, nomeReserva, numPessoas, horaChegada);
             }
         }
         return clientes;
@@ -62,7 +52,7 @@ public class LeituraFicheirosController {
         Mesa[] mesas = new Mesa[100];
         for (int i = 0; i < lista.length; i++) {
             if (lista[i] != null && !lista[i].trim().isEmpty()) {
-                String[] mesa = lista[i].split(separadorConteudo);
+                String[] mesa = lista[i].split(GlobalStorage.getSeparadorConteudo());
                 int idMesa = Integer.parseInt(mesa[0]);
                 int capacidade = Integer.parseInt(mesa[1]);
                 mesas[i] = new Mesa(idMesa, capacidade, 1);
@@ -78,7 +68,7 @@ public class LeituraFicheirosController {
 
         for (int i = 0; i < lista.length; i++) {
             if (lista[i] != null && !lista[i].trim().isEmpty()) {
-                String[] prato = lista[i].split(separadorConteudo);
+                String[] prato = lista[i].split(GlobalStorage.getSeparadorConteudo());
                 String nomePrato = prato[0];
                 String categoria = prato[1];
                 double precoCusto = nf.parse(prato[2].replace(",", ".")).doubleValue();
@@ -90,5 +80,15 @@ public class LeituraFicheirosController {
             }
         }
         return pratos;
+    }
+
+    public GlobalStorage devolverConfigGerais(){
+        String[] lista = devolverConteudoFicheiro("src/Data/ConfigGerais");
+        String pathMesas = lista[0];
+        String pathPratos = lista[1];
+        String pathClientesReserva = lista[2];
+        String passwordConfig = lista[3];
+        String separadorConteudo = lista[4];
+        return new GlobalStorage(pathMesas, pathPratos, pathClientesReserva, passwordConfig, separadorConteudo);
     }
 }

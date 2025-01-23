@@ -1,24 +1,21 @@
 package Controllers;
 
 import Models.ClienteReserva;
+import Models.GlobalStorage;
 import Models.Prato;
 
 public class ClienteReservaController {
     static LeituraFicheirosController lf = new LeituraFicheirosController();
-    static private String pathLeituraClienteReserva = null;
 
     //Array global que irá conter todas as reservas
     static ClienteReserva [] reservas;
 
     public ClienteReservaController() {
-
+        lerReservas();
     }
 
-    public static void lerReservas(String path){
-        reservas = lf.devolverClientesReserva(path);
-        if(reservas[0].getNome() != null){
-            pathLeituraClienteReserva = path;
-        }
+    public static void lerReservas(){
+        reservas = lf.devolverClientesReserva(GlobalStorage.getPathClientesReserva());
     }
 
     public static ClienteReserva[] getReservas() {
@@ -29,14 +26,10 @@ public class ClienteReservaController {
         ClienteReservaController.reservas = reservas;
     }
 
-    public static String getPathLeituraClienteReserva() {
-        return pathLeituraClienteReserva;
-    }
-
-    public static ClienteReserva[] adicionarReserva(String nome, int numPessoas, int numPessoasEntrada, int numPessoasSobremesa, int horaChegada) {
+    public static ClienteReserva[] adicionarReserva(String nome, int numPessoas, int horaChegada) {
         for (int i = 0; i < reservas.length; i++) {
             if (reservas[i] == null) {
-                reservas[i] = new ClienteReserva(i+1, nome, numPessoas, numPessoasEntrada, numPessoasSobremesa, horaChegada);
+                reservas[i] = new ClienteReserva(i+1, nome, numPessoas, horaChegada);
                 break;
             }
         }
@@ -50,8 +43,6 @@ public class ClienteReservaController {
             if (listaReservas[i] != null && listaReservas[i].getIdReserva() == reserva.getIdReserva()) {
                 listaReservas[i].setNome(reserva.getNome());
                 listaReservas[i].setNumPessoas(reserva.getNumPessoas());
-                listaReservas[i].setNumPessoasEntrada(reserva.getNumPessoasEntrada());
-                listaReservas[i].setNumPessoasSobremesa(reserva.getNumPessoasSobremesa());
                 listaReservas[i].setHoraChegada(reserva.getHoraChegada());
                 return true;
             }

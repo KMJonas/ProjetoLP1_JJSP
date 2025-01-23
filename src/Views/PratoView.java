@@ -1,37 +1,38 @@
 package Views;
 
-import Controllers.ClienteReservaController;
-import Controllers.LeituraFicheirosController;
-import Controllers.MesaController;
-import Controllers.PratoController;
+import Controllers.*;
+import Models.GlobalStorage;
 import Models.Prato;
 
+import java.text.ParseException;
 import java.util.Scanner;
 
 public class PratoView {
     static Scanner sc = new Scanner(System.in);
 
     public static void mostrarPratos() {
-        if(PratoController.getPathLeituraPrato() != null){
+        if (GlobalStorage.getPathPratos() != null) {
             System.out.println("━━━━━━━ Mostrar Pratos ━━━━━━━");
             Prato[] pratos = PratoController.getPratos();
             for (int i = 0; i < pratos.length; i++) {
                 if (pratos[i] != null) {
-                    System.out.println("➤ ID Prato: " + pratos[i].getIdPrato());
-                    System.out.println("➤ Nome: " + pratos[i].getNome());
-                    System.out.println("➤ Categoria: " + pratos[i].getCategoria());
-                    System.out.println("➤ Preço custo: " + pratos[i].getPrecoCusto());
-                    System.out.println("➤ Preço venda: " + pratos[i].getPrecoVenda());
-                    System.out.println("➤ Unidade tempo preparação: " + pratos[i].getunidadeTempoPreparacao());
-                    System.out.println("➤ Unidade tempo consumo: " + pratos[i].getunidadeTempoConsumo());
-                    System.out.println("➤ Estado: " + pratos[i].getEstado());
-                    System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                    if(pratos[i].getIdPrato() != 0){
+                        System.out.println("➤ ID Prato: " + pratos[i].getIdPrato());
+                        System.out.println("➤ Nome: " + pratos[i].getNome());
+                        System.out.println("➤ Categoria: " + pratos[i].getCategoria());
+                        System.out.println("➤ Preço custo: " + pratos[i].getPrecoCusto());
+                        System.out.println("➤ Preço venda: " + pratos[i].getPrecoVenda());
+                        System.out.println("➤ Unidade tempo preparação: " + pratos[i].getunidadeTempoPreparacao());
+                        System.out.println("➤ Unidade tempo consumo: " + pratos[i].getunidadeTempoConsumo());
+                        System.out.println("➤ Estado: " + pratos[i].getEstado());
+                        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                    }else {
+                        System.out.println("⚠ Não existem pratos registados ⚠");
+                        break;
+                    }
                 }
             }
-        }else{
-            System.out.println("⚠ O caminho do ficheiro não está definido, por favor configure o caminho nas configurações ⚠");
         }
-
     }
 
     public static void adicionarPrato() {
@@ -273,11 +274,11 @@ public class PratoView {
                     System.out.println("➤ Insira a unidade de tempo do prato: ");
                     unidadeTempoPreparacaoN = sc.nextLine();
                 }
-            }while (!unidadeTempoPreparacaoN.matches("\\d+(\\.\\d+)?"));
+            } while (!unidadeTempoPreparacaoN.matches("\\d+(\\.\\d+)?"));
 
             unidadeTempoPreparacao = Integer.parseInt(unidadeTempoPreparacaoN);
 
-            if(unidadeTempoPreparacao <= 0){
+            if (unidadeTempoPreparacao <= 0) {
                 System.out.println("⚠ Unidade de tempo inválida ⚠");
             }
 
@@ -297,16 +298,15 @@ public class PratoView {
                     System.out.println("➤ Insira a unidade de tempo do prato: ");
                     unidadeTempoConsumoN = sc.nextLine();
                 }
-            }while (!unidadeTempoConsumoN.matches("\\d+(\\.\\d+)?"));
+            } while (!unidadeTempoConsumoN.matches("\\d+(\\.\\d+)?"));
 
             unidadeTempoConsumo = Integer.parseInt(unidadeTempoConsumoN);
 
-            if(unidadeTempoConsumo <= 0){
+            if (unidadeTempoConsumo <= 0) {
                 System.out.println("⚠ Unidade de tempo inválida ⚠");
             }
 
         } while (unidadeTempoConsumo <= 0);
-
 
 
         do {
@@ -328,16 +328,17 @@ public class PratoView {
 
         } while (estado < 0 || estado > 1);
 
-        Prato pratoAtualizado = new Prato(resposta,nome, categoria, precoCusto, precoVenda, unidadeTempoPreparacao, unidadeTempoConsumo, estado);
+        Prato pratoAtualizado = new Prato(resposta, nome, categoria, precoCusto, precoVenda, unidadeTempoPreparacao, unidadeTempoConsumo, estado);
 
-        if(PratoController.modificarPrato(pratoAtualizado)){
+        if (PratoController.modificarPrato(pratoAtualizado)) {
             System.out.println("➤ Prato atualizado com sucesso!");
         } else {
             System.out.println("⚠ Não foi possível atualizar o prato ⚠");
-        };
+        }
+        ;
     }
 
-    public static void eliminarPrato(){
+    public static void eliminarPrato() {
         System.out.println("━━━━━━━ Eliminar Prato ━━━━━━━");
         int idPrato;
 
@@ -372,7 +373,7 @@ public class PratoView {
 
         idPrato = pratoSelecionado.getIdPrato();
 
-        if (PratoController.verificarPrato(idPrato)){
+        if (PratoController.verificarPrato(idPrato)) {
             PratoController.removerPrato(idPrato);
             System.out.println("Prato removido com sucesso!");
         } else {
@@ -380,18 +381,30 @@ public class PratoView {
         }
     }
 
-    public static void caminhoLeituraPrato(){
-        System.out.println("━━━━━━━ Adicionar Caminho Leitura Prato ━━━━━━━");
-        try{
-            if(LeituraFicheirosController.getSeparadorConteudo() != null){
+    public static void caminhoLeituraPrato() {
+        LeituraFicheirosController lf = new LeituraFicheirosController();
+        System.out.println("━━━━━━━ Alterar Caminho Leitura Prato ━━━━━━━");
+
+        try {
+            if (GlobalStorage.getSeparadorConteudo() != null) {
                 System.out.println("Insira o caminho desejado do ficheiro: ");
                 String path = sc.nextLine();
-                PratoController.lerPratos(path);
-            }else {
-                System.out.println("⚠ O separador de conteúdo não está definido, por favor configure o separador nas configurações ⚠");
+
+                // Verifica se o caminho fornecido contém pratos válidos
+                if (lf.devolverPratos(path)[0].getIdPrato() != 0) {
+                    GlobalStorage.setPathPratos(path);
+                    PratoController.lerPratos();
+                    System.out.println("✔ Caminho do ficheiro atualizado com sucesso!");
+                } else {
+                    System.out.println("⚠ O ficheiro fornecido não contém pratos válidos. Verifique o caminho e tente novamente. ⚠");
+                }
+            } else {
+                System.out.println("⚠ O separador de conteúdo não está definido. Por favor, configure o separador nas configurações. ⚠");
             }
-        }catch (Exception e){
-            System.out.println("⚠ Não é possivel importar o ficheiro, por favor verifique o separador associado ⚠");
+        } catch (ParseException e) {
+            System.out.println("⚠ Ocorreu um erro ao ler o ficheiro. Por favor, verifique o formato do conteúdo. ⚠");
+        } catch (Exception e) {
+            System.out.println("⚠ Ocorreu um erro inesperado: " + e.getMessage());
         }
     }
 }

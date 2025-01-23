@@ -1,6 +1,7 @@
 package Views;
 
 import Controllers.*;
+import Models.GlobalStorage;
 import Models.Prato;
 
 import java.util.Scanner;
@@ -46,6 +47,7 @@ public class Menu {
                 System.exit(0);
             default:
                 System.out.println("⚠ Opção inválida ⚠");
+                menu();
         }
     }
 
@@ -67,6 +69,7 @@ public class Menu {
                 System.exit(0);
             default:
                 System.out.println("⚠ Opção inválida ⚠");
+                menuGerirMesasMenus();
         }
     }
 
@@ -99,6 +102,7 @@ public class Menu {
                 menu();
             default:
                 System.out.println("⚠ Opção inválida ⚠");
+                menuGerirMesas();
         }
     }
 
@@ -131,6 +135,7 @@ public class Menu {
                 menu();
             default:
                 System.out.println("⚠ Opção inválida ⚠");
+                menuGerirMenus();
         }
     }
 
@@ -160,6 +165,7 @@ public class Menu {
                 menu();
             default:
                 System.out.println("⚠ Opção inválida ⚠");
+                menuGerirReservas();
         }
     }
 
@@ -196,18 +202,18 @@ public class Menu {
 
     public void menuDefinirCaminhoLeitura(){
         System.out.println("━━━━━━━ Definir Caminho Leitura ━━━━━━━");
-        if(PratoController.getPathLeituraPrato() != null){
-            System.out.println("Caminho Pratos ➤ " + PratoController.getPathLeituraPrato());
+        if(GlobalStorage.getPathPratos() != null){
+            System.out.println("Caminho Pratos ➤ " + GlobalStorage.getPathPratos());
         }else {
             System.out.println("Caminho Pratos ➤ Nenhum caminho definido.");
         }
-        if(MesaController.getPathLeituraMesa() != null){
-            System.out.println("Caminho Mesas ➤ " + MesaController.getPathLeituraMesa());
+        if(GlobalStorage.getPathMesas() != null){
+            System.out.println("Caminho Mesas ➤ " + GlobalStorage.getPathMesas());
         }else {
             System.out.println("Caminho Mesas ➤ Nenhum caminho definido.");
         }
-        if (ClienteReservaController.getPathLeituraClienteReserva() != null){
-            System.out.println("Caminho Reservas ➤ " + ClienteReservaController.getPathLeituraClienteReserva());
+        if (GlobalStorage.getPathClientesReserva() != null){
+            System.out.println("Caminho Reservas ➤ " + GlobalStorage.getPathClientesReserva());
         }else {
             System.out.println("Caminho Reservas ➤ Nenhum caminho definido.");
         }
@@ -215,8 +221,8 @@ public class Menu {
         System.out.println("1 ➤ Ficheiro Pratos");
         System.out.println("2 ➤ Ficheiro Mesas");
         System.out.println("3 ➤ Ficheiro Reservas");
-        System.out.println("4 ➤ Voltar");
-        System.out.println("5 ➤ Sair");
+        System.out.println("8 ➤ Voltar");
+        System.out.println("9 ➤ Voltar menu principal");
         int resposta = sc.nextInt();
 
         switch (resposta){
@@ -229,18 +235,20 @@ public class Menu {
             case 3:
                 ClienteReservaView.caminhoLeituraClientesReserva();
                 menuDefinirCaminhoLeitura();
-            case 4:
+            case 8:
                 menuConfiguracoes();
+            case 9:
+                menu();
             default:
                 System.out.println("⚠ Opção inválida ⚠");
-
+                menuDefinirCaminhoLeitura();
         }
     }
 
     public void menuDefinirSeparadorConteudo(){
         System.out.println("━━━━━━━ Definir Separador Conteudo ━━━━━━━");
-        if(LeituraFicheirosController.getSeparadorConteudo() != null) {
-            System.out.println("Separador atual ➤ " + LeituraFicheirosController.getSeparadorConteudo());
+        if(GlobalStorage.getSeparadorConteudo() != null) {
+            System.out.println("Separador atual ➤ " + GlobalStorage.getSeparadorConteudo());
         }else {
             System.out.println("➤ Separador atual ➤ Nenhum separador definido.");
         }
@@ -256,7 +264,7 @@ public class Menu {
             }
 
         } while (!separador.matches("[\\p{P}\\p{S}]+"));
-        LeituraFicheirosController.setSeparadorConteudo(separador);
+        GlobalStorage.setSeparadorConteudo(separador);
     }
 
     public void menuDefinirUnidadesTempo(){
@@ -284,6 +292,7 @@ public class Menu {
                 menu();
             default:
                 System.out.println("⚠ Opção inválida ⚠");
+                menuDefinirUnidadesTempo();
         }
     }
 
