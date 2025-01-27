@@ -13,17 +13,25 @@
         private int status; // 0: Finalizado, 1: Ativo, 2: Entregue
         private int statusPedido;
 
+
         // Construtor
-        public Pedido(int idPedido, Mesa mesaAssociada, Prato[] pratos, int momentoCriacao, int tempoPreparacao, int status) {
+        public Pedido(int idPedido, Mesa mesaAssociada, Prato[] pratos, int momentoCriacao, int tempoPreparacao, int status, int i) {
             this.idPedido = idPedido;
             this.mesaAssociada = mesaAssociada;
             this.pratos = pratos;
             this.momentoCriacao = momentoCriacao;
             this.tempoPreparacao = tempoPreparacao;
+            this.tempoConsumo = tempoConsumo;
             this.statusPedido = status;
             this.status = status;
             this.preparado = false;
             this.consumido = false;
+        }
+
+
+
+        public void setTempoConsumo(int tempoConsumo) {
+            this.tempoConsumo = tempoConsumo;
         }
 
 
@@ -62,6 +70,9 @@
         }
 
 
+        public int getTempoConsumo() {
+            return tempoConsumo;  // Deve retornar o tempo de consumo, não unidade de tempo
+        }
 
 
         public int getTempoPreparacao() {
@@ -84,9 +95,6 @@
             return status == 0;
         }
 
-        public int getTempoConsumo() {
-            return tempoConsumo;
-        }
 
         public int getMomentoEntrega() {
             return momentoCriacao + tempoPreparacao;

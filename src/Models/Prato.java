@@ -7,6 +7,7 @@ public class Prato {
     private double precoCusto;
     private double precoVenda;
     private int unidadetempo;
+    private int tempoConsumo;
     private int tempoPreparacao;
     private int estado; //Disponivel (1), Indisponivel (0) para seleção.
 
