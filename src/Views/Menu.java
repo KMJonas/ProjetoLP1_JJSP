@@ -4,12 +4,14 @@ import Controllers.*;
 import Models.GlobalStorage;
 import Models.Prato;
 
+import java.sql.SQLOutput;
 import java.util.Scanner;
 
 import static Views.GlobalStorageView.modificarPassword;
 
 public class Menu {
     Scanner sc = new Scanner(System.in);
+    LeituraFicheirosController lt = new LeituraFicheirosController();
 
     public void menu() {
         System.out.println("━━━━━━━ Restaurante JJSP ━━━━━━━");
@@ -17,6 +19,7 @@ public class Menu {
         System.out.println("2 ➤ Gerir Reservas");
         System.out.println("3 ➤ Dia-a-dia");
         System.out.println("4 ➤ Configurações");
+        System.out.println("5 ➤ Guardar Ficheiros");
         System.out.println("9 ➤ Sair");
         int resposta = sc.nextInt();
 
@@ -42,8 +45,25 @@ public class Menu {
                         System.out.println("⚠ Password incorreta, insira a tecla '.' se deseja sair ⚠");
                     }
                 } while (!password.equals("."));
-
+            case 5:
+                menuGuardarFichieros();
             case 9:
+                System.out.println("Deseja guardar os ficheiros antes de sair? (s/n)");
+                String respostaSair = sc.next();
+                if (respostaSair.equals("s")) {
+                    if (lt.guardarClientesReserva()){
+                        System.out.println("✅ Reservas guardadas com sucesso ✅");
+                    }
+                    if (lt.guardarMesas()){
+                        System.out.println("✅ Mesas guardadas com sucesso ✅");
+                    }
+                    if (lt.guardarPratos()){
+                        System.out.println("✅ Pratos guardados com sucesso ✅");
+                    }
+                    if (lt.guardarConfigGerais()) {
+                        System.out.println("✅ Configurações guardadas com sucesso ✅");
+                    }
+                }
                 System.exit(0);
             default:
                 System.out.println("⚠ Opção inválida ⚠");
@@ -293,6 +313,50 @@ public class Menu {
             default:
                 System.out.println("⚠ Opção inválida ⚠");
                 menuDefinirUnidadesTempo();
+        }
+    }
+
+    public void menuGuardarFichieros(){
+        System.out.println("━━━━━━━ Guardar Ficheiros ━━━━━━━");
+        System.out.println("1 ➤ Guardar mesas");
+        System.out.println("2 ➤ Guardar pratos");
+        System.out.println("3 ➤ Guardar reservas");
+        System.out.println("4 ➤ Guardar configurações");
+        System.out.println("5 ➤ Guardar tudo");
+        System.out.println("8 ➤ Voltar");
+        int resposta = sc.nextInt();
+
+        switch (resposta){
+            case 1:
+                if(lt.guardarMesas()){
+                    System.out.println("✅ Mesas guardadas com sucesso ✅");
+                    menuGuardarFichieros();
+                }
+            case 2:
+                if (lt.guardarPratos()){
+                    System.out.println("✅ Pratos guardados com sucesso ✅");
+                    menuGuardarFichieros();
+                }
+            case 3:
+                if(lt.guardarClientesReserva()){
+                    System.out.println("✅ Reservas guardadas com sucesso ✅");
+                    menuGuardarFichieros();
+                }
+            case 4:
+                if(lt.guardarConfigGerais()){
+                    System.out.println("✅ Configurações guardadas com sucesso ✅");
+                    menuGuardarFichieros();
+                }
+            case 5:
+                if(lt.guardarMesas() && lt.guardarPratos() && lt.guardarClientesReserva() && lt.guardarConfigGerais()){
+                    System.out.println("✅ Ficheiros guardados com sucesso ✅");
+                    menuGuardarFichieros();
+                }
+            case 8:
+                menu();
+            default:
+                System.out.println("⚠ Opção inválida ⚠");
+                menuGuardarFichieros();
         }
     }
 

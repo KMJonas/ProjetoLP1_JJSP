@@ -87,4 +87,5 @@ public class GlobalStorage {
     public static void setSeparadorConteudo(String separadorConteudo) {
         GlobalStorage.separadorConteudo = separadorConteudo;
     }
+
 }
