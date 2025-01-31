@@ -3,7 +3,7 @@ package Models;
 public class Mesa {
     private int idMesa;
     private int capacidade;
-    private int status; // 1: Livre, 0: Ocupado, 3: Aguardando entrega, 4: Consumo em andamento
+    private int status; // 0: Livre,10: Ocupado, 3: Aguardando entrega, 4: Consumo em andamento
     private ClienteReserva reservaAssociada;
     private Pedido pedidoAssociado;
 

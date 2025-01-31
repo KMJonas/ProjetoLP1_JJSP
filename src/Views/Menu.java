@@ -4,6 +4,7 @@ import Controllers.*;
 import Models.GlobalStorage;
 import Models.Prato;
 
+import java.text.ParseException;
 import java.util.Scanner;
 
 import static Views.GlobalStorageView.modificarPassword;
@@ -11,7 +12,7 @@ import static Views.GlobalStorageView.modificarPassword;
 public class Menu {
     Scanner sc = new Scanner(System.in);
 
-    public void menu() {
+    public void menu() throws ParseException {
         System.out.println("━━━━━━━ Restaurante JJSP ━━━━━━━");
         System.out.println("1 ➤ Gerir mesas e menus");
         System.out.println("2 ➤ Gerir Reservas");
@@ -26,7 +27,7 @@ public class Menu {
             case 2:
                 menuGerirReservas();
             case 3:
-                System.out.println("Pratos");
+                menuGerirDiaADia();
             case 4:
                 String password;
                 do {
@@ -51,7 +52,21 @@ public class Menu {
         }
     }
 
-    public void menuGerirMesasMenus() {
+    public void menuGerirDiaADia() throws ParseException {
+        MesaController mesaController = new MesaController();
+        PratoController pratoController = new PratoController();
+        ClienteReservaController crc = new ClienteReservaController();
+
+        // Passando os arrays diretamente para o construtor
+        SimulacaoDiaADia simulacao = new SimulacaoDiaADia(
+                MesaController.getMesas(),
+                ClienteReservaController.getReservas(),
+                PratoController.getPratos()
+        );
+        simulacao.iniciarSimulacao();
+    }
+
+    public void menuGerirMesasMenus() throws ParseException {
         System.out.println("━━━━━━━ Mesas e Menus ━━━━━━━");
         System.out.println("1 ➤ Gerir mesas");
         System.out.println("2 ➤ Gerir menus");
@@ -73,7 +88,7 @@ public class Menu {
         }
     }
 
-    public void menuGerirMesas() {
+    public void menuGerirMesas() throws ParseException {
         System.out.println("━━━━━━━ Mesas ━━━━━━━");
         System.out.println("1 ➤ Mostrar mesas");
         System.out.println("2 ➤ Adicionar mesa");
@@ -106,7 +121,7 @@ public class Menu {
         }
     }
 
-    public void menuGerirMenus() {
+    public void menuGerirMenus() throws ParseException {
         System.out.println("━━━━━━━ Mesas ━━━━━━━");
         System.out.println("1 ➤ Mostrar pratos no menu");
         System.out.println("2 ➤ Adicionar prato ao menu");
@@ -139,7 +154,7 @@ public class Menu {
         }
     }
 
-    public void menuGerirReservas() {
+    public void menuGerirReservas() throws ParseException {
         System.out.println("━━━━━━━ Reservas ━━━━━━━");
         System.out.println("1 ➤ Mostrar Reservas");
         System.out.println("2 ➤ Adicionar Reserva");
@@ -153,7 +168,7 @@ public class Menu {
                 ClienteReservaView.mostrarClientesReserva();
                 menuGerirReservas();
             case 2:
-                ClienteReservaView.adicionarReserva();
+                ClienteReservaView.adicionarReserva(0);
                 menuGerirReservas();
             case 3:
                 ClienteReservaView.editarReserva();
@@ -169,7 +184,7 @@ public class Menu {
         }
     }
 
-    public void menuConfiguracoes(){
+    public void menuConfiguracoes() throws ParseException {
         System.out.println("━━━━━━━ Configurações ━━━━━━━");
         System.out.println("1 ➤ Definir caminho leitura de ficheiros.");
         System.out.println("2 ➤ Definir separador de campos.");
@@ -200,7 +215,7 @@ public class Menu {
         }
     }
 
-    public void menuDefinirCaminhoLeitura(){
+    public void menuDefinirCaminhoLeitura() throws ParseException {
         System.out.println("━━━━━━━ Definir Caminho Leitura ━━━━━━━");
         if(GlobalStorage.getPathPratos() != null){
             System.out.println("Caminho Pratos ➤ " + GlobalStorage.getPathPratos());
@@ -267,7 +282,7 @@ public class Menu {
         GlobalStorage.setSeparadorConteudo(separador);
     }
 
-    public void menuDefinirUnidadesTempo(){
+    public void menuDefinirUnidadesTempo() throws ParseException {
         System.out.println("━━━━━━━ Definir Unidades Tempo ━━━━━━━");
         System.out.println("1 ➤ Definir tempo de espera para entrar.");
         System.out.println("2 ➤ Definir tempo de espera para atendimento.");

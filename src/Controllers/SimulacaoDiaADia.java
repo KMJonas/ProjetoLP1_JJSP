@@ -4,6 +4,7 @@
                 import Models.Mesa;
                 import Models.Prato;
                 import Models.Pedido;
+                import Views.ClienteReservaView;
 
                 import java.util.Scanner;
 
@@ -19,7 +20,7 @@
                         this.mesas = mesas;
                         this.reservas = reservas;
                         this.pratos = pratos;
-                        this.pedidos = new Pedido[100]; // Capacidade máxima de 100 pedidos
+                        this.pedidos = new Pedido[100];
                         this.pedidoAtual = 0;
                     }
 
@@ -40,6 +41,7 @@
 
                             verificarPreparacaoPronta(momentoAtual);
                             verificarConsumoFinalizado(momentoAtual);
+                            atualizarStatusConsumo(momentoAtual);
 
                             boolean avancarMomento = false;
 
@@ -49,16 +51,19 @@
                                 System.out.println("2 - Criar um novo pedido");
                                 System.out.println("3 - Entregar comida");
                                 System.out.println("4 - Finalizar pedido de uma mesa");
-                                System.out.println("5 - Avançar para o próximo momento");
+                                System.out.println("5 - Adicionar Reserva");
+                                System.out.println("6 - Avançar para o próximo momento");
                                 System.out.print("Escolha: ");
                                 int escolha = scanner.nextInt();
+
 
                                 switch (escolha) {
                                     case 1 -> atribuirMesaAReserva(scanner, momentoAtual);
                                     case 2 -> criarPedido(scanner, momentoAtual);
                                     case 3 -> entregarComida(scanner, momentoAtual);
                                     case 4 -> finalizarPedido(scanner, momentoAtual);
-                                    case 5 -> {
+                                    case 5 -> ClienteReservaView.adicionarReserva(momentoAtual);
+                                    case 6 -> {
                                         avancarMomento = true;
                                         System.out.println("Avançando para o próximo momento...");
                                     }
@@ -83,12 +88,10 @@
                     private void exibirReservasNoMomento(int momento) {
                         System.out.println("\nReservas no momento " + momento + ":");
                         for (ClienteReserva reserva : reservas) {
-                            if (reserva != null) {
+                            if (reserva != null && reserva.getMesaAssociada() == null) {
                                 if (reserva.getHoraChegada() == momento) {
-                                    // Exibe reservas para o momento atual
                                     System.out.println("- Reserva ID: " + reserva.getIdReserva() + " | Nome: " + reserva.getNome() + " | Nº Pessoas: " + reserva.getNumPessoas());
-                                } else if (reserva.getHoraChegada() < momento && reserva.getMesaAssociada() == null) {
-                                    // Exibe reservas não atribuídas no momento correto
+                                } else if (reserva.getHoraChegada() < momento) {
                                     System.out.println("- Reserva ID: " + reserva.getIdReserva() + " | Nome: " + reserva.getNome() + " | Nº Pessoas: " + reserva.getNumPessoas() + " (Momento original: " + reserva.getHoraChegada() + ")");
                                 }
                             }
@@ -99,19 +102,46 @@
                     private void exibirMesasDisponiveis() {
                         System.out.println("\nMesas disponíveis:");
                         for (Mesa mesa : mesas) {
-                            if (mesa != null && mesa.getStatus() == 1) { // Livre
+                            if (mesa != null && mesa.getStatus() == 1) {
                                 System.out.println("- Mesa ID: " + mesa.getIdMesa() + " | Capacidade: " + mesa.getCapacidade());
                             }
                         }
                     }
 
                     private void exibirOcupacoes() {
-                        System.out.println("\nOcupacões atuais:");
+                        System.out.println("\nOcupações atuais:");
                         for (Mesa mesa : mesas) {
-                            if (mesa != null && mesa.getStatus() == 0) { // Ocupado
+                            if (mesa != null) {
                                 ClienteReserva reserva = mesa.getReservaAssociada();
+                                String statusTexto = "Vazia";
+
                                 if (reserva != null) {
-                                    System.out.println("- Mesa ID: " + mesa.getIdMesa() + " está ocupada pela reserva ID: " + reserva.getIdReserva() + " (" + reserva.getNome() + ")");
+                                    switch (mesa.getStatus()) {
+                                        case 1:
+                                            statusTexto = "Á espera da comida";
+                                            break;
+                                        case 2:
+                                            statusTexto = "A Comer";
+                                            break;
+                                        case 3:
+                                            statusTexto = "Acabou de Comer!Á espera para poder pagar!";
+                                            break;
+
+                                        default:
+                                            statusTexto = "Ocupada";
+                                    }
+
+                                    System.out.println("- Mesa ID: " + mesa.getIdMesa() + " está ocupada pela reserva ID: "
+                                            + reserva.getIdReserva() + " (" + reserva.getNome() + ") - Status: " + statusTexto);
+
+
+                                    Pedido pedido = mesa.getPedidoAssociado();
+                                    if (pedido != null && pedido.isPreparado()) {
+                                        System.out.println("  → A comida está pronta para entrega!");
+                                    }
+                                } else {
+
+                                    System.out.println("- Mesa ID: " + mesa.getIdMesa() + " - Status: " + statusTexto);
                                 }
                             }
                         }
@@ -125,6 +155,7 @@
                                 if (momentoAtual >= pedido.getMomentoEntrega() + tempoConsumo) {
                                     System.out.println("Pedido associado à mesa " + pedido.getMesaAssociada().getIdMesa() + " foi consumido e pode ser finalizado.");
                                     pedido.setConsumido(true);
+                                    pedido.getMesaAssociada().setStatus(3);
                                 }
                             }
                         }
@@ -166,7 +197,7 @@
                             return;
                         }
 
-                        mesa.setStatus(0);
+                        mesa.setStatus(0); // Mesa ocupada
                         mesa.setReservaAssociada(reserva);
                         reserva.setMesaAssociada(mesa);
                         reserva.setMomentoAtribuicao(momentoAtual);
@@ -186,40 +217,36 @@
                             return;
                         }
 
-                        Pedido pedidoExistente = mesa.getPedidoAssociado();
-                        if (pedidoExistente != null) {
-                            if (pedidoExistente.getStatusPedido() == 1) { // 1 -> Pedido em andamento
-                                System.out.println("Já existe um pedido em andamento para esta mesa.");
-                                return;
-                            } else if (pedidoExistente.getStatusPedido() == 0) { // 0 -> Pedido finalizado
-                                System.out.println("O pedido da mesa foi finalizado. Você pode criar um novo pedido.");
-                                mesa.setPedidoAssociado(null);
-                            }
-                        }
-
                         ClienteReserva reserva = mesa.getReservaAssociada();
                         if (reserva == null) {
                             System.out.println("Não há reserva associada à mesa.");
                             return;
                         }
 
-                        // Alteração: Verificar o momento de atribuição da reserva
-                        if (reserva.getMomentoAtribuicao() > momentoAtual) {
-                            System.out.println("A reserva não pode ser utilizada antes do momento de atribuição.");
+                        // Verifica se o momento atual é o mesmo que o momento de atribuição da mesa
+                        if (reserva.getMomentoAtribuicao() == momentoAtual) {
+                            System.out.println("Não é possível criar um pedido no mesmo momento em que a mesa foi atribuída.");
+                            return;
+                        }
+
+                        // Verifica se já existe um pedido em andamento para esta mesa
+                        Pedido pedidoExistente = mesa.getPedidoAssociado();
+                        if (pedidoExistente != null && pedidoExistente.getStatusPedido() == 1) {
+                            System.out.println("Já existe um pedido em andamento para esta mesa.");
                             return;
                         }
 
                         System.out.println("Pratos disponíveis:");
                         for (Prato prato : pratos) {
                             if (prato != null) {
-                                System.out.println("- Prato ID: " + prato.getIdPrato() + " | Nome: " + prato.getNome() + " | Tempo de Preparação: " + prato.getTempoPreparacao() + " minutos.");
+                                System.out.println("- Prato ID: " + prato.getIdPrato() + " | Nome: " + prato.getNome() + " | Tempo de Preparação: " + prato.getunidadeTempoPreparacao() + " momentos." + "| Tempo de consumo: " + prato.getunidadeTempoConsumo() + "momentos.");
                             }
                         }
 
                         Prato[] pratosSelecionados = new Prato[10];
                         int pratoCount = 0;
                         int tempoTotalPreparacao = 0;
-                        int maiorTempoConsumo = 0;  // Variável para armazenar o maior tempo de consumo
+                        int maiorTempoConsumo = 0;
 
                         while (true) {
                             System.out.print("Digite o ID do prato a incluir no pedido (ou 0 para finalizar): ");
@@ -231,44 +258,43 @@
                             Prato pratoSelecionado = buscarPratoPorId(idPrato);
                             if (pratoSelecionado != null) {
                                 pratosSelecionados[pratoCount++] = pratoSelecionado;
-                                // Atualize o tempo de preparo com o maior valor
-                                tempoTotalPreparacao = Math.max(tempoTotalPreparacao, pratoSelecionado.getTempoPreparacao());
-                                maiorTempoConsumo = Math.max(maiorTempoConsumo, pratoSelecionado.getTempoConsumo()); // Cálculo do maior tempo de consumo
+                                tempoTotalPreparacao = Math.max(tempoTotalPreparacao, pratoSelecionado.getunidadeTempoPreparacao());
+                                maiorTempoConsumo = Math.max(maiorTempoConsumo, pratoSelecionado.getunidadeTempoConsumo());
                             } else {
                                 System.out.println("Prato não encontrado.");
                             }
                         }
 
-                        // Alteração: corrigir incremento do pedidoAtual
-                        int idPedido = pedidoAtual++;  // Garantir que o ID seja correto
+                        int idPedido = pedidoAtual++;
 
                         System.out.println("tempo total de preparação: " + tempoTotalPreparacao);
                         System.out.println("maior tempo de consumo: " + maiorTempoConsumo);
 
-                        // Criar novo pedido com base nos dados coletados
                         Pedido novoPedido = new Pedido(idPedido, mesa, pratosSelecionados, momentoAtual, tempoTotalPreparacao, maiorTempoConsumo, 1);
+                        novoPedido.setStatusPedido(1);
 
-                        // Atribuir o pedido à mesa e adicionar à lista de pedidos
+
                         mesa.setPedidoAssociado(novoPedido);
                         pedidos[idPedido] = novoPedido;
                         System.out.println("Pedido criado com sucesso para a mesa " + idMesa + "!");
-                        System.out.println("Teste tempo:" + maiorTempoConsumo);
+
+                        mesa.setStatus(1);
+
+
+
+
+
+                        System.out.println("Pedido criado com sucesso para a mesa " + idMesa + "!");
                     }
-
-
-
-
-
 
 
                     private void entregarComida(Scanner scanner, int momentoAtual) {
                         System.out.print("Digite o ID da mesa para entregar comida: ");
                         int idMesa = scanner.nextInt();
 
-
                         Mesa mesa = null;
                         for (Mesa m : mesas) {
-                            if (m != null && m.getIdMesa() == idMesa && m.getStatus() == 0) { // Mesa ocupada
+                            if (m != null && m.getIdMesa() == idMesa && (m.getStatus() == 1 || m.getStatus() == 2)) {
                                 mesa = m;
                                 break;
                             }
@@ -285,7 +311,6 @@
                             return;
                         }
 
-
                         if (momentoAtual < pedido.getMomentoCriacao() + pedido.getTempoPreparacao()) {
                             System.out.println("A comida ainda não está pronta para ser entregue.");
                             return;
@@ -294,7 +319,9 @@
                         System.out.println("Comida entregue com sucesso na mesa " + idMesa + "!");
                         pedido.setMomentoEntrega(momentoAtual);
 
+                        mesa.setStatus(2); // Atualiza o status da mesa para "A Comer"
                     }
+
 
 
 
@@ -306,17 +333,27 @@
                                 if (momentoAtual >= pedido.getMomentoCriacao() + tempoPreparacao) {
                                     System.out.println("Comida do pedido associado à mesa " + pedido.getMesaAssociada().getIdMesa() + " está pronta para ser entregue.");
                                     pedido.setPreparado(true);
+                                } else {
+                                    System.out.println("Comida do pedido associado à mesa " + pedido.getMesaAssociada().getIdMesa() + " ainda não está pronta. Tempo restante: " + (pedido.getMomentoCriacao() + tempoPreparacao - momentoAtual));
                                 }
                             }
                         }
                     }
 
+                    private void atualizarStatusConsumo(int momentoAtual) {
+                        for (Pedido pedido : pedidos) {
+                            if (pedido != null && pedido.getStatusPedido() == 2) {
+                                int tempoConsumo = pedido.getTempoConsumo();
 
-
-
-
-
-
+                                if (momentoAtual >= pedido.getMomentoEntrega() + tempoConsumo) {
+                                    System.out.println("Pedido associado à mesa " + pedido.getMesaAssociada().getIdMesa() + " foi consumido.");
+                                    pedido.setStatusPedido(3);
+                                    pedido.setConsumido(true);
+                                    pedido.getMesaAssociada().setStatus(3);
+                                }
+                            }
+                        }
+                    }
 
 
 
@@ -326,8 +363,8 @@
 
                         Mesa mesa = buscarMesaPorId(idMesa);
 
-                        if (mesa == null || mesa.getStatus() != 0) {
-                            System.out.println("Mesa não está ocupada ou não encontrada.");
+                        if (mesa == null || mesa.getStatus() != 3) { // Verifica se a mesa está com status "Acabou de Comer"
+                            System.out.println("Mesa não encontrada ou o pedido ainda não foi consumido por completo.");
                             return;
                         }
 
@@ -338,25 +375,20 @@
                             return;
                         }
 
-
-                        int maiorTempoConsumo = 0;
-                        for (Prato prato : pedido.getPratos()) {
-                            if (prato != null && prato.getTempoConsumo() > maiorTempoConsumo) {
-                                maiorTempoConsumo = prato.getTempoConsumo();
-                            }
-                        }
-
-
-                        if (momentoAtual < pedido.getMomentoEntrega() + pedido.getTempoConsumo()) {
+                        if (!pedido.isConsumido()) {
                             System.out.println("O pedido ainda não foi consumido por completo.");
                             return;
                         }
 
                         pedido.setFinalizado(true);
-                        mesa.setStatus(1);
                         mesa.setReservaAssociada(null);
+                        mesa.setPedidoAssociado(null);
+                        mesa.setStatus(4); // Libera a mesa
                         System.out.println("Pedido da mesa " + idMesa + " finalizado com sucesso.");
                     }
+
+
+
 
 
 

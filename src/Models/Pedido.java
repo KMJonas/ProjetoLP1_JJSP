@@ -12,6 +12,7 @@
         private boolean prontoParaEntrega;
         private int status; // 0: Finalizado, 1: Ativo, 2: Entregue
         private int statusPedido;
+        private boolean prejuizo;
 
 
         // Construtor
@@ -28,6 +29,14 @@
             this.consumido = false;
         }
 
+
+        public boolean isPrejuizo() {
+            return prejuizo;
+        }
+
+        public void setPrejuizo(boolean prejuizo) {
+            this.prejuizo = prejuizo;
+        }
 
 
         public void setTempoConsumo(int tempoConsumo) {
