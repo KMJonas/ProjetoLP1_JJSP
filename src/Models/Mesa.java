@@ -4,10 +4,11 @@ public class Mesa {
     private int idMesa;
     private int capacidade;
     private int status; // 0: Livre,10: Ocupado, 3: Aguardando entrega, 4: Consumo em andamento
-    private ClienteReserva reservaAssociada;
-    private Pedido pedidoAssociado;
 
     // Construtor
+    public Mesa(){
+
+    }
     public Mesa(int idMesa, int capacidade, int status) {
         this.idMesa = idMesa;
         this.capacidade = capacidade;
@@ -32,14 +33,6 @@ public class Mesa {
         this.status = status;
     }
 
-    public ClienteReserva getReservaAssociada() {
-        return reservaAssociada;
-    }
-
-    public void setReservaAssociada(ClienteReserva reservaAssociada) {
-        this.reservaAssociada = reservaAssociada;
-    }
-
     public int setCapacidade(int capacidade) {
         return capacidade;
     }
@@ -48,13 +41,4 @@ public class Mesa {
         return i;
     }
 
-
-
-    public Pedido getPedidoAssociado() {
-        return pedidoAssociado;
-    }
-
-    public void setPedidoAssociado(Pedido pedido) {
-        this.pedidoAssociado = pedido;
-    }
 }

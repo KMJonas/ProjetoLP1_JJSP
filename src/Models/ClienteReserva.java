@@ -5,8 +5,6 @@ public class ClienteReserva {
     private String nome;
     private int numPessoas;
     private int horaChegada;
-    private  int momentoAtribuicao;
-    private Mesa mesaAssociada;
     
 
 
@@ -50,22 +48,5 @@ public class ClienteReserva {
 
     public void setHoraChegada(int horaChegada) {
         this.horaChegada = horaChegada;
-    }
-
-
-    public int getMomentoAtribuicao() {
-        return momentoAtribuicao;
-    }
-
-    public void setMomentoAtribuicao(int momentoAtribuicao) {
-        this.momentoAtribuicao = momentoAtribuicao;
-    }
-
-    public Mesa getMesaAssociada() {
-        return mesaAssociada;
-    }
-
-    public void setMesaAssociada(Mesa mesaAssociada) {
-        this.mesaAssociada = mesaAssociada;
     }
 }
