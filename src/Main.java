@@ -1,30 +1,30 @@
 import Controllers.*;
 import Models.ClienteReserva;
-import Views.ClienteReservaView;
-import Views.Menu;
-import Views.MesaView;
-import Views.PratoView;
+import Models.Prato;
+import Models.Mesa;
+
+import Views.*;
+import org.w3c.dom.ls.LSOutput;
 
 import java.io.IOException;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+
+
 public class Main {
     public static void main(String[] args) throws IOException {
-        /*
         MesaController mesaController = new MesaController();
         PratoController pratoController = new PratoController();
         ClienteReservaController crc = new ClienteReservaController();
 
-        Menu menu = new Menu();
-        menu.menu();
-        */
-        String caminho = "src/Data/Logs/23-01-2025-02.txt";
-        String mensagem = "Mensagem TESTE!";
-        int unidadeTempo = 1;
-        FicheirosLogController ficheirosLogController = new FicheirosLogController();
-        //FicheirosLogController.criaFicheirosLog();
-        //FicheirosLogController.escreverLog(unidadeTempo, mensagem);
-        System.out.println(FicheirosLogController.lerFicheiroLog(caminho));
+        Passando os arrays diretamente para o construtor
+        SimulacaoDiaADia simulacao = new SimulacaoDiaADia(
+                MesaController.getMesas(),
+                ClienteReservaController.getReservas(),
+                PratoController.getPratos()
+        );
+        simulacao.iniciarSimulacao();
+
+
     }
+
 }

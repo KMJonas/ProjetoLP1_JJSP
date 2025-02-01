@@ -1,5 +1,7 @@
 package Controllers;
 
+import Views.LogsView;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,15 +47,16 @@ public class FicheirosLogController {
         File ultimoArquivo = obterUltimoFicheiroLog();
 
         if (ultimoArquivo != null) {
-            // Tenta escrever no arquvio
             try (FileWriter fw = new FileWriter(ultimoArquivo, true)) {
-                fw.write(System.lineSeparator() +"unidade " + unidadeTempo + ": " + mensagem + " ;");
-                System.out.println("Escrevendo no arquivo");
+                if (ultimoArquivo.length() > 0) {
+                    fw.write(System.lineSeparator());
+                }
+                fw.write("unidade " + unidadeTempo + ": " + mensagem + " ;");
             } catch (IOException e) {
-                System.err.println("Erro ao escrever o arquivo");
+                System.err.println("Erro ao escrever no ficheiro.");
             }
         } else {
-            System.out.println("Nenhum arquivo encontrado");
+            System.err.println("Erro ao escrever no ficheiro.");
         }
     }
 
@@ -104,12 +107,24 @@ public class FicheirosLogController {
         return null; // Retorna Null se nenhum arquivo for encontrado
     }
 
-    public static String lerFicheiroLog (String caminhoLog) throws IOException {
+    public static void apagarLog (String ficheiroApagar) throws IOException {
+        String caminhoLog = "src/Data/Logs";
+
+        Path ficheiroSelecionado = Paths.get(caminhoLog + "/" + ficheiroApagar );
+
+        if (Files.exists(ficheiroSelecionado) && Files.isRegularFile(ficheiroSelecionado)) {
+            Files.delete(ficheiroSelecionado);
+        } else {
+            System.err.println("Ficheiro não encontrado.");
+        }
+    }
+
+    public static String lerFicheiroLog (Path caminhoFicheiro) throws IOException {
         StringBuilder conteudo = new StringBuilder();
         BufferedReader reader = null;
 
         try {
-            reader = new BufferedReader(new FileReader(caminhoLog));
+            reader = new BufferedReader(new FileReader(String.valueOf(caminhoFicheiro)));
             String linha;
 
             while ((linha = reader.readLine()) != null) {

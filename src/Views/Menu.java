@@ -1,19 +1,20 @@
 package Views;
 
-import Controllers.ClienteReservaController;
-import Controllers.MesaController;
+import Controllers.FicheirosLogController;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Menu {
     Scanner sc = new Scanner(System.in);
 
-    public void menu() {
+    public void menu() throws IOException {
         System.out.println("━━━━━━━ Restaurante JJSP ━━━━━━━");
         System.out.println("1 ➤ Gerir mesas e menus");
         System.out.println("2 ➤ Gerir Reservas");
         System.out.println("3 ➤ Dia-a-dia");
-        System.out.println("4 ➤ Sair");
+        System.out.println("4 ➤ Logs");
+        System.out.println("5 ➤ Sair");
         int resposta = sc.nextInt();
 
         switch (resposta) {
@@ -24,13 +25,15 @@ public class Menu {
             case 3:
                 System.out.println("Pratos");
             case 4:
+                menuGerirLogs();
+            case 5:
                 System.out.println("Sair");
             default:
                 System.out.println("⚠ Opção inválida ⚠");
         }
     }
 
-    public void menuGerirMesasMenus() {
+    public void menuGerirMesasMenus() throws IOException {
         System.out.println("━━━━━━━ Mesas e Menus ━━━━━━━");
         System.out.println("1 ➤ Gerir mesas");
         System.out.println("2 ➤ Gerir menus");
@@ -49,7 +52,7 @@ public class Menu {
         }
     }
 
-    public void menuGerirMesas() {
+    public void menuGerirMesas() throws IOException {
         System.out.println("━━━━━━━ Mesas ━━━━━━━");
         System.out.println("1 ➤ Mostrar mesas");
         System.out.println("2 ➤ Adicionar mesa");
@@ -78,7 +81,7 @@ public class Menu {
         }
     }
 
-    public void menuGerirMenus() {
+    public void menuGerirMenus() throws IOException {
         System.out.println("━━━━━━━ Mesas ━━━━━━━");
         System.out.println("1 ➤ Mostrar pratos no menu");
         System.out.println("2 ➤ Adicionar prato ao menu");
@@ -107,7 +110,7 @@ public class Menu {
         }
     }
 
-    public void menuGerirReservas() {
+    public void menuGerirReservas() throws IOException {
         System.out.println("━━━━━━━ Reservas ━━━━━━━");
         System.out.println("1 ➤ Mostrar Reservas");
         System.out.println("2 ➤ Adicionar Reserva");
@@ -130,6 +133,39 @@ public class Menu {
                 ClienteReservaView.eliminarReserva();
                 menuGerirReservas();
             case 5:
+                menu();
+            default:
+                System.out.println("⚠ Opção inválida ⚠");
+        }
+    }
+
+    public void menuGerirLogs() throws IOException {
+        System.out.println("━━━━━━━ Ficheiros Log ━━━━━━━");
+        System.out.println("1 ➤ Listar Logs");
+        System.out.println("2 ➤ Mostrar Log");
+        System.out.println("3 ➤ Apagar Log");
+        System.out.println("4 ➤ Voltar");
+        int resposta = sc.nextInt();
+
+        switch (resposta) {
+            case 1:
+                LogsView.listarLogs();
+                menuGerirLogs();
+            case 2:
+                LogsView.listarLogs();
+
+                System.out.println("Insira o nome do ficheiro.");
+                String ficheiroInserido = sc.next();
+
+                LogsView.mostrarLog(ficheiroInserido);
+                menuGerirLogs();
+            case 3:
+                System.out.println("Insira o nome do ficheiro.");
+                String ficheiroApagar = sc.next();
+
+                FicheirosLogController.apagarLog(ficheiroApagar);
+                menuGerirLogs();
+            case 4:
                 menu();
             default:
                 System.out.println("⚠ Opção inválida ⚠");

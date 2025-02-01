@@ -5,6 +5,7 @@
     import Models.Prato;
     import Models.Pedido;
 
+    import java.io.IOException;
     import java.util.Scanner;
 
     public class SimulacaoDiaADia {
@@ -23,7 +24,8 @@
             this.pedidoAtual = 0;
         }
 
-        public void iniciarSimulacao() {
+        public void iniciarSimulacao() throws IOException {
+            FicheirosLogController.criaFicheirosLog();
             Scanner scanner = new Scanner(System.in);
 
             System.out.println("Bem-vindo à simulação de gestão de restaurante!");
@@ -164,6 +166,9 @@
             reserva.setMesaAssociada(mesa);
             reserva.setMomentoAtribuicao(momentoAtual);
             System.out.println("Mesa " + idMesa + " atribuída à reserva " + idReserva + ".");
+
+            String mensagemLog = "A reserva: " + idReserva + " foi atribuida à mesa: " + idMesa;
+            FicheirosLogController.escreverLog(momentoAtual, mensagemLog);
         }
 
 
@@ -240,7 +245,8 @@
             System.out.println("Pedido criado com sucesso para a mesa " + idMesa + "!");
 
 
-
+            String mensagemLog = "Foi efetuado o pedido: " + idPedido + "na mesa: " + idMesa;
+            FicheirosLogController.escreverLog(momentoAtual, mensagemLog);
         }
 
 
@@ -281,6 +287,8 @@
             System.out.println("Comida entregue com sucesso na mesa " + idMesa + "!");
             pedido.setMomentoEntrega(momentoAtual);
 
+            String mensagemLog = "Comida entregue na mesa: " + idMesa;
+            FicheirosLogController.escreverLog(momentoAtual, mensagemLog);
         }
 
 
@@ -343,6 +351,9 @@
             mesa.setStatus(1);
             mesa.setReservaAssociada(null);
             System.out.println("Pedido da mesa " + idMesa + " finalizado com sucesso.");
+
+            String mensagemLog = "Mesa: " + idMesa + " finalizada.";
+            FicheirosLogController.escreverLog(momentoAtual, mensagemLog);
         }
 
 
