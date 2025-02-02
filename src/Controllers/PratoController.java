@@ -43,7 +43,7 @@ public class PratoController {
         if(categoria.equals("Entrada") || categoria.equals("Prato principal") || categoria.equals("Sobremesa")){
             return true;
         }
-    return false;
+        return false;
     }
 
     public static boolean confirmarPreco(double preco) {
@@ -104,5 +104,14 @@ public class PratoController {
         }
 
         return false;
+    }
+
+    public static Prato buscarPratoPorId(int id) {
+        for (Prato prato : pratos) {
+            if (prato != null && prato.getIdPrato() == id) {
+                return prato;
+            }
+        }
+        return null;
     }
 }

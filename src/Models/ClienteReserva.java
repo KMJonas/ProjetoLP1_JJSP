@@ -5,6 +5,8 @@ public class ClienteReserva {
     private String nome;
     private int numPessoas;
     private int horaChegada;
+    
+
 
 
     public ClienteReserva() {}
@@ -47,5 +49,4 @@ public class ClienteReserva {
     public void setHoraChegada(int horaChegada) {
         this.horaChegada = horaChegada;
     }
-
 }

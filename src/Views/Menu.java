@@ -4,29 +4,41 @@ import Controllers.*;
 import Models.GlobalStorage;
 import Models.Prato;
 
+import java.text.ParseException;
 import java.util.Scanner;
 
+
+import static Controllers.SimulacaoDiaADia.iniciarSimulacao;
 import static Views.GlobalStorageView.modificarPassword;
 
 public class Menu {
     Scanner sc = new Scanner(System.in);
 
-    public void menu() {
+    public void menu() throws ParseException {
         System.out.println("━━━━━━━ Restaurante JJSP ━━━━━━━");
         System.out.println("1 ➤ Gerir mesas e menus");
         System.out.println("2 ➤ Gerir Reservas");
         System.out.println("3 ➤ Dia-a-dia");
         System.out.println("4 ➤ Configurações");
+        System.out.println("5 ➤ Estatisticas");
         System.out.println("9 ➤ Sair");
         int resposta = sc.nextInt();
 
         switch (resposta) {
             case 1:
                 menuGerirMesasMenus();
+                break;
             case 2:
                 menuGerirReservas();
+                break;
             case 3:
-                System.out.println("Pratos");
+                if(GlobalStorage.getTempoMaxEsperaEntrada() == 0 || GlobalStorage.getTempoMaxEsperaAtendimento() == 0 || GlobalStorage.getTempoMaxEsperaPagamento() == 0){
+                    System.out.println("⚠ Tempo de espera não foi devidamente definido ⚠");
+                }else {
+                    iniciarSimulacao();
+                }
+                menu();
+                break;
             case 4:
                 String password;
                 do {
@@ -42,7 +54,9 @@ public class Menu {
                         System.out.println("⚠ Password incorreta, insira a tecla '.' se deseja sair ⚠");
                     }
                 } while (!password.equals("."));
+            case 5:
 
+                break;
             case 9:
                 System.exit(0);
             default:
@@ -51,7 +65,8 @@ public class Menu {
         }
     }
 
-    public void menuGerirMesasMenus() {
+
+    public void menuGerirMesasMenus() throws ParseException {
         System.out.println("━━━━━━━ Mesas e Menus ━━━━━━━");
         System.out.println("1 ➤ Gerir mesas");
         System.out.println("2 ➤ Gerir menus");
@@ -61,19 +76,23 @@ public class Menu {
         switch (resposta) {
             case 1:
                 menuGerirMesas();
+                break;
             case 2:
                 menuGerirMenus();
+                break;
             case 8:
                 menu();
+                break;
             case 9:
                 System.exit(0);
             default:
                 System.out.println("⚠ Opção inválida ⚠");
                 menuGerirMesasMenus();
+                break;
         }
     }
 
-    public void menuGerirMesas() {
+    public void menuGerirMesas() throws ParseException {
         System.out.println("━━━━━━━ Mesas ━━━━━━━");
         System.out.println("1 ➤ Mostrar mesas");
         System.out.println("2 ➤ Adicionar mesa");
@@ -87,26 +106,33 @@ public class Menu {
             case 1:
                 MesaView.mostrarMesas();
                 menuGerirMesas();
+                break;
             case 2:
                 MesaView.adicionarMesa();
                 menuGerirMesas();
+                break;
             case 3:
                 MesaView.editarMesa();
                 menuGerirMesas();
+                break;
             case 4:
                 MesaView.eliminarMesa();
                 menuGerirMesas();
+                break;
             case 8:
                 menuGerirMesasMenus();
+                break;
             case 9:
                 menu();
+                break;
             default:
                 System.out.println("⚠ Opção inválida ⚠");
                 menuGerirMesas();
+                break;
         }
     }
 
-    public void menuGerirMenus() {
+    public void menuGerirMenus() throws ParseException {
         System.out.println("━━━━━━━ Mesas ━━━━━━━");
         System.out.println("1 ➤ Mostrar pratos no menu");
         System.out.println("2 ➤ Adicionar prato ao menu");
@@ -120,26 +146,33 @@ public class Menu {
             case 1:
                 PratoView.mostrarPratos();
                 menuGerirMenus();
+                break;
             case 2:
                 PratoView.adicionarPrato();
                 menuGerirMenus();
+                break;
             case 3:
                 PratoView.modificarPrato();
                 menuGerirMenus();
+                break;
             case 4:
                 PratoView.eliminarPrato();
                 menuGerirMenus();
+                break;
             case 8:
                 menuGerirMesasMenus();
+                break;
             case 9:
                 menu();
+                break;
             default:
                 System.out.println("⚠ Opção inválida ⚠");
                 menuGerirMenus();
+                break;
         }
     }
 
-    public void menuGerirReservas() {
+    public void menuGerirReservas() throws ParseException {
         System.out.println("━━━━━━━ Reservas ━━━━━━━");
         System.out.println("1 ➤ Mostrar Reservas");
         System.out.println("2 ➤ Adicionar Reserva");
@@ -152,24 +185,30 @@ public class Menu {
             case 1:
                 ClienteReservaView.mostrarClientesReserva();
                 menuGerirReservas();
+                break;
             case 2:
-                ClienteReservaView.adicionarReserva();
+                ClienteReservaView.adicionarReserva(0);
                 menuGerirReservas();
+                break;
             case 3:
                 ClienteReservaView.editarReserva();
                 menuGerirReservas();
+                break;
             case 4:
                 ClienteReservaView.eliminarReserva();
                 menuGerirReservas();
+                break;
             case 8:
                 menu();
+                break;
             default:
                 System.out.println("⚠ Opção inválida ⚠");
                 menuGerirReservas();
+                break;
         }
     }
 
-    public void menuConfiguracoes(){
+    public void menuConfiguracoes() throws ParseException {
         System.out.println("━━━━━━━ Configurações ━━━━━━━");
         System.out.println("1 ➤ Definir caminho leitura de ficheiros.");
         System.out.println("2 ➤ Definir separador de campos.");
@@ -184,23 +223,29 @@ public class Menu {
             case 1:
                 menuDefinirCaminhoLeitura();
                 menuConfiguracoes();
+                break;
             case 2:
                 menuDefinirSeparadorConteudo();
                 menuConfiguracoes();
+                break;
             case 3:
                 menuDefinirUnidadesTempo();
                 menuConfiguracoes();
+                break;
             case 6:
                 modificarPassword();
                 menu();
+                break;
             case 8:
                 menu();
+                break;
             default:
                 System.out.println("⚠ Opção inválida ⚠");
+                break;
         }
     }
 
-    public void menuDefinirCaminhoLeitura(){
+    public void menuDefinirCaminhoLeitura() throws ParseException {
         System.out.println("━━━━━━━ Definir Caminho Leitura ━━━━━━━");
         if(GlobalStorage.getPathPratos() != null){
             System.out.println("Caminho Pratos ➤ " + GlobalStorage.getPathPratos());
@@ -229,19 +274,25 @@ public class Menu {
             case 1:
                 PratoView.caminhoLeituraPrato();
                 menuDefinirCaminhoLeitura();
+                break;
             case 2:
                 MesaView.caminhoLeituraMesa();
                 menuDefinirCaminhoLeitura();
+                break;
             case 3:
                 ClienteReservaView.caminhoLeituraClientesReserva();
                 menuDefinirCaminhoLeitura();
+                break;
             case 8:
                 menuConfiguracoes();
+                break;
             case 9:
                 menu();
+                break;
             default:
                 System.out.println("⚠ Opção inválida ⚠");
                 menuDefinirCaminhoLeitura();
+                break;
         }
     }
 
@@ -267,7 +318,7 @@ public class Menu {
         GlobalStorage.setSeparadorConteudo(separador);
     }
 
-    public void menuDefinirUnidadesTempo(){
+    public void menuDefinirUnidadesTempo() throws ParseException {
         System.out.println("━━━━━━━ Definir Unidades Tempo ━━━━━━━");
         System.out.println("1 ➤ Definir tempo de espera para entrar.");
         System.out.println("2 ➤ Definir tempo de espera para atendimento.");
@@ -280,20 +331,28 @@ public class Menu {
             case 1:
                 ClienteReservaView.tempoEspera(resposta);
                 menuDefinirUnidadesTempo();
+                break;
             case 2:
                 ClienteReservaView.tempoEspera(resposta);
                 menuDefinirUnidadesTempo();
+                break;
             case 3:
                 ClienteReservaView.tempoEspera(resposta);
                 menuDefinirUnidadesTempo();
+                break;
             case 8:
                 menuConfiguracoes();
+                break;
             case 9:
                 menu();
+                break;
             default:
                 System.out.println("⚠ Opção inválida ⚠");
                 menuDefinirUnidadesTempo();
+                break;
         }
     }
+
+
 
 }

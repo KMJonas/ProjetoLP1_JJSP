@@ -32,7 +32,7 @@ public class ClienteReservaView {
 
     }
 
-    public static void adicionarReserva(){
+    public static void adicionarReserva(int momentoAtual){
         ClienteReserva[] listaClientes = ClienteReservaController.getReservas();
         int idCount = 0;
         // Calcula o maior ID já existente
@@ -41,6 +41,9 @@ public class ClienteReservaView {
                 idCount++;
             }
         }
+
+
+
 
         System.out.println("━━━━━━━ Adicionar Reserva ━━━━━━━");
         char resposta;
@@ -72,23 +75,26 @@ public class ClienteReservaView {
 
             } while (numPessoas <= 0);
 
-            int horaChegada;
-            do {
-                System.out.println("➤ Hora de chegada: ");
-                while (!sc.hasNextInt()) {
-                    System.out.println("⚠ Insira um número válido ⚠");
-                    sc.next();
-                }
+            if(momentoAtual == 0){
 
-                horaChegada = sc.nextInt();
+                do {
+                    System.out.println("➤ Hora de chegada: ");
+                    while (!sc.hasNextInt()) {
+                        System.out.println("⚠ Insira um número válido ⚠");
+                        sc.next();
+                    }
 
-                if (horaChegada < 0) {
-                    System.out.println("⚠ Número tem de ser superior a 0 ⚠");
-                }
+                    momentoAtual = sc.nextInt();
 
-            } while (horaChegada < 0);
+                    if (momentoAtual < 0) {
+                        System.out.println("⚠ Número tem de ser superior a 0 ⚠");
+                    }
 
-            ClienteReservaController.adicionarReserva(nome, numPessoas, horaChegada);
+                } while (momentoAtual < 0);
+            }
+
+
+            ClienteReservaController.adicionarReserva(nome, numPessoas, momentoAtual);
 
             System.out.println("➤ Deseja adicionar mais reservas? (S/N)");
             resposta = sc.next().charAt(0);

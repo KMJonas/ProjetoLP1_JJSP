@@ -1,24 +1,47 @@
 package Models;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Pedido {
     private int idPedido;
+    private ClienteReserva reserva;  // Reserva associada
     private Mesa mesaAssociada;
-    private Prato[] listaPratos;
-    private double custoTotal;
-    private double lucro;
-    private int status; //Ativo (1) , Desativo (0)
+    private Prato[] pratos;
+    private int tMomentoAtribuicaoMesa;
+    private int momentoCriacao;
+    private int tempoPreparacao;
+    private int tempoConsumo;
+    private boolean preparado;
+    private boolean consumido;
+    private int status;         // 1: Ativo, 2: Espera de ser atendido, 3: Espera de comida, 4: Pronto para entrega, 5:Comida entregue, 6:Consumido, 7-Finalizado
+    private boolean prejuizo;
+    private int horaFinalizacao;
+    private int momentoEntregaPrato;
 
-    public Pedido() {}
 
-    public Pedido(int idPedido, Mesa mesaAssociada, Prato[] listaPratos, double custoTotal, double lucro, int status) {
-        this.idPedido = idPedido;
+    public Pedido(ClienteReserva reserva, Mesa mesaAssociada, Prato[] pratos, int tMomentoAtribuicaoMesa,
+                  int momentoCriacao, int tempoPreparacao, int tempoConsumo, int status) {
+        this.reserva = reserva;
         this.mesaAssociada = mesaAssociada;
-        this.listaPratos = listaPratos;
-        this.custoTotal = custoTotal;
-        this.lucro = lucro;
+        this.pratos = pratos;
+        this.tMomentoAtribuicaoMesa = tMomentoAtribuicaoMesa;
+        this.momentoCriacao = momentoCriacao;
+        this.tempoPreparacao = tempoPreparacao;
+        this.tempoConsumo = tempoConsumo;
         this.status = status;
+    }
+
+    public int getmomentoEntregaPrato(){return momentoEntregaPrato;}
+
+    public void setmomentoEntregaPrato(int momentoEntregaPrato){
+        this.momentoEntregaPrato = horaFinalizacao;
+    }
+
+    public int getHoraFinalizacao(){return horaFinalizacao;}
+
+    public void setHoraFinalizacao(int horaFinalizacao){
+        this.horaFinalizacao = horaFinalizacao;
     }
 
     public int getIdPedido() {
@@ -29,6 +52,14 @@ public class Pedido {
         this.idPedido = idPedido;
     }
 
+    public ClienteReserva getReserva() {
+        return reserva;
+    }
+
+    public void setReserva(ClienteReserva reserva) {
+        this.reserva = reserva;
+    }
+
     public Mesa getMesaAssociada() {
         return mesaAssociada;
     }
@@ -37,28 +68,60 @@ public class Pedido {
         this.mesaAssociada = mesaAssociada;
     }
 
-    public Prato[] getListaPratos() {
-        return listaPratos;
+    public Prato[] getPratos() {
+        return pratos;
     }
 
-    public void setListaPratos(Prato[] listaPratos) {
-        this.listaPratos = listaPratos;
+    public void setPratos(Prato[] pratos) {
+        this.pratos = pratos;
     }
 
-    public double getCustoTotal() {
-        return custoTotal;
+    public int gettMomentoAtribuicaoMesa() {
+        return tMomentoAtribuicaoMesa;
     }
 
-    public void setCustoTotal(double custoTotal) {
-        this.custoTotal = custoTotal;
+    public void settMomentoAtribuicaoMesa(int tMomentoAtribuicaoMesa) {
+        this.tMomentoAtribuicaoMesa = tMomentoAtribuicaoMesa;
     }
 
-    public double getLucro() {
-        return lucro;
+    public int getMomentoCriacao() {
+        return momentoCriacao;
     }
 
-    public void setLucro(double lucro) {
-        this.lucro = lucro;
+    public void setMomentoCriacao(int momentoCriacao) {
+        this.momentoCriacao = momentoCriacao;
+    }
+
+    public int getTempoPreparacao() {
+        return tempoPreparacao;
+    }
+
+    public void setTempoPreparacao(int tempoPreparacao) {
+        this.tempoPreparacao = tempoPreparacao;
+    }
+
+    public int getTempoConsumo() {
+        return tempoConsumo;
+    }
+
+    public void setTempoConsumo(int tempoConsumo) {
+        this.tempoConsumo = tempoConsumo;
+    }
+
+    public boolean isPreparado() {
+        return preparado;
+    }
+
+    public void setPreparado(boolean preparado) {
+        this.preparado = preparado;
+    }
+
+    public boolean isConsumido() {
+        return consumido;
+    }
+
+    public void setConsumido(boolean consumido) {
+        this.consumido = consumido;
     }
 
     public int getStatus() {
@@ -67,5 +130,13 @@ public class Pedido {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public boolean isPrejuizo() {
+        return prejuizo;
+    }
+
+    public void setPrejuizo(boolean prejuizo) {
+        this.prejuizo = prejuizo;
     }
 }
