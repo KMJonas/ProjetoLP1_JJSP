@@ -4,179 +4,124 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Pedido {
-    private int tMomentoAtribuicao;
     private int idPedido;
-    private ClienteReserva idReserva;  // Reserva associada
+    private ClienteReserva reserva;  // Reserva associada
     private Mesa mesaAssociada;
     private Prato[] pratos;
+    private int tMomentoAtribuicaoMesa;
     private int momentoCriacao;
     private int tempoPreparacao;
     private int tempoConsumo;
     private boolean preparado;
     private boolean consumido;
-    private boolean prontoParaEntrega;
-    private int status;         // 0: Finalizado, 1: Ativo, 2: Entregue, etc.
-    private int statusPedido;   // Para controlar etapas do pedido
+    private int status;         // 1: Ativo, 2: Espera de ser atendido, 3: Espera de comida, 4: Pronto para entrega, 5:Comida entregue, 6:Consumido, 7-Finalizado
     private boolean prejuizo;
+    private int horaFinalizacao;
+    private int momentoEntregaPrato;
 
-    // MAPAS ESTÁTICOS para gerenciar as associações:
-    //  – Associa Reserva (ID) à Mesa
-    //  – Associa Mesa (ID) ao Pedido
-    private static Map<Integer, Mesa> reservaMesaMap = new HashMap<>();
-    private static Map<Integer, Pedido> mesaPedidoMap = new HashMap<>();
 
-    // Construtor – observe que o seu construtor original exige 9 parâmetros
-    public Pedido(int idPedido, ClienteReserva idReserva, Mesa mesaAssociada, Prato[] pratos,
-                  int momentoCriacao, int tempoPreparacao, int tempoConsumo, int status, int dummy) {
-        this.idPedido = idPedido;
-        this.idReserva = idReserva;
+    public Pedido(ClienteReserva reserva, Mesa mesaAssociada, Prato[] pratos, int tMomentoAtribuicaoMesa,
+                  int momentoCriacao, int tempoPreparacao, int tempoConsumo, int status) {
+        this.reserva = reserva;
         this.mesaAssociada = mesaAssociada;
         this.pratos = pratos;
+        this.tMomentoAtribuicaoMesa = tMomentoAtribuicaoMesa;
         this.momentoCriacao = momentoCriacao;
         this.tempoPreparacao = tempoPreparacao;
         this.tempoConsumo = tempoConsumo;
-        this.statusPedido = status;
         this.status = status;
-        this.preparado = false;
-        this.consumido = false;
     }
 
+    public int getmomentoEntregaPrato(){return momentoEntregaPrato;}
 
-    public int gettMomentoAtribuicao() {
-        return tMomentoAtribuicao;
+    public void setmomentoEntregaPrato(int momentoEntregaPrato){
+        this.momentoEntregaPrato = horaFinalizacao;
     }
 
-    public void settMomentoAtribuicao(int tMomentoAtribuicao) {
-        this.tMomentoAtribuicao = tMomentoAtribuicao;
-    }
+    public int getHoraFinalizacao(){return horaFinalizacao;}
 
-    public static void atribuirMesaAReserva(ClienteReserva reserva, Mesa mesa) {
-        reservaMesaMap.put(reserva.getIdReserva(), mesa);
-    }
-
-    /**
-     * Retorna a mesa associada à reserva (ou null se não houver).
-     */
-    public static Mesa getMesaAssociada(ClienteReserva reserva) {
-        return reservaMesaMap.get(reserva.getIdReserva());
-    }
-
-    /**
-     * Registra um pedido para uma mesa.
-     */
-    public static void setPedidoAssociado(Mesa mesa, Pedido pedido) {
-        mesaPedidoMap.put(mesa.getIdMesa(), pedido);
-    }
-
-    /**
-     * Retorna o pedido associado à mesa (ou null se não houver).
-     */
-    public static Pedido getPedidoAssociado(Mesa mesa) {
-        return mesaPedidoMap.get(mesa.getIdMesa());
-    }
-
-    /**
-     * Remove as associações para uma mesa e reserva (usado ao finalizar o pedido).
-     */
-    public static void removerAssociacoes(Mesa mesa, ClienteReserva reserva) {
-        mesaPedidoMap.remove(mesa.getIdMesa());
-        reservaMesaMap.remove(reserva.getIdReserva());
-    }
-
-    // GETTERS E SETTERS DE INSTÂNCIA
-
-    public boolean isPrejuizo() {
-        return prejuizo;
-    }
-
-    public void setPrejuizo(boolean prejuizo) {
-        this.prejuizo = prejuizo;
-    }
-
-    public void setTempoConsumo(int tempoConsumo) {
-        this.tempoConsumo = tempoConsumo;
+    public void setHoraFinalizacao(int horaFinalizacao){
+        this.horaFinalizacao = horaFinalizacao;
     }
 
     public int getIdPedido() {
         return idPedido;
     }
 
-    public void setStatusPedido(int statusPedido) {
-        this.statusPedido = statusPedido;
+    public void setIdPedido(int idPedido) {
+        this.idPedido = idPedido;
     }
 
-    public int getStatusPedido() {
-        return statusPedido;
+    public ClienteReserva getReserva() {
+        return reserva;
     }
 
-    public void setProntoParaEntrega(boolean prontoParaEntrega) {
-        this.prontoParaEntrega = prontoParaEntrega;
-    }
-
-    public boolean isProntoParaEntrega() {
-        return prontoParaEntrega;
-    }
-
-    public boolean isConsumido() {
-        return consumido;
-    }
-
-    /**
-     * Marca o pedido como finalizado (status 0).
-     */
-    public void setFinalizado(boolean finalizado) {
-        this.status = finalizado ? 0 : this.status;
-    }
-
-    /**
-     * Define o momento de entrega, atualizando o momento de criação.
-     * (momentoEntrega - tempoPreparacao = momentoCriacao)
-     */
-    public void setMomentoEntrega(int momentoEntrega) {
-        this.momentoCriacao = momentoEntrega - tempoPreparacao;
-    }
-
-    /**
-     * Retorna o momento de entrega (momentoCriacao + tempoPreparacao).
-     */
-    public int getMomentoEntrega() {
-        return momentoCriacao + tempoPreparacao;
-    }
-
-    public int getTempoConsumo() {
-        return tempoConsumo;
-    }
-
-    public int getTempoPreparacao() {
-        return tempoPreparacao;
-    }
-
-    public int getMomentoCriacao() {
-        return momentoCriacao;
-    }
-
-    public void setPreparado(boolean preparado) {
-        this.preparado = preparado;
-    }
-
-    public boolean isPreparado() {
-        return preparado;
-    }
-
-    public boolean isFinalizado() {
-        return status == 0;
-    }
-
-    public void setConsumido(boolean consumido) {
-        this.consumido = consumido;
+    public void setReserva(ClienteReserva reserva) {
+        this.reserva = reserva;
     }
 
     public Mesa getMesaAssociada() {
         return mesaAssociada;
     }
 
+    public void setMesaAssociada(Mesa mesaAssociada) {
+        this.mesaAssociada = mesaAssociada;
+    }
+
     public Prato[] getPratos() {
         return pratos;
+    }
+
+    public void setPratos(Prato[] pratos) {
+        this.pratos = pratos;
+    }
+
+    public int gettMomentoAtribuicaoMesa() {
+        return tMomentoAtribuicaoMesa;
+    }
+
+    public void settMomentoAtribuicaoMesa(int tMomentoAtribuicaoMesa) {
+        this.tMomentoAtribuicaoMesa = tMomentoAtribuicaoMesa;
+    }
+
+    public int getMomentoCriacao() {
+        return momentoCriacao;
+    }
+
+    public void setMomentoCriacao(int momentoCriacao) {
+        this.momentoCriacao = momentoCriacao;
+    }
+
+    public int getTempoPreparacao() {
+        return tempoPreparacao;
+    }
+
+    public void setTempoPreparacao(int tempoPreparacao) {
+        this.tempoPreparacao = tempoPreparacao;
+    }
+
+    public int getTempoConsumo() {
+        return tempoConsumo;
+    }
+
+    public void setTempoConsumo(int tempoConsumo) {
+        this.tempoConsumo = tempoConsumo;
+    }
+
+    public boolean isPreparado() {
+        return preparado;
+    }
+
+    public void setPreparado(boolean preparado) {
+        this.preparado = preparado;
+    }
+
+    public boolean isConsumido() {
+        return consumido;
+    }
+
+    public void setConsumido(boolean consumido) {
+        this.consumido = consumido;
     }
 
     public int getStatus() {
@@ -187,12 +132,11 @@ public class Pedido {
         this.status = status;
     }
 
-    public void adicionarPrato(Prato pratoSelecionado) {
-        // Se necessário, implementar lógica de inclusão de prato.
+    public boolean isPrejuizo() {
+        return prejuizo;
     }
 
-    // Método para acesso à reserva associada (pode ser usado para exibir informações)
-    public ClienteReserva getReservaAssociada() {
-        return idReserva;
+    public void setPrejuizo(boolean prejuizo) {
+        this.prejuizo = prejuizo;
     }
 }

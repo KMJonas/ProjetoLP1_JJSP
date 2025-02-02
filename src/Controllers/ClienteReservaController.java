@@ -87,4 +87,13 @@ public class ClienteReservaController {
         return false;
     }
 
+    public static ClienteReserva buscarReservaPorId(int id) {
+        for (ClienteReserva reserva : reservas) {
+            if (reserva != null && reserva.getIdReserva() == id) {
+                return reserva;
+            }
+        }
+        return null;
+    }
+
 }

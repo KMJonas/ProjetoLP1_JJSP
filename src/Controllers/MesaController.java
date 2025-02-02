@@ -104,4 +104,13 @@ public class MesaController {
 
         listaMesas[listaMesas.length - 1] = null;
     }
+
+    public static Mesa buscarMesaPorId(int id) {
+        for (Mesa mesa : mesas) {
+            if (mesa != null && mesa.getIdMesa() == id) {
+                return mesa;
+            }
+        }
+        return null;
+    }
 }
