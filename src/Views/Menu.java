@@ -374,7 +374,7 @@ public class Menu {
         }
     }
 
-    public void menuGuardarFichieros(){
+    public void menuGuardarFichieros() throws ParseException {
         System.out.println("━━━━━━━ Guardar Ficheiros ━━━━━━━");
         System.out.println("1 ➤ Guardar mesas");
         System.out.println("2 ➤ Guardar pratos");
@@ -390,6 +390,7 @@ public class Menu {
                     System.out.println("✅ Mesas guardadas com sucesso ✅");
                     menuGuardarFichieros();
                 }
+                break;
             case 2:
                 if (lt.guardarPratos()){
                     System.out.println("✅ Pratos guardados com sucesso ✅");
@@ -400,21 +401,26 @@ public class Menu {
                     System.out.println("✅ Reservas guardadas com sucesso ✅");
                     menuGuardarFichieros();
                 }
+                break;
             case 4:
                 if(lt.guardarConfigGerais()){
                     System.out.println("✅ Configurações guardadas com sucesso ✅");
                     menuGuardarFichieros();
                 }
+                break;
             case 5:
                 if(lt.guardarMesas() && lt.guardarPratos() && lt.guardarClientesReserva() && lt.guardarConfigGerais()){
                     System.out.println("✅ Ficheiros guardados com sucesso ✅");
                     menuGuardarFichieros();
                 }
+                break;
             case 8:
                 menu();
+                break;
             default:
                 System.out.println("⚠ Opção inválida ⚠");
                 menuGuardarFichieros();
+                break;
         }
     }
 

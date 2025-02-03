@@ -40,7 +40,7 @@ public class PratoController {
     }
 
     public static boolean confirmarCategoriaPrato(String categoria){
-        if(categoria.equals("Entrada") || categoria.equals("Prato principal") || categoria.equals("Sobremesa")){
+        if(categoria.equals("Entrada") || categoria.equals("Principal") || categoria.equals("Sobremesa")){
             return true;
         }
         return false;
