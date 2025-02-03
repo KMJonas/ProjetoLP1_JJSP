@@ -25,6 +25,7 @@ public class Menu {
         System.out.println("4 ➤ Configurações");
         System.out.println("5 ➤ Estatisticas");
         System.out.println("6 ➤ Guardar Ficheiros");
+        System.out.println("7 ➤ Ficheiros Log");
         System.out.println("9 ➤ Sair");
         int resposta = sc.nextInt();
 
@@ -82,6 +83,10 @@ public class Menu {
                 break;
             case 6:
                 menuGuardarFichieros();
+                break;
+            case 7:
+                menuLogs();
+                break;
             case 9:
                 System.out.println("Deseja guardar os ficheiros antes de sair? (s/n)");
                 String respostaSair = sc.next();
@@ -442,6 +447,48 @@ public class Menu {
                     menuGuardarFichieros();
                 }
                 break;
+            case 8:
+                menu();
+                break;
+            default:
+                System.out.println("⚠ Opção inválida ⚠");
+                menuGuardarFichieros();
+                break;
+        }
+    }
+
+    public void menuLogs() throws ParseException {
+        System.out.println("━━━━━━━ Ficheiros Log ━━━━━━━");
+        System.out.println("1 ➤ Listar Ficheiros");
+        System.out.println("2 ➤ Mostrar Log");
+        System.out.println("3 ➤ Apagar Log");
+        System.out.println("5 ➤ Voltar");
+        int resposta = sc.nextInt();
+
+        switch (resposta){
+            case 1:
+                LogsView.listarLogs();
+                menuLogs();
+                break;
+            case 2:
+                sc.nextLine();
+                LogsView.listarLogs();
+                System.out.println("Por favor insira o nome do ficheiro:");
+
+                String ficheiroInserido = sc.nextLine();
+                LogsView.mostrarLog(ficheiroInserido);
+                menuLogs();
+            case 3:
+                sc.nextLine();
+                LogsView.listarLogs();
+                System.out.println("Por favor insira o nome do ficheiro:");
+                String ficheiroApagado = sc.nextLine();
+
+                FicheirosLogController.apagarLog(ficheiroApagado);
+                menuLogs();
+                break;
+            case 5:
+
             case 8:
                 menu();
                 break;

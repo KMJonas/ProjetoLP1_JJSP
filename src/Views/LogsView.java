@@ -16,6 +16,7 @@ public class LogsView {
     public static <caminhoPasta> void listarLogs() {
         Path caminho = Paths.get(caminhoPasta);
 
+        System.out.println("━━━━━━━ Ficheiros Log ━━━━━━━");
         if (Files.exists(caminho) && Files.isDirectory(caminho)) {
             try (Stream<Path> stream = Files.list(caminho)) {
                 stream.filter(Files::isRegularFile).sorted().forEach(file -> System.out.println(file.getFileName()));
@@ -28,12 +29,16 @@ public class LogsView {
         }
     }
 
-    public static void mostrarLog(String ficheiroInserido) throws IOException {
+    public static void mostrarLog(String ficheiroInserido) {
         Path caminhoFicheiro = Paths.get(caminhoPasta, ficheiroInserido);
-        System.out.println(caminhoFicheiro);
 
         if (Files.exists(caminhoFicheiro) && Files.isRegularFile(caminhoFicheiro)) {
-            System.out.println(FicheirosLogController.lerFicheiroLog(caminhoFicheiro));
+            try {
+                System.out.println("━━━━━━━ " + ficheiroInserido + " ━━━━━━━");
+                System.out.println(FicheirosLogController.lerFicheiroLog(caminhoFicheiro));
+            } catch (IOException e) {
+                System.err.println("Erro ao ler arquivo: " + caminhoFicheiro);
+            }
 
         } else{
             System.err.println("O ficheiro:" + ficheiroInserido + " não existe na pasta!");

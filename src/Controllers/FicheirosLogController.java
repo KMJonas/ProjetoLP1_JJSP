@@ -6,18 +6,25 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Formatter;
 
 
 public class FicheirosLogController {
 
-    public static void criaFicheirosLog() throws IOException {
+    public static void criaFicheirosLog()  {
         Path logs = Paths.get("src/Data/Logs");
 
         if (!Files.exists(logs)) {
-            Files.createDirectory(logs);
+            try {
+                Files.createDirectory(logs);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         try {
@@ -39,19 +46,23 @@ public class FicheirosLogController {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Erro ao criar ficheiro log: " + e.getMessage());
         }
     }
 
     public static void escreverLog (int unidadeTempo ,  String mensagem) {
         File ultimoArquivo = obterUltimoFicheiroLog();
+        NumberFormat nf = NumberFormat.getInstance();
+        nf.setMinimumIntegerDigits(2);
+        nf.setGroupingUsed(false);
 
+        String numeroFormatado = nf.format(unidadeTempo);
         if (ultimoArquivo != null) {
             try (FileWriter fw = new FileWriter(ultimoArquivo, true)) {
                 if (ultimoArquivo.length() > 0) {
                     fw.write(System.lineSeparator());
                 }
-                fw.write("unidade " + unidadeTempo + ": " + mensagem + " ;");
+                fw.write("unidade " + numeroFormatado + ": " + mensagem + " ;");
             } catch (IOException e) {
                 System.err.println("Erro ao escrever no ficheiro.");
             }
@@ -107,13 +118,17 @@ public class FicheirosLogController {
         return null; // Retorna Null se nenhum arquivo for encontrado
     }
 
-    public static void apagarLog (String ficheiroApagar) throws IOException {
+    public static void apagarLog (String ficheiroApagar){
         String caminhoLog = "src/Data/Logs";
 
         Path ficheiroSelecionado = Paths.get(caminhoLog + "/" + ficheiroApagar );
 
         if (Files.exists(ficheiroSelecionado) && Files.isRegularFile(ficheiroSelecionado)) {
-            Files.delete(ficheiroSelecionado);
+            try {
+                Files.delete(ficheiroSelecionado);
+            } catch (IOException e) {
+                System.err.println("Erro ao apagar ficheiro log: " + e.getMessage());
+            }
         } else {
             System.err.println("Ficheiro não encontrado.");
         }
