@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 import static Controllers.SimulacaoDiaADia.iniciarSimulacao;
 import static Views.GlobalStorageView.modificarPassword;
+import static Views.GlobalStorageView.valorUnidadeDia;
 
 public class Menu {
     Scanner sc = new Scanner(System.in);
@@ -35,12 +36,31 @@ public class Menu {
                 menuGerirReservas();
                 break;
             case 3:
-                if(GlobalStorage.getTempoMaxEsperaEntrada() == 0 || GlobalStorage.getTempoMaxEsperaAtendimento() == 0 || GlobalStorage.getTempoMaxEsperaPagamento() == 0){
-                    System.out.println("⚠ Tempo de espera não foi devidamente definido ⚠");
-                }else {
-                    iniciarSimulacao();
+                boolean erro = false;
+
+                if (GlobalStorage.getTempoMaxEsperaEntrada() == 0 ||
+                        GlobalStorage.getTempoMaxEsperaAtendimento() == 0 ||
+                        GlobalStorage.getTempoMaxEsperaPagamento() == 0) {
+                    System.out.println("⚠ Tempos de espera não foram devidamente definidos ⚠");
+                    erro = true;
                 }
-                menu();
+
+                if (GlobalStorage.unidadeDia == 0) {
+                    System.out.println("⚠ Unidade de tempo dia não foi devidamente definida ⚠");
+                    erro = true;
+                }
+
+                if (GlobalStorage.getPrejuizoClienteNaoAtendido() == 0) {
+                    System.out.println("⚠ Prejuízo por cliente não atendido não foi devidamente definido ⚠");
+                    erro = true;
+                }
+
+                if (!erro) {
+                    iniciarSimulacao();
+                    menu();
+                } else {
+                    menu();
+                }
                 break;
             case 4:
                 String password;
@@ -234,8 +254,8 @@ public class Menu {
         System.out.println("1 ➤ Definir caminho leitura de ficheiros.");
         System.out.println("2 ➤ Definir separador de campos.");
         System.out.println("3 ➤ Definir unidades tempo.");
-        System.out.println("4 ➤ ");
-        System.out.println("5 ➤ ");
+        System.out.println("4 ➤ Definir unidade tempo dia.");
+        System.out.println("5 ➤ Definir prejuízo por cliente não atendido.");
         System.out.println("6 ➤ Alterar password de configuração.");
         System.out.println("8 ➤ Voltar");
         int resposta = sc.nextInt();
@@ -251,6 +271,14 @@ public class Menu {
                 break;
             case 3:
                 menuDefinirUnidadesTempo();
+                menuConfiguracoes();
+                break;
+            case 4:
+                valorUnidadeDia();
+                menuConfiguracoes();
+                break;
+            case 5:
+                GlobalStorageView.valorPrejuizoClienteNaoAtendido();
                 menuConfiguracoes();
                 break;
             case 6:

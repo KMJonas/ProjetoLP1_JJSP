@@ -7,15 +7,16 @@ import java.sql.SQLOutput;
 import java.util.Scanner;
 import java.util.jar.JarOutputStream;
 
+import static Models.GlobalStorage.unidadeDia;
+
 public  class SimulacaoDiaADia {
     static Scanner sc = new Scanner(System.in);
 
     public static void iniciarSimulacao() {
 
         System.out.println("Bem-vindo à simulação de gestão de restaurante!");
-        System.out.print("Quantos momentos (unidades de tempo) deseja simular? ");
-        int totalMomentos = sc.nextInt();
 
+        int totalMomentos = unidadeDia;
         int momentoAtual = 0;
 
         while (momentoAtual <= totalMomentos) {
