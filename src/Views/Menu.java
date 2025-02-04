@@ -2,8 +2,9 @@ package Views;
 
 import Controllers.*;
 import Models.GlobalStorage;
+import Models.Pedido;
 import Models.Prato;
-
+import Views.EstatisticasView;
 import java.text.ParseException;
 import java.sql.SQLOutput;
 import java.util.Scanner;
@@ -78,7 +79,8 @@ public class Menu {
                     }
                 } while (!password.equals("."));
             case 5:
-
+                EstatisticasView.mostrarMenuEstatisticas();
+                menu();
                 break;
             case 6:
                 menuGuardarFichieros();
