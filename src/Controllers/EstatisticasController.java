@@ -1,5 +1,6 @@
 package Controllers;
 
+import Models.GlobalStorage;
 import Models.Mesa;
 import Models.Pedido;
 import Models.Prato;
@@ -231,9 +232,19 @@ public class EstatisticasController {
     }
 
     public static double calcularTotalLucro() {
+        Pedido[] pedidos = PedidoController.getListaPedidos();
+        double valorPrejuizo = GlobalStorage.getPrejuizoClienteNaoAtendido();
+        int countPrejuizo = 0;
+        for(int i = 0; i < pedidos.length; i++){
+            if(pedidos[i] != null && pedidos[i].isPrejuizo()){
+                countPrejuizo ++;
+            }
+        }
+
         double totalFaturado = calcularTotalFaturado();
         double totalCustos = calcularTotalCustoTotal();
-        return totalFaturado - totalCustos;
+
+        return totalFaturado - totalCustos - (countPrejuizo * valorPrejuizo);
     }
 
     public static int contarPedidosAtendidosTotal() {

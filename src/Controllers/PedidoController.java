@@ -45,4 +45,15 @@ public class PedidoController {
         }
         return null;
     }
+
+    public static boolean getPedidoByReserva(int id) {
+        ClienteReserva reserva = ClienteReservaController.buscarReservaPorId(id);
+        Pedido[] pedidos = getListaPedidos();
+        for(int i = 0; i < listaPedidos.length; i++) {
+            if(pedidos[i] != null && pedidos[i].getReserva().equals(reserva)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
