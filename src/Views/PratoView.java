@@ -62,7 +62,7 @@ public class PratoView {
 
             String categoria;
             do {
-                System.out.println("➤ Insira a categoria do prato (Entrada, Prato principal, Sobremesa): ");
+                System.out.println("➤ Insira a categoria do prato (Entrada, Principal, Sobremesa): ");
                 categoria = sc.nextLine();
 
                 if (!PratoController.confirmarCategoriaPrato(categoria) || !categoria.matches("[a-zA-Z\\s]+")) {

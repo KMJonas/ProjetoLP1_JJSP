@@ -3,19 +3,23 @@ package Controllers;
 import Models.*;
 import Views.ClienteReservaView;
 
+import java.io.IOException;
+import java.sql.ClientInfoStatus;
 import java.sql.SQLOutput;
 import java.util.Scanner;
 import java.util.jar.JarOutputStream;
 
-public  class SimulacaoDiaADia {
+import static Models.GlobalStorage.unidadeDia;
+
+public class SimulacaoDiaADia {
     static Scanner sc = new Scanner(System.in);
 
     public static void iniciarSimulacao() {
+        FicheirosLogController.criaFicheirosLog();
 
         System.out.println("Bem-vindo à simulação de gestão de restaurante!");
-        System.out.print("Quantos momentos (unidades de tempo) deseja simular? ");
-        int totalMomentos = sc.nextInt();
 
+        int totalMomentos = unidadeDia;
         int momentoAtual = 0;
 
         while (momentoAtual <= totalMomentos) {
@@ -38,6 +42,12 @@ public  class SimulacaoDiaADia {
                 System.out.println("5 - Adicionar Reserva");
                 System.out.println("6 - Avançar para o próximo momento");
                 System.out.print("Escolha: ");
+
+                while (!sc.hasNextInt()) {
+                    System.out.println("⚠ Número inválido ⚠");
+                    sc.next();
+                    System.out.println("➤ Insira o número válido na lista: ");
+                }
                 int escolha = sc.nextInt();
 
                 switch (escolha) {
@@ -63,17 +73,21 @@ public  class SimulacaoDiaADia {
             momentoAtual++;
         }
         System.out.println("\n \uD83D\uDD14 Simulação finalizada! \uD83D\uDD14");
+
+        String mensagemLog = "Dia Finalizado!";
+        FicheirosLogController.escreverLog(momentoAtual, mensagemLog);
     }
+
 
     public static void exibirReservasNoMomento(int momento) {
         System.out.println("\n \uD83D\uDCDD Reservas no momento " + momento + ": \uD83D\uDCDD");
         ClienteReserva[] reservas = ClienteReservaController.getReservas();
+
         Pedido[] pedidos = PedidoController.getListaPedidos();
 
         for (int i = 0; i < reservas.length; i++) {
 
             if (reservas[i] != null) {
-
                 // Verifica se a reserva já está associada a um pedido com mesa
                 boolean reservaTemMesa = false;
                 for (int j = 0; j < pedidos.length; j++) {
@@ -91,25 +105,25 @@ public  class SimulacaoDiaADia {
                 }
 
                 if (pedidos[i] == null) {
-                    if(reservas[i].getHoraChegada() == momento){
+                    if (reservas[i].getHoraChegada() == momento) {
+
                         System.out.println("➜ Reserva ID: " + reservas[i].getIdReserva() +
                                 " | Nome: " + reservas[i].getNome() +
                                 " | Nº Pessoas: " + reservas[i].getNumPessoas());
+
                         Pedido criarPedido = new Pedido(reservas[i], null, null, 0, 0, 0, 0, 1);
                         PedidoController.adicionarPedido(criarPedido);
-
                     }
-                } else{
-                    if (reservas[i].getHoraChegada() == momento && pedidos[i].getStatus() != 7) {
-                        System.out.println("➜ Reserva ID: " + reservas[i].getIdReserva() +
-                                " | Nome: " + reservas[i].getNome() +
-                                " | Nº Pessoas: " + reservas[i].getNumPessoas());
-
-                    } else if (reservas[i].getHoraChegada() < momento && pedidos[i].getStatus() != 7) {
-                        System.out.println("➜ Reserva ID: " + reservas[i].getIdReserva() +
-                                " | Nome: " + reservas[i].getNome() +
-                                " | Nº Pessoas: " + reservas[i].getNumPessoas() +
-                                " (Momento original: " + reservas[i].getHoraChegada() + ")");
+                } else {
+                    if (pedidos[i].getReserva().getHoraChegada() == momento && pedidos[i].getStatus() != 7 && pedidos[i].getMesaAssociada() == null) {
+                        System.out.println("➜ Reserva ID: " + pedidos[i].getReserva().getIdReserva() +
+                                " | Nome: " + pedidos[i].getReserva().getNome() +
+                                " | Nº Pessoas: " + pedidos[i].getReserva().getNumPessoas());
+                    } else if (pedidos[i].getReserva().getHoraChegada() < momento && pedidos[i].getStatus() != 7 && pedidos[i].getMesaAssociada() == null) {
+                        System.out.println("➜ Reserva ID: " + pedidos[i].getReserva().getIdReserva() +
+                                " | Nome: " + pedidos[i].getReserva().getNome() +
+                                " | Nº Pessoas: " + pedidos[i].getReserva().getNumPessoas() +
+                                " (Momento original: " + pedidos[i].getReserva().getHoraChegada() + ")");
                     }
                 }
             }
@@ -161,6 +175,7 @@ public  class SimulacaoDiaADia {
         }
     }
 
+
     public static void verificarConsumoFinalizado(int momentoAtual) {
         Pedido[] pedidos = PedidoController.getListaPedidos();
 
@@ -192,7 +207,7 @@ public  class SimulacaoDiaADia {
 
         Pedido pedidoReserva = PedidoController.getPedidoByReserva(reserva);
 
-        if (pedidoReserva.getReserva().getHoraChegada() > momentoAtual) {
+        if (reserva == null && pedidoReserva.getReserva().getHoraChegada() > momentoAtual) {
             System.out.println("⚠\uFE0F A reserva só pode ser atribuída no momento de chegada ou depois. ⚠\uFE0F");
             return;
         }
@@ -201,7 +216,7 @@ public  class SimulacaoDiaADia {
             if (pedidoReserva.getMesaAssociada() != null) {
                 System.out.println("⚠\uFE0F Reserva já associada a uma mesa. ⚠\uFE0F");
 
-            }else {
+            } else {
                 System.out.println("➤ Insira o ID da mesa para associar a reserva: ");
                 int idMesa = sc.nextInt();
                 Mesa mesa = MesaController.buscarMesaPorId(idMesa);
@@ -212,6 +227,9 @@ public  class SimulacaoDiaADia {
                         pedidoReserva.settMomentoAtribuicaoMesa(momentoAtual);
                         mesa.setStatus(0); //Desabilita a mesa
                         System.out.println("\uD83D\uDCE2 Mesa " + pedidoReserva.getMesaAssociada().getIdMesa() + " atribuída à reserva com o nome " + pedidoReserva.getReserva().getNome() + ". \uD83D\uDCE2");
+
+                        String mensagemLog = "Mesa:" + pedidoReserva.getMesaAssociada().getIdMesa() + " atribuida á reserva:" + pedidoReserva.getReserva().getIdReserva() + ";";
+                        FicheirosLogController.escreverLog(momentoAtual, mensagemLog);
                     } else {
                         System.out.println("⚠\uFE0F Mesa com capacidade insuficiente. ⚠\uFE0F");
                     }
@@ -219,11 +237,10 @@ public  class SimulacaoDiaADia {
                     System.out.println("⚠\uFE0F Mesa não disponível. ⚠\uFE0F");
                 }
             }
-
         }
     }
 
-    public static void criarPedido (int momentoAtual){
+    public static void criarPedido(int momentoAtual) {
         System.out.print("➤ Digite o ID da mesa para criar um pedido: ");
         int idMesa = sc.nextInt();
 
@@ -249,7 +266,7 @@ public  class SimulacaoDiaADia {
             return;
         }
 
-        Prato [] pratos = PratoController.getPratos();
+        Prato[] pratos = PratoController.getPratos();
         System.out.println("\uD83C\uDF7D\uFE0F Pratos disponíveis: \uD83C\uDF7D\uFE0F");
         for (int i = 0; i < pratos.length; i++) {
             if (pratos[i] != null) {
@@ -268,9 +285,9 @@ public  class SimulacaoDiaADia {
         while (true) {
             System.out.print("➤ Digite o ID do prato a incluir no pedido (ou 0 para finalizar): ");
             int idPrato = sc.nextInt();
-            if (idPrato == 0){
+            if (idPrato == 0) {
                 int countPratosPrincipais = 0;
-                if (countPratosPrincipais == 0 ){
+                if (countPratosPrincipais == 0) {
 
                     for (int i = 0; i < pratosSelecionados.length; i++) {
                         if (pratosSelecionados[i] != null && pratosSelecionados[i].getCategoria().equals("Principal")) {
@@ -278,15 +295,13 @@ public  class SimulacaoDiaADia {
                         }
                     }
 
-                }else {
+                } else {
 
                     countPratosPrincipais = 0;
                 }
-
-                System.out.println(countPratosPrincipais);
-                if(pedido.getReserva().getNumPessoas() > countPratosPrincipais){
+                if (pedido.getReserva().getNumPessoas() > countPratosPrincipais) {
                     System.out.println("⚠\uFE0F O número de pratos principais tem de ser igual ao número de pessoas presentes na mesa. ⚠\uFE0F");
-                } else if (pedido.getReserva().getNumPessoas() < countPratosPrincipais){
+                } else if (pedido.getReserva().getNumPessoas() < countPratosPrincipais) {
                     pratosSelecionados = new Prato[50];
                     System.out.println("⚠\uFE0F O número de pratos principais tem de ser igual ao número de pessoas presentes na mesa. Por favor volte a introduzir os pratos que deseja! ⚠\uFE0F");
                     System.out.println("\uD83C\uDF7D\uFE0F Pratos disponíveis: \uD83C\uDF7D\uFE0F");
@@ -300,7 +315,7 @@ public  class SimulacaoDiaADia {
                         }
                     }
 
-                }else {
+                } else {
                     break;
                 }
             } else {
@@ -315,7 +330,7 @@ public  class SimulacaoDiaADia {
             }
         }
 
-        System.out.println("\uD83D\uDCE2 Tempo total de preparação: " + tempoTotalPreparacao +" \uD83D\uDCE2");
+        System.out.println("\uD83D\uDCE2 Tempo total de preparação: " + tempoTotalPreparacao + " \uD83D\uDCE2");
         System.out.println("\uD83D\uDCE2 Maior tempo de consumo: " + maiorTempoConsumo + " \uD83D\uDCE2");
 
         pedido.setPratos(pratosSelecionados);
@@ -325,9 +340,12 @@ public  class SimulacaoDiaADia {
         pedido.setStatus(3);
 
         System.out.println("✅ Pedido criado com sucesso para a mesa " + idMesa + "! ✅");
+
+        String mensagemLog = "Foi criado um pedido para a mesa:" + idMesa + ";";
+        FicheirosLogController.escreverLog(momentoAtual, mensagemLog);
     }
 
-    public static void entregarComida (int momentoAtual){
+    public static void entregarComida(int momentoAtual) {
         System.out.print("➤ Digite o ID da mesa para entregar comida: ");
         int idMesa = sc.nextInt();
         Mesa mesa = MesaController.buscarMesaPorId(idMesa);
@@ -350,6 +368,9 @@ public  class SimulacaoDiaADia {
         System.out.println("✅ Comida entregue com sucesso na mesa " + idMesa + "! ✅");
         pedido.setStatus(5); // Status: Comida entregue
         pedido.setmomentoEntregaPrato(momentoAtual);
+
+        String mensagemLog = "Comida entregue na mesa:" + idMesa + ";";
+        FicheirosLogController.escreverLog(momentoAtual, mensagemLog);
     }
 
     public static void verificarPreparacaoPronta(int momentoAtual) {
@@ -384,7 +405,7 @@ public  class SimulacaoDiaADia {
         }
     }
 
-    public static void finalizarPedido (int momentoAtual){
+    public static void finalizarPedido(int momentoAtual) {
         System.out.print("\n➤ Digite o ID da mesa cujo pedido deseja finalizar: ");
         int idMesa = sc.nextInt();
         Mesa mesa = MesaController.buscarMesaPorId(idMesa);
@@ -421,6 +442,9 @@ public  class SimulacaoDiaADia {
         pedido.setStatus(7);// Status: Finalizado
         pedido.setHoraFinalizacao(momentoAtual);
         mesa.setStatus(1);
+
+        String mensagemLog = "Pedido da mesa:" + idMesa + " finalizado com sucesso!";
+        FicheirosLogController.escreverLog(momentoAtual, mensagemLog);
     }
 
     public static void verificarTemposDeEsperaAtendimento(int momentoAtual) {
@@ -456,7 +480,7 @@ public  class SimulacaoDiaADia {
 
                 // Verifica se o tempo de espera para pagamento foi excedido
                 if (pedidos[i].isConsumido()) {
-                    if ((pedidos[i].getMomentoCriacao() + pedidos[i].getTempoPreparacao() + pedidos[i].getTempoConsumo() + GlobalStorage.getTempoMaxEsperaPagamento() + 1) == momentoAtual) {
+                    if ((pedidos[i].getMomentoCriacao() + pedidos[i].getTempoPreparacao() + pedidos[i].getTempoConsumo() + GlobalStorage.getTempoMaxEsperaPagamento() + 2) == momentoAtual) {
                         System.out.print("⚠️ AVISO ⚠️");
                         System.out.println(" ➤ A mesa " + pedidos[i].getMesaAssociada().getIdMesa() + " (" + pedidos[i].getReserva().getNome() + ") ultrapassou o tempo máximo de espera para pagar. ❌");
                         pedidos[i].setPrejuizo(true);

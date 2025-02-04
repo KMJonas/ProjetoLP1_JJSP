@@ -5,10 +5,8 @@ import Models.GlobalStorage;
 import Models.Mesa;
 import Models.Prato;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 
@@ -90,5 +88,89 @@ public class LeituraFicheirosController {
         String passwordConfig = lista[3];
         String separadorConteudo = lista[4];
         return new GlobalStorage(pathMesas, pathPratos, pathClientesReserva, passwordConfig, separadorConteudo);
+    }
+
+    public boolean guardarClientesReserva() {
+        ClienteReserva[] clientes = ClienteReservaController.getReservas();
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(GlobalStorage.getPathClientesReserva()))) {
+            for (ClienteReserva cliente : clientes) {
+                if (cliente != null) {
+                    String linha = cliente.getNome() + GlobalStorage.getSeparadorConteudo() +
+                            cliente.getNumPessoas() + GlobalStorage.getSeparadorConteudo() +
+                            cliente.getHoraChegada();
+                    bw.write(linha);
+                    bw.newLine();
+                }
+            }
+            return true;
+        } catch (IOException e) {
+            System.out.println("⚠ Ocorreu um erro ao escrever no ficheiro ⚠");
+        }
+        return false;
+    }
+
+    public boolean guardarMesas() {
+        Mesa[] mesas = MesaController.getMesas();
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(GlobalStorage.getPathMesas()))) {
+            for (Mesa mesa : mesas) {
+                if (mesa != null) {
+                    String linha = mesa.getIdMesa() + GlobalStorage.getSeparadorConteudo() +
+                            mesa.getCapacidade();
+                    bw.write(linha);
+                    bw.newLine();
+                }
+            }
+            return true;
+        } catch (IOException e) {
+            System.out.println("⚠ Ocorreu um erro ao escrever no ficheiro ⚠");
+        }
+        return false;
+    }
+
+    public boolean guardarPratos() {
+        Prato[] pratos = PratoController.getPratos();
+        DecimalFormat df = new DecimalFormat("0.00");
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(GlobalStorage.getPathPratos()))) {
+            for (Prato prato : pratos) {
+                if (prato != null) {
+                    String linha = prato.getNome() + GlobalStorage.getSeparadorConteudo() +
+                            prato.getCategoria() + GlobalStorage.getSeparadorConteudo() +
+                            df.format(prato.getPrecoCusto()).replace('.', ',') + GlobalStorage.getSeparadorConteudo() +
+                            df.format(prato.getPrecoVenda()).replace('.', ',') + GlobalStorage.getSeparadorConteudo() +
+                            prato.getUnidadeTempoPreparacao() + GlobalStorage.getSeparadorConteudo() +
+                            prato.getUnidadeTempoConsumo() + GlobalStorage.getSeparadorConteudo() +
+                            (prato.getEstado() == 1 ? "True" : "False");
+                    bw.write(linha);
+                    bw.newLine();
+                }
+            }
+            return true;
+        } catch (IOException e) {
+            System.out.println("⚠ Ocorreu um erro ao escrever no ficheiro ⚠");
+        }
+        return false;
+    }
+
+    public boolean guardarConfigGerais() {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/Data/ConfigGerais"))) {
+            String linha = GlobalStorage.getPathMesas();
+            bw.write(linha);
+            bw.newLine();
+            linha = GlobalStorage.getPathPratos();
+            bw.write(linha);
+            bw.newLine();
+            linha = GlobalStorage.getPathClientesReserva();
+            bw.write(linha);
+            bw.newLine();
+            linha = GlobalStorage.getPasswordConfiguracao();
+            bw.write(linha);
+            bw.newLine();
+            linha = GlobalStorage.getSeparadorConteudo();
+            bw.write(linha);
+            return true;
+        } catch (IOException e) {
+            System.out.println("⚠ Ocorreu um erro ao escrever no ficheiro ⚠");
+        }
+        return false;
     }
 }

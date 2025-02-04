@@ -33,8 +33,8 @@ public class Mesa {
         this.status = status;
     }
 
-    public int setCapacidade(int capacidade) {
-        return capacidade;
+    public void setCapacidade(int capacidade) {
+        this.capacidade = capacidade;
     }
 
     public int setIdMesa(int i) {

@@ -100,7 +100,6 @@ public class ClienteReservaView {
             resposta = sc.next().charAt(0);
             sc.nextLine();
         } while (resposta == 'S' || resposta == 's');
-
     }
 
     public static void editarReserva(){

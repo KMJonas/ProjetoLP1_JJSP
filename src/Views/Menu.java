@@ -2,17 +2,21 @@ package Views;
 
 import Controllers.*;
 import Models.GlobalStorage;
+import Models.Pedido;
 import Models.Prato;
-
+import Views.EstatisticasView;
 import java.text.ParseException;
+import java.sql.SQLOutput;
 import java.util.Scanner;
 
 
 import static Controllers.SimulacaoDiaADia.iniciarSimulacao;
 import static Views.GlobalStorageView.modificarPassword;
+import static Views.GlobalStorageView.valorUnidadeDia;
 
 public class Menu {
     Scanner sc = new Scanner(System.in);
+    LeituraFicheirosController lt = new LeituraFicheirosController();
 
     public void menu() throws ParseException {
         System.out.println("━━━━━━━ Restaurante JJSP ━━━━━━━");
@@ -21,6 +25,8 @@ public class Menu {
         System.out.println("3 ➤ Dia-a-dia");
         System.out.println("4 ➤ Configurações");
         System.out.println("5 ➤ Estatisticas");
+        System.out.println("6 ➤ Guardar Ficheiros");
+        System.out.println("7 ➤ Ficheiros Log");
         System.out.println("9 ➤ Sair");
         int resposta = sc.nextInt();
 
@@ -32,12 +38,31 @@ public class Menu {
                 menuGerirReservas();
                 break;
             case 3:
-                if(GlobalStorage.getTempoMaxEsperaEntrada() == 0 || GlobalStorage.getTempoMaxEsperaAtendimento() == 0 || GlobalStorage.getTempoMaxEsperaPagamento() == 0){
-                    System.out.println("⚠ Tempo de espera não foi devidamente definido ⚠");
-                }else {
-                    iniciarSimulacao();
+                boolean erro = false;
+
+                if (GlobalStorage.getTempoMaxEsperaEntrada() == 0 ||
+                        GlobalStorage.getTempoMaxEsperaAtendimento() == 0 ||
+                        GlobalStorage.getTempoMaxEsperaPagamento() == 0) {
+                    System.out.println("⚠ Tempos de espera não foram devidamente definidos ⚠");
+                    erro = true;
                 }
-                menu();
+
+                if (GlobalStorage.unidadeDia == 0) {
+                    System.out.println("⚠ Unidade de tempo dia não foi devidamente definida ⚠");
+                    erro = true;
+                }
+
+                if (GlobalStorage.getPrejuizoClienteNaoAtendido() == 0) {
+                    System.out.println("⚠ Prejuízo por cliente não atendido não foi devidamente definido ⚠");
+                    erro = true;
+                }
+
+                if (!erro) {
+                    iniciarSimulacao();
+                    menu();
+                } else {
+                    menu();
+                }
                 break;
             case 4:
                 String password;
@@ -55,9 +80,32 @@ public class Menu {
                     }
                 } while (!password.equals("."));
             case 5:
-
+                EstatisticasView.mostrarMenuEstatisticas();
+                menu();
+                break;
+            case 6:
+                menuGuardarFichieros();
+                break;
+            case 7:
+                menuLogs();
                 break;
             case 9:
+                System.out.println("Deseja guardar os ficheiros antes de sair? (s/n)");
+                String respostaSair = sc.next();
+                if (respostaSair.equals("s")) {
+                    if (lt.guardarClientesReserva()){
+                        System.out.println("✅ Reservas guardadas com sucesso ✅");
+                    }
+                    if (lt.guardarMesas()){
+                        System.out.println("✅ Mesas guardadas com sucesso ✅");
+                    }
+                    if (lt.guardarPratos()){
+                        System.out.println("✅ Pratos guardados com sucesso ✅");
+                    }
+                    if (lt.guardarConfigGerais()) {
+                        System.out.println("✅ Configurações guardadas com sucesso ✅");
+                    }
+                }
                 System.exit(0);
             default:
                 System.out.println("⚠ Opção inválida ⚠");
@@ -213,8 +261,8 @@ public class Menu {
         System.out.println("1 ➤ Definir caminho leitura de ficheiros.");
         System.out.println("2 ➤ Definir separador de campos.");
         System.out.println("3 ➤ Definir unidades tempo.");
-        System.out.println("4 ➤ ");
-        System.out.println("5 ➤ ");
+        System.out.println("4 ➤ Definir unidade tempo dia.");
+        System.out.println("5 ➤ Definir prejuízo por cliente não atendido.");
         System.out.println("6 ➤ Alterar password de configuração.");
         System.out.println("8 ➤ Voltar");
         int resposta = sc.nextInt();
@@ -230,6 +278,14 @@ public class Menu {
                 break;
             case 3:
                 menuDefinirUnidadesTempo();
+                menuConfiguracoes();
+                break;
+            case 4:
+                valorUnidadeDia();
+                menuConfiguracoes();
+                break;
+            case 5:
+                GlobalStorageView.valorPrejuizoClienteNaoAtendido();
                 menuConfiguracoes();
                 break;
             case 6:
@@ -353,6 +409,96 @@ public class Menu {
         }
     }
 
+    public void menuGuardarFichieros() throws ParseException {
+        System.out.println("━━━━━━━ Guardar Ficheiros ━━━━━━━");
+        System.out.println("1 ➤ Guardar mesas");
+        System.out.println("2 ➤ Guardar pratos");
+        System.out.println("3 ➤ Guardar reservas");
+        System.out.println("4 ➤ Guardar configurações");
+        System.out.println("5 ➤ Guardar tudo");
+        System.out.println("8 ➤ Voltar");
+        int resposta = sc.nextInt();
 
+        switch (resposta){
+            case 1:
+                if(lt.guardarMesas()){
+                    System.out.println("✅ Mesas guardadas com sucesso ✅");
+                    menuGuardarFichieros();
+                }
+                break;
+            case 2:
+                if (lt.guardarPratos()){
+                    System.out.println("✅ Pratos guardados com sucesso ✅");
+                    menuGuardarFichieros();
+                }
+            case 3:
+                if(lt.guardarClientesReserva()){
+                    System.out.println("✅ Reservas guardadas com sucesso ✅");
+                    menuGuardarFichieros();
+                }
+                break;
+            case 4:
+                if(lt.guardarConfigGerais()){
+                    System.out.println("✅ Configurações guardadas com sucesso ✅");
+                    menuGuardarFichieros();
+                }
+                break;
+            case 5:
+                if(lt.guardarMesas() && lt.guardarPratos() && lt.guardarClientesReserva() && lt.guardarConfigGerais()){
+                    System.out.println("✅ Ficheiros guardados com sucesso ✅");
+                    menuGuardarFichieros();
+                }
+                break;
+            case 8:
+                menu();
+                break;
+            default:
+                System.out.println("⚠ Opção inválida ⚠");
+                menuGuardarFichieros();
+                break;
+        }
+    }
+
+    public void menuLogs() throws ParseException {
+        System.out.println("━━━━━━━ Ficheiros Log ━━━━━━━");
+        System.out.println("1 ➤ Listar Ficheiros");
+        System.out.println("2 ➤ Mostrar Log");
+        System.out.println("3 ➤ Apagar Log");
+        System.out.println("5 ➤ Voltar");
+        int resposta = sc.nextInt();
+
+        switch (resposta){
+            case 1:
+                LogsView.listarLogs();
+                menuLogs();
+                break;
+            case 2:
+                sc.nextLine();
+                LogsView.listarLogs();
+                System.out.println("Por favor insira o nome do ficheiro:");
+
+                String ficheiroInserido = sc.nextLine();
+                LogsView.mostrarLog(ficheiroInserido);
+                menuLogs();
+            case 3:
+                sc.nextLine();
+                LogsView.listarLogs();
+                System.out.println("Por favor insira o nome do ficheiro:");
+                String ficheiroApagado = sc.nextLine();
+
+                FicheirosLogController.apagarLog(ficheiroApagado);
+                menuLogs();
+                break;
+            case 5:
+
+            case 8:
+                menu();
+                break;
+            default:
+                System.out.println("⚠ Opção inválida ⚠");
+                menuGuardarFichieros();
+                break;
+        }
+    }
 
 }

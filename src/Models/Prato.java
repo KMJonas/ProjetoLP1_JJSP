@@ -86,4 +86,20 @@ public class Prato {
     public void setEstado(int estado) {
         this.estado = estado;
     }
+
+    public int getUnidadeTempoPreparacao() {
+        return unidadeTempoPreparacao;
+    }
+
+    public void setUnidadeTempoPreparacao(int unidadeTempoPreparacao) {
+        this.unidadeTempoPreparacao = unidadeTempoPreparacao;
+    }
+
+    public int getUnidadeTempoConsumo() {
+        return unidadeTempoConsumo;
+    }
+
+    public void setUnidadeTempoConsumo(int unidadeTempoConsumo) {
+        this.unidadeTempoConsumo = unidadeTempoConsumo;
+    }
 }

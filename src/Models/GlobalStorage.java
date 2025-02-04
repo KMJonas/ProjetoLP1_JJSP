@@ -1,9 +1,11 @@
 package Models;
 
 public class GlobalStorage {
-    static private int tempoMaxEsperaEntrada;
-    static private int tempoMaxEsperaAtendimento;
-    static private int tempoMaxEsperaPagamento;
+    public static int unidadeDia = 20;
+    static private int tempoMaxEsperaEntrada = 3;
+    static private int tempoMaxEsperaAtendimento = 3;
+    static private int tempoMaxEsperaPagamento = 3;
+    static private double prejuizoClienteNaoAtendido = 50;
     static private String pathMesas;
     static private String pathPratos;
     static private String pathClientesReserva;
@@ -86,5 +88,21 @@ public class GlobalStorage {
 
     public static void setSeparadorConteudo(String separadorConteudo) {
         GlobalStorage.separadorConteudo = separadorConteudo;
+    }
+
+    public static double getPrejuizoClienteNaoAtendido() {
+        return prejuizoClienteNaoAtendido;
+    }
+
+    public static void setPrejuizoClienteNaoAtendido(double prejuizoClienteNaoAtendido) {
+        GlobalStorage.prejuizoClienteNaoAtendido = prejuizoClienteNaoAtendido;
+    }
+
+    public static int getUnidadesDia() {
+        return unidadeDia;
+    }
+
+    public static void setUnidadesDia(int unidadesDia) {
+        GlobalStorage.unidadeDia = unidadesDia;
     }
 }

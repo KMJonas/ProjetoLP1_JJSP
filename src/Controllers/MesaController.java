@@ -54,33 +54,19 @@ public class MesaController {
 
 
     public static boolean modificarMesa (int numMesa, int opcao, int capacidade, int status) {
-        Mesa[] listaMesas = getMesas();
-        Mesa mesaModificada = null;
+        Mesa mesaModificada = buscarMesaPorId(numMesa);
 
         if (opcao == 1){
-            for (int i = 0; i < mesas.length; i++) {
-                if (listaMesas[i].getIdMesa() == numMesa) {
-                    listaMesas[i].setCapacidade(capacidade);
-                    return true;
-                }
-            }
+            mesaModificada.setCapacidade(capacidade);
+            return true;
         } else if (opcao == 2) {
-            for (int i = 0; i < listaMesas.length; i++) {
-                if (listaMesas[i].getIdMesa() == numMesa) {
-                    listaMesas[i].setStatus(status);
-                    return true;
-                }
-            }
+            mesaModificada.setStatus(status);
+            return true;
         } else if (opcao == 3) {
-            for (int i = 0; i < listaMesas.length; i++) {
-                if (listaMesas[i].getIdMesa() == numMesa) {
-                    listaMesas[i].setCapacidade(capacidade);
-                    listaMesas[i].setStatus(status);
-                    return true;
-                }
-            }
+            mesaModificada.setCapacidade(capacidade);
+            mesaModificada.setStatus(status);
+            return true;
         }
-
         return false;
     }
 

@@ -40,7 +40,7 @@ public class PratoController {
     }
 
     public static boolean confirmarCategoriaPrato(String categoria){
-        if(categoria.equals("Entrada") || categoria.equals("Prato principal") || categoria.equals("Sobremesa")){
+        if(categoria.equals("Entrada") || categoria.equals("Principal") || categoria.equals("Sobremesa")){
             return true;
         }
         return false;
@@ -62,6 +62,7 @@ public class PratoController {
                 listaPratos[i].setPrecoCusto(prato.getPrecoCusto());
                 listaPratos[i].setPrecoVenda(prato.getPrecoVenda());
                 listaPratos[i].setunidadeTempoPreparacao(prato.getunidadeTempoPreparacao());
+                listaPratos[i].setunidadeTempoConsumo(prato.getunidadeTempoConsumo());
                 listaPratos[i].setEstado(prato.getEstado());
                 return true;
             }
