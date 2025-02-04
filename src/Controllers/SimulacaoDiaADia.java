@@ -192,7 +192,7 @@ public  class SimulacaoDiaADia {
 
         Pedido pedidoReserva = PedidoController.getPedidoByReserva(reserva);
 
-        if (pedidoReserva.getReserva().getHoraChegada() > momentoAtual) {
+        if (reserva == null && pedidoReserva.getReserva().getHoraChegada() > momentoAtual) {
             System.out.println("⚠\uFE0F A reserva só pode ser atribuída no momento de chegada ou depois. ⚠\uFE0F");
             return;
         }

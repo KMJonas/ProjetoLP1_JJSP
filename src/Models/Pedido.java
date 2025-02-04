@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Pedido {
+    private static int contadorId = 1;
     private int idPedido;
     private ClienteReserva reserva;  // Reserva associada
     private Mesa mesaAssociada;
@@ -22,6 +23,7 @@ public class Pedido {
 
     public Pedido(ClienteReserva reserva, Mesa mesaAssociada, Prato[] pratos, int tMomentoAtribuicaoMesa,
                   int momentoCriacao, int tempoPreparacao, int tempoConsumo, int status) {
+        this.idPedido = contadorId++;
         this.reserva = reserva;
         this.mesaAssociada = mesaAssociada;
         this.pratos = pratos;
@@ -35,7 +37,7 @@ public class Pedido {
     public int getmomentoEntregaPrato(){return momentoEntregaPrato;}
 
     public void setmomentoEntregaPrato(int momentoEntregaPrato){
-        this.momentoEntregaPrato = horaFinalizacao;
+        this.momentoEntregaPrato = momentoEntregaPrato;
     }
 
     public int getHoraFinalizacao(){return horaFinalizacao;}

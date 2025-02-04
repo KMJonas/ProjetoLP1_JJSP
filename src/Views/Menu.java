@@ -2,8 +2,9 @@ package Views;
 
 import Controllers.*;
 import Models.GlobalStorage;
+import Models.Pedido;
 import Models.Prato;
-
+import Views.EstatisticasView;
 import java.text.ParseException;
 import java.util.Scanner;
 
@@ -21,6 +22,7 @@ public class Menu {
         System.out.println("3 ➤ Dia-a-dia");
         System.out.println("4 ➤ Configurações");
         System.out.println("5 ➤ Estatisticas");
+        System.out.println("teste");
         System.out.println("9 ➤ Sair");
         int resposta = sc.nextInt();
 
@@ -55,7 +57,8 @@ public class Menu {
                     }
                 } while (!password.equals("."));
             case 5:
-
+                EstatisticasView.mostrarMenuEstatisticas();
+                menu();
                 break;
             case 9:
                 System.exit(0);
