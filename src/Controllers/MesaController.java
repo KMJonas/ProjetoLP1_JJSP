@@ -92,9 +92,9 @@ public class MesaController {
     }
 
     public static Mesa buscarMesaPorId(int id) {
-        for (Mesa mesa : mesas) {
-            if (mesa != null && mesa.getIdMesa() == id) {
-                return mesa;
+        for (int i = 0; i < mesas.length; i++) {
+            if (mesas[i] != null && mesas[i].getIdMesa() == id) {
+                return mesas[i];
             }
         }
         return null;

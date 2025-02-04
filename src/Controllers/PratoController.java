@@ -108,9 +108,9 @@ public class PratoController {
     }
 
     public static Prato buscarPratoPorId(int id) {
-        for (Prato prato : pratos) {
-            if (prato != null && prato.getIdPrato() == id) {
-                return prato;
+        for (int i = 0; i < pratos.length; i++) {
+            if (pratos[i] != null && pratos[i].getIdPrato() == id) {
+                return pratos[i];
             }
         }
         return null;

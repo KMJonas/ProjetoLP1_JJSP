@@ -1,11 +1,11 @@
 package Models;
 
 public class GlobalStorage {
-    public static int unidadeDia = 20;
-    static private int tempoMaxEsperaEntrada = 3;
-    static private int tempoMaxEsperaAtendimento = 3;
-    static private int tempoMaxEsperaPagamento = 3;
-    static private double prejuizoClienteNaoAtendido = 50;
+    public static int unidadeDia;
+    static private int tempoMaxEsperaEntrada;
+    static private int tempoMaxEsperaAtendimento;
+    static private int tempoMaxEsperaPagamento;
+    static private double prejuizoClienteNaoAtendido;
     static private String pathMesas;
     static private String pathPratos;
     static private String pathClientesReserva;

@@ -26,9 +26,9 @@ public class PedidoController {
     }
 
     public static Pedido getPedidoByReserva(ClienteReserva reserva) {
-        for (Pedido pedido : listaPedidos) {
-            if (pedido != null && pedido.getReserva().equals(reserva) ) {
-                return pedido;
+        for (int i = 0; i < listaPedidos.length; i++) {
+            if (listaPedidos[i] != null && listaPedidos[i].getReserva().equals(reserva)) {
+                return listaPedidos[i];
             }
         }
         return null;
