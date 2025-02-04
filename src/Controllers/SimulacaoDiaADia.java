@@ -3,6 +3,7 @@ package Controllers;
 import Models.*;
 import Views.ClienteReservaView;
 
+import java.io.IOException;
 import java.sql.SQLOutput;
 import java.util.Scanner;
 import java.util.jar.JarOutputStream;
@@ -13,6 +14,7 @@ public  class SimulacaoDiaADia {
     static Scanner sc = new Scanner(System.in);
 
     public static void iniciarSimulacao() {
+        FicheirosLogController.criaFicheirosLog();
 
         System.out.println("Bem-vindo à simulação de gestão de restaurante!");
 
@@ -64,6 +66,9 @@ public  class SimulacaoDiaADia {
             momentoAtual++;
         }
         System.out.println("\n \uD83D\uDD14 Simulação finalizada! \uD83D\uDD14");
+
+        String mensagemLog = "Dia Finalizado!";
+        FicheirosLogController.escreverLog(momentoAtual, mensagemLog);
     }
 
     public static void exibirReservasNoMomento(int momento) {
@@ -213,6 +218,9 @@ public  class SimulacaoDiaADia {
                         pedidoReserva.settMomentoAtribuicaoMesa(momentoAtual);
                         mesa.setStatus(0); //Desabilita a mesa
                         System.out.println("\uD83D\uDCE2 Mesa " + pedidoReserva.getMesaAssociada().getIdMesa() + " atribuída à reserva com o nome " + pedidoReserva.getReserva().getNome() + ". \uD83D\uDCE2");
+
+                        String mensagemLog = "Mesa:" + pedidoReserva.getMesaAssociada().getIdMesa() + " atribuida á reserva:" + pedidoReserva.getReserva().getIdReserva() + ";";
+                        FicheirosLogController.escreverLog(momentoAtual, mensagemLog);
                     } else {
                         System.out.println("⚠\uFE0F Mesa com capacidade insuficiente. ⚠\uFE0F");
                     }
@@ -326,6 +334,9 @@ public  class SimulacaoDiaADia {
         pedido.setStatus(3);
 
         System.out.println("✅ Pedido criado com sucesso para a mesa " + idMesa + "! ✅");
+
+        String mensagemLog = "Foi criado um pedido para a mesa:" + idMesa + ";";
+        FicheirosLogController.escreverLog(momentoAtual, mensagemLog);
     }
 
     public static void entregarComida (int momentoAtual){
@@ -351,6 +362,9 @@ public  class SimulacaoDiaADia {
         System.out.println("✅ Comida entregue com sucesso na mesa " + idMesa + "! ✅");
         pedido.setStatus(5); // Status: Comida entregue
         pedido.setmomentoEntregaPrato(momentoAtual);
+
+        String mensagemLog = "Comida entregue na mesa:" + idMesa + ";";
+        FicheirosLogController.escreverLog(momentoAtual, mensagemLog);
     }
 
     public static void verificarPreparacaoPronta(int momentoAtual) {
@@ -422,6 +436,9 @@ public  class SimulacaoDiaADia {
         pedido.setStatus(7);// Status: Finalizado
         pedido.setHoraFinalizacao(momentoAtual);
         mesa.setStatus(1);
+
+        String mensagemLog = "Pedido da mesa:" + idMesa + " finalizado com sucesso!";
+        FicheirosLogController.escreverLog(momentoAtual, mensagemLog);
     }
 
     public static void verificarTemposDeEsperaAtendimento(int momentoAtual) {
