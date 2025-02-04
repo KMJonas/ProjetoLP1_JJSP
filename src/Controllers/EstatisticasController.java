@@ -104,8 +104,6 @@ public class EstatisticasController {
                 tempoTotalMedioMesas[i] = contagemPedidosMesa[i] > 0 ?
                         (double) tempoTotal[i] / contagemPedidosMesa[i] : 0;
             }
-            System.out.println(contagemPedidosMesa[i]);
-            System.out.println(tempoTotal[i]);
         }
         return tempoTotalMedioMesas;
     }

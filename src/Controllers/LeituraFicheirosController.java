@@ -93,11 +93,11 @@ public class LeituraFicheirosController {
     public boolean guardarClientesReserva() {
         ClienteReserva[] clientes = ClienteReservaController.getReservas();
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(GlobalStorage.getPathClientesReserva()))) {
-            for (ClienteReserva cliente : clientes) {
-                if (cliente != null) {
-                    String linha = cliente.getNome() + GlobalStorage.getSeparadorConteudo() +
-                            cliente.getNumPessoas() + GlobalStorage.getSeparadorConteudo() +
-                            cliente.getHoraChegada();
+            for (int i = 0; i < clientes.length; i++) {
+                if (clientes[i] != null) {
+                    String linha = clientes[i].getNome() + GlobalStorage.getSeparadorConteudo() +
+                            clientes[i].getNumPessoas() + GlobalStorage.getSeparadorConteudo() +
+                            clientes[i].getHoraChegada();
                     bw.write(linha);
                     bw.newLine();
                 }
@@ -112,10 +112,10 @@ public class LeituraFicheirosController {
     public boolean guardarMesas() {
         Mesa[] mesas = MesaController.getMesas();
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(GlobalStorage.getPathMesas()))) {
-            for (Mesa mesa : mesas) {
-                if (mesa != null) {
-                    String linha = mesa.getIdMesa() + GlobalStorage.getSeparadorConteudo() +
-                            mesa.getCapacidade();
+            for (int i = 0; i < mesas.length; i++) {
+                if (mesas[i] != null) {
+                    String linha = mesas[i].getIdMesa() + GlobalStorage.getSeparadorConteudo() +
+                            mesas[i].getCapacidade();
                     bw.write(linha);
                     bw.newLine();
                 }
@@ -131,15 +131,15 @@ public class LeituraFicheirosController {
         Prato[] pratos = PratoController.getPratos();
         DecimalFormat df = new DecimalFormat("0.00");
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(GlobalStorage.getPathPratos()))) {
-            for (Prato prato : pratos) {
-                if (prato != null) {
-                    String linha = prato.getNome() + GlobalStorage.getSeparadorConteudo() +
-                            prato.getCategoria() + GlobalStorage.getSeparadorConteudo() +
-                            df.format(prato.getPrecoCusto()).replace('.', ',') + GlobalStorage.getSeparadorConteudo() +
-                            df.format(prato.getPrecoVenda()).replace('.', ',') + GlobalStorage.getSeparadorConteudo() +
-                            prato.getUnidadeTempoPreparacao() + GlobalStorage.getSeparadorConteudo() +
-                            prato.getUnidadeTempoConsumo() + GlobalStorage.getSeparadorConteudo() +
-                            (prato.getEstado() == 1 ? "True" : "False");
+            for (int i = 0; i < pratos.length; i++) {
+                if (pratos[i] != null) {
+                    String linha = pratos[i].getNome() + GlobalStorage.getSeparadorConteudo() +
+                            pratos[i].getCategoria() + GlobalStorage.getSeparadorConteudo() +
+                            df.format(pratos[i].getPrecoCusto()).replace('.', ',') + GlobalStorage.getSeparadorConteudo() +
+                            df.format(pratos[i].getPrecoVenda()).replace('.', ',') + GlobalStorage.getSeparadorConteudo() +
+                            pratos[i].getUnidadeTempoPreparacao() + GlobalStorage.getSeparadorConteudo() +
+                            pratos[i].getUnidadeTempoConsumo() + GlobalStorage.getSeparadorConteudo() +
+                            (pratos[i].getEstado() == 1 ? "True" : "False");
                     bw.write(linha);
                     bw.newLine();
                 }

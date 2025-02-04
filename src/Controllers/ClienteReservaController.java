@@ -88,12 +88,13 @@ public class ClienteReservaController {
     }
 
     public static ClienteReserva buscarReservaPorId(int id) {
-        for (ClienteReserva reserva : reservas) {
-            if (reserva != null && reserva.getIdReserva() == id) {
-                return reserva;
+        for (int i = 0; i < reservas.length; i++) {
+            if (reservas[i] != null && reservas[i].getIdReserva() == id) {
+                return reservas[i];
             }
         }
         return null;
     }
+
 
 }
